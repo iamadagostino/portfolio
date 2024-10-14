@@ -1,25 +1,26 @@
-import gamestackTexture2Large from '~/assets/gamestack-list-large.jpg';
-import gamestackTexture2Placeholder from '~/assets/gamestack-list-placeholder.jpg';
-import gamestackTexture2 from '~/assets/gamestack-list.jpg';
-import gamestackTextureLarge from '~/assets/gamestack-login-large.jpg';
-import gamestackTexturePlaceholder from '~/assets/gamestack-login-placeholder.jpg';
-import gamestackTexture from '~/assets/gamestack-login.jpg';
-import sliceTextureLarge from '~/assets/slice-app-large.jpg';
-import sliceTexturePlaceholder from '~/assets/slice-app-placeholder.jpg';
-import sliceTexture from '~/assets/slice-app.jpg';
-import sprTextureLarge from '~/assets/spr-lesson-builder-dark-large.jpg';
-import sprTexturePlaceholder from '~/assets/spr-lesson-builder-dark-placeholder.jpg';
-import sprTexture from '~/assets/spr-lesson-builder-dark.jpg';
+import { useEffect, useRef, useState } from 'react';
+
 import { Footer } from '~/components/footer';
-import { baseMeta } from '~/utils/meta';
 import { Intro } from './intro';
 import { Profile } from './profile';
 import { ProjectSummary } from './project-summary';
-import { useEffect, useRef, useState } from 'react';
-import config from '~/config.json';
+import { baseMeta } from '~/utils/meta';
+import config from '~/config/app.json';
+import gamestackTexture from '~/assets/gamestack-login.jpg';
+import gamestackTexture2 from '~/assets/gamestack-list.jpg';
+import gamestackTexture2Large from '~/assets/gamestack-list-large.jpg';
+import gamestackTexture2Placeholder from '~/assets/gamestack-list-placeholder.jpg';
+import gamestackTextureLarge from '~/assets/gamestack-login-large.jpg';
+import gamestackTexturePlaceholder from '~/assets/gamestack-login-placeholder.jpg';
+import sliceTexture from '~/assets/slice-app.jpg';
+import sliceTextureLarge from '~/assets/slice-app-large.jpg';
+import sliceTexturePlaceholder from '~/assets/slice-app-placeholder.jpg';
+import sprTexture from '~/assets/spr-lesson-builder-dark.jpg';
+import sprTextureLarge from '~/assets/spr-lesson-builder-dark-large.jpg';
+import sprTexturePlaceholder from '~/assets/spr-lesson-builder-dark-placeholder.jpg';
 import styles from './home.module.css';
 
-// Prefetch draco decoader wasm
+// Prefetch draco decoder wasm
 export const links = () => {
   return [
     {
@@ -41,8 +42,8 @@ export const links = () => {
 
 export const meta = () => {
   return baseMeta({
-    title: 'Designer + Developer',
-    description: `Design portfolio of ${config.name} — a product designer working on web & mobile apps with a focus on motion, experience design, and accessibility.`,
+    title: 'Software Engineer + Coder',
+    description: `Portfolio of ${config.name} — A software engineer dedicated to crafting web and mobile solutions, with expertise in building robust architectures, planning efficient projects, and creating user-driven designs.`,
   });
 };
 

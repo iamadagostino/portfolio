@@ -1,12 +1,16 @@
 import { Button } from '~/components/button';
 import { Icon } from '~/components/icon';
 import styles from './nav-toggle.module.css';
+import { useNavbar } from '~/components/navbar-provider';
 
-export const NavToggle = ({ menuOpen, ...rest }) => {
+export const NavToggle = ({ ...rest }) => {
+  const { isMobile, menuOpen } = useNavbar();
+
   return (
     <Button
       iconOnly
       className={styles.toggle}
+      data-mobile={isMobile}
       aria-label="Menu"
       aria-expanded={menuOpen}
       {...rest}

@@ -1,17 +1,18 @@
+import { Suspense, lazy, useEffect, useState } from 'react';
+import { useInterval, usePrevious, useScrollToHash } from '~/hooks';
+
 import { DecoderText } from '~/components/decoder-text';
 import { Heading } from '~/components/heading';
+import { Link as RouterLink } from '@remix-run/react';
 import { Section } from '~/components/section';
-import { useTheme } from '~/components/theme-provider';
-import { tokens } from '~/components/theme-provider/theme';
 import { Transition } from '~/components/transition';
 import { VisuallyHidden } from '~/components/visually-hidden';
-import { Link as RouterLink } from '@remix-run/react';
-import { useInterval, usePrevious, useScrollToHash } from '~/hooks';
-import { Suspense, lazy, useEffect, useState } from 'react';
+import config from '~/config/app.json';
 import { cssProps } from '~/utils/style';
-import config from '~/config.json';
-import { useHydrated } from '~/hooks/useHydrated';
 import styles from './intro.module.css';
+import { tokens } from '~/config/theme.mjs';
+import { useHydrated } from '~/hooks/useHydrated';
+import { useTheme } from '~/components/theme-provider';
 
 const DisplacementSphere = lazy(() =>
   import('./displacement-sphere').then(module => ({ default: module.DisplacementSphere }))

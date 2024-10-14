@@ -1,5 +1,5 @@
-import { forwardRef } from 'react';
 import { classes } from '~/utils/style';
+import { forwardRef } from 'react';
 import styles from './section.module.css';
 
 export const Section = forwardRef(

@@ -1,0 +1,5 @@
+# Ignore all .min.js files
+*.min.js
+
+# Ignore Draco WASM file
+draco_wasm_wrapper.js

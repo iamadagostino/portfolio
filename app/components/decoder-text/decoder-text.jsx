@@ -1,8 +1,9 @@
-import { VisuallyHidden } from '~/components/visually-hidden';
-import { useReducedMotion, useSpring } from 'framer-motion';
 import { memo, useEffect, useRef } from 'react';
-import { delay } from '~/utils/delay';
+import { useReducedMotion, useSpring } from 'framer-motion';
+
+import { VisuallyHidden } from '~/components/visually-hidden';
 import { classes } from '~/utils/style';
+import { delay } from '~/utils/delay';
 import styles from './decoder-text.module.css';
 
 // prettier-ignore

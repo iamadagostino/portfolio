@@ -1,11 +1,24 @@
+# Node modules
 node_modules
+node_modules.nosync
 
-/.cache
-/build
+# Build and cache directories
+.cache
+build
+
+# Environment files
 .env
-
-.wrangler
 .dev.vars
 
+# Wrangler configuration
+.wrangler
+
+# Public and static assets
 public/draco
 storybook-static
+
+# System files
+.DS_Store
+
+# PNPM lock file
+pnpm-lock.yaml

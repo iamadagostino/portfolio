@@ -1,11 +1,11 @@
+import { addons } from '@storybook/manager-api';
 import { themes } from '@storybook/theming';
-import { addons } from '@storybook/addons';
 
 addons.setConfig({
   theme: {
     ...themes.dark,
     brandImage: './icon.svg',
-    brandTitle: 'Hamish Williams Components',
-    brandUrl: 'https://hamishw.com',
+    brandTitle: 'Angelo D\'Agostino Components',
+    brandUrl: 'https://www.angelo-dagostino.com',
   },
 });

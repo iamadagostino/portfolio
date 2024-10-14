@@ -1,10 +1,11 @@
-import { json } from '@remix-run/cloudflare';
 import { Outlet, useLoaderData } from '@remix-run/react';
-import { MDXProvider } from '@mdx-js/react';
 import { Post, postMarkdown } from '~/layouts/post';
-import { baseMeta } from '~/utils/meta';
-import config from '~/config.json';
 import { formatTimecode, readingTime } from '~/utils/timecode';
+
+import { MDXProvider } from '@mdx-js/react';
+import { baseMeta } from '~/utils/meta';
+import config from '~/config/app.json';
+import { json } from '@remix-run/cloudflare';
 
 export async function loader({ request }) {
   const slug = request.url.split('/').at(-1);

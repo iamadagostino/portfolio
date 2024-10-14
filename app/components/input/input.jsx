@@ -1,10 +1,11 @@
-import { useId, useRef, useState } from 'react';
-import { Icon } from '~/components/icon';
-import { tokens } from '~/components/theme-provider/theme';
-import { Transition } from '~/components/transition';
 import { classes, cssProps, msToNum } from '~/utils/style';
+import { useId, useRef, useState } from 'react';
+
+import { Icon } from '~/components/icon';
 import { TextArea } from './text-area';
+import { Transition } from '~/components/transition';
 import styles from './input.module.css';
+import { tokens } from '~/config/theme.mjs';
 
 export const Input = ({
   id,

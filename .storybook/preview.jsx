@@ -1,8 +1,10 @@
-import { useEffect } from 'react';
-import { ThemeProvider, themeStyles } from '../app/components/theme-provider';
-import '../app/reset.module.css';
-import '../app/global.module.css';
+import '../resources/css/app/reset.module.css'; // Contains Reset styles
+import '../resources/css/app/global.module.css'; // Contains Global styles
 import './preview.css';
+
+import { ThemeProvider, themeStyles } from '../app/components/theme-provider';
+
+import { useEffect } from 'react';
 
 export const decorators = [
   (Story, context) => {

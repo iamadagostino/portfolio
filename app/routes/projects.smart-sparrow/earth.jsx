@@ -1,28 +1,3 @@
-import earthModel from '~/assets/earth.glb';
-import mwnx from '~/assets/milkyway-nx.hdr';
-import mwny from '~/assets/milkyway-ny.hdr';
-import mwnz from '~/assets/milkyway-nz.hdr';
-import mwpx from '~/assets/milkyway-px.hdr';
-import mwpy from '~/assets/milkyway-py.hdr';
-import mwpz from '~/assets/milkyway-pz.hdr';
-import milkywayBg from '~/assets/milkyway.jpg';
-import { Loader } from '~/components/loader';
-import { Section } from '~/components/section';
-import { tokens } from '~/components/theme-provider/theme';
-import { Transition } from '~/components/transition';
-import { useReducedMotion, useSpring } from 'framer-motion';
-import { useInViewport, useWindowSize } from '~/hooks';
-import {
-  createContext,
-  memo,
-  startTransition,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
-import { HDRCubeTextureLoader, OrbitControls } from 'three-stdlib';
 import {
   ACESFilmicToneMapping,
   AmbientLight,
@@ -40,9 +15,7 @@ import {
   Vector3,
   WebGLRenderer,
 } from 'three';
-import { LinearFilter } from 'three';
-import { EquirectangularReflectionMapping } from 'three';
-import { clamp } from '~/utils/clamp';
+import { HDRCubeTextureLoader, OrbitControls } from 'three-stdlib';
 import { classes, media, msToNum, numToPx } from '~/utils/style';
 import {
   cleanRenderer,
@@ -52,8 +25,36 @@ import {
   removeLights,
   textureLoader,
 } from '~/utils/three';
-import { throttle } from '~/utils/throttle';
+import {
+  createContext,
+  memo,
+  startTransition,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+import { useInViewport, useWindowSize } from '~/hooks';
+import { useReducedMotion, useSpring } from 'framer-motion';
+
+import { EquirectangularReflectionMapping } from 'three';
+import { LinearFilter } from 'three';
+import { Loader } from '~/components/loader';
+import { Section } from '~/components/section';
+import { Transition } from '~/components/transition';
+import { clamp } from '~/utils/clamp';
+import earthModel from '~/assets/earth.glb';
+import milkywayBg from '~/assets/milkyway.jpg';
+import mwnx from '~/assets/milkyway-nx.hdr';
+import mwny from '~/assets/milkyway-ny.hdr';
+import mwnz from '~/assets/milkyway-nz.hdr';
+import mwpx from '~/assets/milkyway-px.hdr';
+import mwpy from '~/assets/milkyway-py.hdr';
+import mwpz from '~/assets/milkyway-pz.hdr';
 import styles from './earth.module.css';
+import { throttle } from '~/utils/throttle';
+import { tokens } from '~/config/theme.mjs';
 
 const nullTarget = { x: 0, y: 0, z: 2 };
 

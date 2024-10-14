@@ -1,7 +1,7 @@
-__  __  __
-\ \ \ \ \/
- \ \/\ \
-  \/  \/
+   /‾‾\‾‾‾‾‾\
+  / /\ \ ‾‾\ \
+ / /  \ \__/ /
+/_/    \____/
 
 The humans.txt file explains the team, technology,
 and graphic assets behind this site humanstxt.org.
@@ -10,16 +10,20 @@ _______________________________________________________________________________
 
 DESIGNER | デザイナー
 
-Hamish Williams
-Hand crafted design & web development
+Angelo D'Agostino
+My Journey in Pixels and Ideas.
 
 Design tools:
+Affinity
 Figma
+Illustrator
 Photoshop
 Blender
 
-twitter.com/hamishmw
-github.com/hamishmw
+facebook.com/iamadagostino
+instagram.com/iamadagostino
+x.com/iamadagostino
+github.com/iamadagostino
 
 _______________________________________________________________________________
 

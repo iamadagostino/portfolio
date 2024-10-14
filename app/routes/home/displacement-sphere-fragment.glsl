@@ -41,8 +41,20 @@ void main() {
 
 	#include <clipping_planes_fragment>
 
+//  Original color
+//   vec3 color = vec3(vUv * (0.2 - 2.0 * noise), 1.0);
+//   vec3 finalColors = vec3(color.b * 1.5, color.r, color.r);
+
+  // Target color normalized to vec3
+  vec3 targetColor = vec3(10.0 / 255.0, 132.0 / 255.0, 255.0 / 255.0);
+  // Adjust noise and vUv scaling to work towards target color
   vec3 color = vec3(vUv * (0.2 - 2.0 * noise), 1.0);
-  vec3 finalColors = vec3(color.b * 1.5, color.r, color.r);
+  // Modify the final color output
+  vec3 finalColors = vec3(
+      mix(color.b * 4.0, targetColor.r, 0.5),  // Red channel
+      mix(color.b * 2.0, targetColor.g, 0.5),       // Green channel
+      mix(color.g * - 2.0, targetColor.b, 0.5)        // Blue channel
+  );
   vec4 diffuseColor = vec4(cos(finalColors * noise * 3.0), 1.0);
   ReflectedLight reflectedLight = ReflectedLight(vec3(0.0), vec3(0.0), vec3(0.0), vec3(0.0));
   vec3 totalEmissiveRadiance = emissive;

@@ -1,11 +1,11 @@
-import { Text } from '~/components/text';
 import { StoryContainer } from '../../../.storybook/story-container';
+import { Text } from '~/components/text';
 
 export default {
   title: 'Text',
 };
 
-export const size = () => (
+export const Size = () => (
   <StoryContainer vertical>
     <Text size="xl">XLarge</Text>
     <Text size="l">Large</Text>
@@ -14,7 +14,7 @@ export const size = () => (
   </StoryContainer>
 );
 
-export const weight = () => (
+export const Weight = () => (
   <StoryContainer vertical>
     <Text weight="regular">Regular</Text>
     <Text weight="medium">Medium</Text>
@@ -22,7 +22,7 @@ export const weight = () => (
   </StoryContainer>
 );
 
-export const align = () => (
+export const Align = () => (
   <StoryContainer vertical stretch>
     <Text align="start">Start</Text>
     <Text align="center">Center</Text>

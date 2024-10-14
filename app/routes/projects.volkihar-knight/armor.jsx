@@ -1,32 +1,33 @@
+import {
+  ACESFilmicToneMapping,
+  CubeTextureLoader,
+  DirectionalLight,
+  Group,
+  MathUtils,
+  PMREMGenerator,
+  PerspectiveCamera,
+  SRGBColorSpace,
+  Scene,
+  WebGLRenderer,
+} from 'three';
+import { classes, cssProps, msToNum, numToMs } from '~/utils/style';
+import { cleanRenderer, cleanScene, modelLoader, removeLights } from '~/utils/three';
+import { startTransition, useCallback, useEffect, useRef, useState } from 'react';
+import { useReducedMotion, useSpring } from 'framer-motion';
+
+import { Loader } from '~/components/loader';
+import { Transition } from '~/components/transition';
+import armor from '~/assets/volkihar-knight.glb';
+import styles from './armor.module.css';
+import { throttle } from '~/utils/throttle';
+import { tokens } from '~/config/theme.mjs';
+import { useInViewport } from '~/hooks';
 import vknx from '~/assets/volkihar-cube-nx.jpg';
 import vkny from '~/assets/volkihar-cube-ny.jpg';
 import vknz from '~/assets/volkihar-cube-nz.jpg';
 import vkpx from '~/assets/volkihar-cube-px.jpg';
 import vkpy from '~/assets/volkihar-cube-py.jpg';
 import vkpz from '~/assets/volkihar-cube-pz.jpg';
-import armor from '~/assets/volkihar-knight.glb';
-import { Loader } from '~/components/loader';
-import { tokens } from '~/components/theme-provider/theme';
-import { Transition } from '~/components/transition';
-import { useReducedMotion, useSpring } from 'framer-motion';
-import { useInViewport } from '~/hooks';
-import { startTransition, useCallback, useEffect, useRef, useState } from 'react';
-import {
-  ACESFilmicToneMapping,
-  CubeTextureLoader,
-  DirectionalLight,
-  Group,
-  PMREMGenerator,
-  PerspectiveCamera,
-  Scene,
-  WebGLRenderer,
-  MathUtils,
-  SRGBColorSpace,
-} from 'three';
-import { classes, cssProps, msToNum, numToMs } from '~/utils/style';
-import { cleanRenderer, cleanScene, modelLoader, removeLights } from '~/utils/three';
-import { throttle } from '~/utils/throttle';
-import styles from './armor.module.css';
 
 const rotationSpringConfig = {
   stiffness: 40,

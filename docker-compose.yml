@@ -1,0 +1,12 @@
+services:
+  db:
+    image: postgres:14
+    env_file: .env.test
+    restart: always
+    container_name: portfolio-integrations-tests-db
+    ports:
+      - '5432:5433'
+    environment:
+      POSTGRES_DB: prisma
+      POSTGRES_USER: prisma
+      POSTGRES_PASSWORD: tests

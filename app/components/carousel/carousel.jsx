@@ -1,22 +1,23 @@
-import { animate, useReducedMotion } from 'framer-motion';
-import { useInViewport } from '~/hooks';
-import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Color,
   LinearFilter,
+  LinearSRGBColorSpace,
   Mesh,
   OrthographicCamera,
   PlaneGeometry,
-  LinearSRGBColorSpace,
   Scene,
   ShaderMaterial,
   WebGLRenderer,
 } from 'three';
-import { resolveSrcFromSrcSet } from '~/utils/image';
-import { cssProps } from '~/utils/style';
+import { animate, useReducedMotion } from 'framer-motion';
 import { cleanRenderer, cleanScene, textureLoader } from '~/utils/three';
-import styles from './carousel.module.css';
+import { useCallback, useEffect, useRef, useState } from 'react';
+
+import { cssProps } from '~/utils/style';
 import fragment from './carousel-fragment.glsl?raw';
+import { resolveSrcFromSrcSet } from '~/utils/image';
+import styles from './carousel.module.css';
+import { useInViewport } from '~/hooks';
 import vertex from './carousel-vertex.glsl?raw';
 
 function determineIndex(imageIndex, index, images, direction) {

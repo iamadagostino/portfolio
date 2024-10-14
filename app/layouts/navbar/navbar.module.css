@@ -1,4 +1,4 @@
-@layer layout {
+@layer components {
   .navbar {
     --headerNavFontSize: calc((16 / 16) * 1rem);
 

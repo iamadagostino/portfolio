@@ -1,4 +1,4 @@
-import config from '~/config.json';
+import config from '~/config/app.json';
 
 export const navLinks = [
   {
@@ -21,14 +21,19 @@ export const navLinks = [
 
 export const socialLinks = [
   {
-    label: 'Twitter',
-    url: `https://twitter.com/${config.twitter}`,
-    icon: 'twitter',
+    label: 'Facebook',
+    url: `https://www.facebook.com/${config.facebook}`,
+    icon: 'facebook',
   },
   {
-    label: 'Figma',
-    url: `https://www.figma.com/${config.figma}`,
-    icon: 'figma',
+    label: 'Instagram',
+    url: `https://www.instagram.com/${config.instagram}`,
+    icon: 'instagram',
+  },
+  {
+    label: 'X',
+    url: `https://x.com/${config.x}`,
+    icon: 'twitter-x',
   },
   {
     label: 'Github',

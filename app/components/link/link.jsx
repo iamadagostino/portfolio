@@ -1,6 +1,6 @@
-import { forwardRef } from 'react';
 import { Link as RouterLink } from '@remix-run/react';
 import { classes } from '~/utils/style';
+import { forwardRef } from 'react';
 import styles from './link.module.css';
 
 // File extensions that can be linked to
@@ -36,7 +36,7 @@ export const Link = forwardRef(
     }
 
     return (
-      <RouterLink unstable_viewTransition prefetch="intent" {...linkProps} to={href}>
+      <RouterLink viewTransition prefetch="intent" {...linkProps} to={href}>
         {children}
       </RouterLink>
     );
