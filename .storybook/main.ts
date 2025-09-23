@@ -2,22 +2,17 @@ import type { StorybookConfig } from '@storybook/react-vite';
 
 const config: StorybookConfig = {
   stories: ['../app/**/*.stories.@(js|jsx|ts|tsx)'],
-  addons: [
-    { name: '@storybook/addon-essentials', options: { backgrounds: false } },
-    '@storybook/addon-links',
-    '@storybook/addon-interactions',
-    '@storybook/addon-a11y',
-  ],
+  addons: ['@storybook/addon-links', '@storybook/addon-a11y', '@storybook/addon-docs'],
+
   framework: {
     name: '@storybook/react-vite',
     options: {},
   },
+
   core: {
     builder: '@storybook/builder-vite', // 👈 The builder enabled here.
   },
-  docs: {
-    autodocs: 'tag',
-  },
+
   async viteFinal(config) {
     // Ensure config.define is properly handled
     const customConfig = {
@@ -29,7 +24,7 @@ const config: StorybookConfig = {
       },
       // Add dependencies to pre-optimization
       optimizeDeps: {
-        include: ['storybook-dark-mode'],
+        include: [],
       },
       // Define the NODE_ENV environment variable
       define: {
@@ -45,6 +40,10 @@ const config: StorybookConfig = {
 
     // Merge custom configuration into the default config
     return mergeConfig(config, customConfig);
+  },
+
+  features: {
+    backgrounds: false,
   },
 };
 

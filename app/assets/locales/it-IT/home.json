@@ -1,0 +1,48 @@
+{
+    "hero": {
+        "title": "Angelo D'Agostino",
+        "role": "Ingegnere Software",
+        "disciplines": [
+            "Sviluppatore",
+            "Innovatore",
+            "Costruttore",
+            "Designer",
+            "Smanettone"
+        ],
+        "disciplineConjunction": " e ",
+        "subtitle": "Sviluppatore Full-Stack e Designer",
+        "description": "Creo esperienze digitali che combinano un design accattivante con funzionalità potenti.",
+        "cta": "Visualizza il mio lavoro",
+        "scrollDown": "Scrolla per esplorare"
+    },
+    "about": {
+        "title": "Chi sono",
+        "description": "Sviluppatore appassionato con esperienza nelle tecnologie web moderne e nel design dell'esperienza utente.",
+        "skills": "Competenze e Tecnologie",
+        "experience": "Esperienza",
+        "education": "Formazione"
+    },
+    "services": {
+        "title": "Cosa faccio",
+        "webDevelopment": {
+            "title": "Sviluppo Web",
+            "description": "Siti web e applicazioni web moderne e responsive"
+        },
+        "mobileApps": {
+            "title": "App Mobile",
+            "description": "App multipiattaforma con tecnologie web"
+        },
+        "uiDesign": {
+            "title": "UI/UX Design",
+            "description": "Design centrato sull'utente e creazione di interfacce"
+        }
+    },
+    "profile": {
+        "greeting": "Ciao",
+        "intro": "Sono Angelo, attualmente vivo in Italia e lavoro come ingegnere software e sviluppatore full-stack. I miei progetti includono sviluppo web, applicazioni mobili e design UI/UX. Essere a mio agio sia con le tecnologie frontend che backend mi permette di prototipare rapidamente e validare soluzioni complete.",
+        "interests": "Nel tempo libero mi piace esplorare nuove tecnologie, lavorare su progetti personali e contribuire all'open source. Sono sempre entusiasta di nuove sfide e opportunità per creare esperienze digitali innovative.",
+        "cta": "Inviami un messaggio",
+        "tagLabel": "Chi sono",
+        "imageAlt": "Angelo D'Agostino, Ingegnere Software e Sviluppatore Full-Stack"
+    }
+}

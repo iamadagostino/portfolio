@@ -1,5 +1,5 @@
-import usesBackgroundPlaceholder from '~/assets/uses-background-placeholder.jpg';
-import usesBackground from '~/assets/uses-background.mp4';
+import usesBackgroundPlaceholder from '~/assets/images/placeholders/uses-background-placeholder.jpg';
+import usesBackground from '~/assets/videos/misc/uses-background.mp4';
 import { Footer } from '~/components/footer';
 import { Link } from '~/components/link';
 import { List, ListItem } from '~/components/list';

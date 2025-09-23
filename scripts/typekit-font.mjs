@@ -8,7 +8,7 @@ const https = require('https');
 const cssJson = require('cssjson');
 
 
-const FONTS_FOLDER = './resources/fonts';
+const FONTS_FOLDER = './assets/fonts';
 const FONTS_DEFINITIONS = `${FONTS_FOLDER}/definitions`;
 
 

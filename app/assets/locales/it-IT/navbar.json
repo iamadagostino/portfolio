@@ -1,0 +1,15 @@
+{
+    "Home": "Home",
+    "Projects": "Progetti",
+    "Details": "Dettagli",
+    "Articles": "Articoli",
+    "Contact": "Contatti",
+    "slugs": {
+        "home": "",
+        "project-1": "project-1",
+        "details": "dettagli",
+        "articles": "articoli",
+        "contact": "contatti",
+        "projects": "progetti"
+    }
+}

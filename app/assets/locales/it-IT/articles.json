@@ -1,0 +1,15 @@
+{
+    "title": "Articoli Recenti",
+    "featured": "In Evidenza",
+    "readMore": "Leggi articolo",
+    "readTime": "{{minutes}} min di lettura",
+    "publishedOn": "Pubblicato il",
+    "updatedOn": "Aggiornato il",
+    "backToArticles": "Torna agli articoli",
+    "noArticles": "Nessun articolo trovato",
+    "searchPlaceholder": "Cerca articoli...",
+    "tags": "Tag",
+    "category": "Categoria",
+    "author": "Autore",
+    "relatedArticles": "Articoli Correlati"
+}

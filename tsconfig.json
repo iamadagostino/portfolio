@@ -1,5 +1,6 @@
 {
   "include": [
+    ".react-router/types/**/*",
     "env.d.ts",
     "**/*.ts",
     "**/*.tsx",
@@ -7,11 +8,20 @@
     "**/.server/**/*.tsx",
     "**/.client/**/*.ts",
     "**/.client/**/*.tsx",
-    "postcss.config.mjs"
+    "postcss.config.mjs",
+    "app/routes/$lang/article.$slug/article.tss",
+    "app/routes/$lang/articles/route.ts"
   ],
   "compilerOptions": {
-    "types": ["@remix-run/node", "vite/client"],
-    "lib": ["DOM", "DOM.Iterable", "ES2022"],
+    "types": [
+      "@react-router/node",
+      "vite/client"
+    ],
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ES2022"
+    ],
     "isolatedModules": true,
     "esModuleInterop": true,
     "jsx": "react-jsx",
@@ -26,8 +36,14 @@
     "outDir": "./dist",
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./app/*"]
-    }
+      "~/*": [
+        "./app/*"
+      ]
+    },
+    "rootDirs": [
+      ".",
+      "./.react-router/types"
+    ]
   },
   // Vite takes care of building everything, not tsc.
   "noEmit": true

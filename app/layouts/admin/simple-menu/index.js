@@ -1,0 +1,1 @@
+export { SimpleMenuLayout } from './simple-menu-layout';

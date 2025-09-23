@@ -1,7 +1,7 @@
-import notFoundPoster from '~/assets/notfound.jpg';
-import notFoundVideo from '~/assets/notfound.mp4';
-import flatlinePoster from '~/assets/flatline.png';
-import flatlineVideo from '~/assets/flatline.mp4';
+import notFoundPoster from '~/assets/images/errors/notfound.jpg';
+import notFoundVideo from '~/assets/videos/errors/notfound.mp4';
+import flatlinePoster from '~/assets/images/errors/flatline.png';
+import flatlineVideo from '~/assets/videos/errors//flatline.mp4';
 import { Button } from '~/components/button';
 import { DecoderText } from '~/components/decoder-text';
 import { Heading } from '~/components/heading';
@@ -10,26 +10,31 @@ import { Transition } from '~/components/transition';
 import styles from './error.module.css';
 import { Image } from '~/components/image';
 import flatlineSkull from './error-flatline.svg';
+import { useErrorTranslation, useCurrentLanguage } from '~/i18n/i18n.hooks';
 
 export function Error({ error }) {
+  const { t } = useErrorTranslation();
+  const currentLanguage = useCurrentLanguage();
   const flatlined = !error.status;
+
+  // Generate locale-aware home link
+  const homeLink = `/${currentLanguage}`;
 
   const getMessage = () => {
     switch (error.status) {
       case 404:
         return {
-          summary: 'Error: redacted',
-          message:
-            'This page could not be found. It either doesn’t exist or was deleted. Or perhaps you don’t exist and this webpage couldn’t find you.',
+          summary: t('errors.404.summary'),
+          message: t('errors.404.message'),
         };
       case 405:
         return {
-          summary: 'Error: method denied',
+          summary: t('errors.405.summary'),
           message: error.data,
         };
       default:
         return {
-          summary: 'Error: anomaly',
+          summary: t('errors.default.summary'),
           message: error.statusText || error.data || error.toString(),
         };
     }
@@ -80,7 +85,11 @@ export function Error({ error }) {
                     <svg width="60" height="80" viewBox="0 0 60 80">
                       <use href={`${flatlineSkull}#skull`} />
                     </svg>
-                    <DecoderText text="Flatlined" start={visible} delay={300} />
+                    <DecoderText
+                      text={t('errors.flatlined.title')}
+                      start={visible}
+                      delay={300}
+                    />
                   </Heading>
                 )}
                 {!flatlined && (
@@ -106,7 +115,7 @@ export function Error({ error }) {
                     href="https://www.youtube.com/watch?v=EuQzHGcsjlA"
                     icon="chevron-right"
                   >
-                    Emotional support
+                    {t('errors.flatlined.button')}
                   </Button>
                 ) : (
                   <Button
@@ -114,10 +123,10 @@ export function Error({ error }) {
                     iconHoverShift
                     className={styles.button}
                     data-visible={visible}
-                    href="/"
+                    href={homeLink}
                     icon="chevron-right"
                   >
-                    Back to homepage
+                    {t('errors.notFound.button')}
                   </Button>
                 )}
               </div>
@@ -141,7 +150,7 @@ export function Error({ error }) {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Animation from Berserk (1997)
+                  {t('errors.flatlined.credit')}
                 </a>
               ) : (
                 <a
@@ -151,7 +160,7 @@ export function Error({ error }) {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Animation from Ghost in the Shell (1995)
+                  {t('errors.notFound.credit')}
                 </a>
               )}
             </div>

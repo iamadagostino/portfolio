@@ -1,9 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -19,14 +16,83 @@ enum Role {
   ADMIN
 }
 
+enum Language {
+  EN
+  IT
+}
+
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
 model User {
-  id        Int     @id @default(autoincrement())
-  email     String  @unique
-  username  String  @unique
+  id        Int    @id @default(autoincrement())
+  email     String @unique
+  username  String @unique
   firstName String
   lastName  String
 
   role Role @default(USER)
+
+  // Blog post relationships
+  posts Post[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
 }
 
+model Post {
+  id       Int        @id @default(autoincrement())
+  slug     String     @unique
+  status   PostStatus @default(DRAFT)
+  featured Boolean    @default(false)
 
+  // SEO and metadata
+  banner   String? // Path to banner image
+  readTime Int? // Reading time in minutes
+
+  // Author relationship
+  authorId Int
+  author   User @relation(fields: [authorId], references: [id])
+
+  // Translations
+  translations PostTranslation[]
+
+  // Timestamps
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@map("posts")
+}
+
+model PostTranslation {
+  id       Int      @id @default(autoincrement())
+  language Language
+
+  // Content fields
+  title    String
+  abstract String
+  content  String  @db.Text // MDX content
+  slug     String? // Language-specific slug (optional, defaults to main post slug)
+
+  // SEO fields
+  metaTitle       String?
+  metaDescription String?
+
+  // Relationships
+  postId Int
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Unique constraint: one translation per language per post
+  @@unique([postId, language])
+  @@map("post_translations")
+}

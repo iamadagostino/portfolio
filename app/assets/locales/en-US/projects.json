@@ -1,0 +1,27 @@
+{
+    "title": "Projects",
+    "subtitle": "My work and creations",
+    "description": "A collection of projects I've worked on",
+    "viewProject": "View project",
+    "viewCode": "View code",
+    "liveDemo": "Live demo",
+    "technologies": "Technologies",
+    "status": {
+        "inProgress": "In progress",
+        "completed": "Completed",
+        "maintenance": "Maintenance"
+    },
+    "categories": {
+        "web": "Web Development",
+        "mobile": "Mobile Apps",
+        "desktop": "Desktop Applications",
+        "api": "APIs & Backend",
+        "library": "Libraries & Tools",
+        "design": "Design & UI/UX"
+    },
+    "filters": {
+        "all": "All projects",
+        "featured": "Featured",
+        "recent": "Recent"
+    }
+}

@@ -1,0 +1,48 @@
+{
+    "hero": {
+        "title": "Angelo D'Agostino",
+        "role": "Software Engineer",
+        "disciplines": [
+            "Coder",
+            "Innovator",
+            "Builder",
+            "Designer",
+            "Tinkerer"
+        ],
+        "disciplineConjunction": ", and ",
+        "subtitle": "Full-Stack Developer & Designer",
+        "description": "I create digital experiences that combine beautiful design with powerful functionality.",
+        "cta": "View my work",
+        "scrollDown": "Scroll to explore"
+    },
+    "about": {
+        "title": "About me",
+        "description": "Passionate developer with expertise in modern web technologies and user experience design.",
+        "skills": "Skills & Technologies",
+        "experience": "Experience",
+        "education": "Education"
+    },
+    "services": {
+        "title": "What I do",
+        "webDevelopment": {
+            "title": "Web Development",
+            "description": "Modern, responsive websites and web applications"
+        },
+        "mobileApps": {
+            "title": "Mobile Apps",
+            "description": "Cross-platform apps with web technologies"
+        },
+        "uiDesign": {
+            "title": "UI/UX Design",
+            "description": "User-centered design and interface creation"
+        }
+    },
+    "profile": {
+        "greeting": "Hi there",
+        "intro": "I'm Angelo, currently I live in Italy working as a software engineer and full-stack developer. My projects include web development, mobile applications, and UI/UX design. Being comfortable with both frontend and backend technologies allows me to rapidly prototype and validate complete solutions.",
+        "interests": "In my spare time I like to explore new technologies, work on personal projects, and contribute to open source. I'm always excited about new challenges and opportunities to create innovative digital experiences.",
+        "cta": "Send me a message",
+        "tagLabel": "About me",
+        "imageAlt": "Angelo D'Agostino, Software Engineer and Full-Stack Developer"
+    }
+}

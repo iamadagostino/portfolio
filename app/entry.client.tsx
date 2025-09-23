@@ -1,43 +1,51 @@
 import { I18nextProvider, initReactI18next } from 'react-i18next';
 import { StrictMode, startTransition } from 'react';
 
-import Fetch from 'i18next-fetch-backend';
-import I18nextBrowserLanguageDetector from 'i18next-browser-languagedetector';
-import { RemixBrowser } from '@remix-run/react';
-import { getInitialNamespaces } from 'remix-i18next/client';
+import { HydratedRouter } from 'react-router/dom';
 import { hydrateRoot } from 'react-dom/client';
 import i18n from '~/i18n/i18n';
 import i18next from 'i18next';
 import { resources } from './i18n/i18n.resources';
 
 async function main() {
+  // Add error handling and validation for resources
+  if (!resources || typeof resources !== 'object') {
+    console.error('i18n resources not properly loaded');
+    return;
+  }
+
+  // Get the language from the HTML lang attribute (set by server)
+  const serverLanguage = document.documentElement.lang || 'en';
+
+  // Use fallback namespaces instead of getInitialNamespaces to avoid hydration issues
+  const namespaces = [
+    'common',
+    'navbar',
+    'home',
+    'articles',
+    'contact',
+    'projects',
+    'error',
+  ]; // All available namespaces
+
   // eslint-disable-next-line import/no-named-as-default-member
   await i18next
     .use(initReactI18next) // Tell i18next to use the react-i18next plugin
-    .use(Fetch) // Tell i18next to use the Fetch backend
-    .use(I18nextBrowserLanguageDetector) // Setup a client-side language detector
     .init({
       ...i18n,
-      ns: getInitialNamespaces(),
+      lng: serverLanguage, // Explicitly use the server-detected language
+      fallbackLng: serverLanguage, // Also set fallback to server language
+      ns: namespaces,
+      // Disable language detection completely on client
       detection: {
-        // Here only enable htmlTag detection, we'll detect the language only
-        // server-side with remix-i18next, by using the `<html lang>` attribute
-        // we can communicate to the client the language detected server-side
-        order: ['htmlTag'],
-        // Because we only use htmlTag, there's no reason to cache the language
-        // on the browser, so we disable it
+        order: [],
         caches: [],
       },
-      backend: {
-        // We will configure the backend to fetch the translations from the
-        // resource route /api/locales and pass the lng and ns as search params
-        // to the route.
-        // Add the API locales route uncommenting the following line:
-        // loadPath: '/api/locales?lng={{lng}}&ns={{ns}}',
-
-        // We will use the resources we imported from the i18n.resources.ts file
-        resources,
-      },
+      // Use local resources instead of trying to fetch from server
+      resources,
+      // Ensure we don't change language on client
+      updateMissing: false,
+      saveMissing: false,
     });
 
   startTransition(() => {
@@ -45,7 +53,7 @@ async function main() {
       document,
       <I18nextProvider i18n={i18next}>
         <StrictMode>
-          <RemixBrowser />
+          <HydratedRouter />
         </StrictMode>
       </I18nextProvider>
     );

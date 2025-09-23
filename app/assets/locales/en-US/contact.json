@@ -1,0 +1,30 @@
+{
+    "title": "Contact",
+    "subtitle": "Get in touch",
+    "description": "I'm always interested in new opportunities and collaborations.",
+    "metaDescription": "Send me a message if you're interested in discussing a project or if you just want to say hi",
+    "sayHello": "Drop a hello!",
+    "name": "Name",
+    "email": "E-mail",
+    "yourEmail": "Your e-mail",
+    "message": "Message",
+    "send": "Send message",
+    "sending": "Sending...",
+    "success": "Message Sent",
+    "successMessage": "I'll get back to you within a couple days, sit tight",
+    "backToHome": "Back to homepage",
+    "error": "Failed to send message. Please try again.",
+    "requiredField": "This field is required",
+    "invalidEmail": "Please enter a valid e-mail address.",
+    "messageRequired": "Please enter a message.",
+    "emailTooLong": "E-mail address must be shorter than {{length}} characters.",
+    "messageTooLong": "Message must be shorter than {{length}} characters.",
+    "emailSubject": "Portfolio message from {{email}}",
+    "emailFrom": "From: {{email}}",
+    "social": {
+        "email": "E-mail me",
+        "linkedin": "Connect on LinkedIn",
+        "github": "Follow on GitHub",
+        "twitter": "Follow on X"
+    }
+}

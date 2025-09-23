@@ -1,5 +1,5 @@
-import '../resources/css/app/reset.module.css'; // Contains Reset styles
-import '../resources/css/app/global.module.css'; // Contains Global styles
+import 'assets/css/app.reset.module.css'; // Contains Reset styles
+import 'assets/css/app.global.module.css'; // Contains Global styles
 import './preview.css';
 
 import { ThemeProvider, themeStyles } from '../app/components/theme-provider';

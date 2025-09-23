@@ -35,8 +35,14 @@ export const Loader = forwardRef<HTMLDivElement, LoaderProps>(
         ref={ref}
         className={classes(styles.loader, className)}
         data-center={center}
-        style={cssProps({ width, height }, style)}
         {...rest}
+        style={
+          {
+            '--width': `${width}px`,
+            '--height': `${height}px`,
+            ...style,
+          } as React.CSSProperties
+        }
       >
         <div className={styles.span} />
       </div>

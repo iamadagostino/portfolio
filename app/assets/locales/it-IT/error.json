@@ -1,0 +1,24 @@
+{
+    "pageTitle": "404 | Nascosto",
+    "errors": {
+        "404": {
+            "summary": "Errore: nascosto",
+            "message": "Questa pagina non può essere trovata. O non esiste o è stata eliminata. O forse non esisti tu e questa pagina web non è riuscita a trovarti."
+        },
+        "405": {
+            "summary": "Errore: metodo negato"
+        },
+        "default": {
+            "summary": "Errore: anomalia"
+        },
+        "flatlined": {
+            "title": "Piatto",
+            "button": "Supporto emotivo",
+            "credit": "Animazione da Berserk (1997)"
+        },
+        "notFound": {
+            "button": "Torna alla homepage",
+            "credit": "Animazione da Ghost in the Shell (1995)"
+        }
+    }
+}

@@ -1,0 +1,30 @@
+{
+    "title": "Contatti",
+    "subtitle": "Mettiti in contatto",
+    "description": "Sono sempre interessato a nuove opportunità e collaborazioni.",
+    "metaDescription": "Inviami un messaggio se sei interessato a discutere di un progetto o se vuoi semplicemente salutare",
+    "sayHello": "Droppa un ciao!",
+    "name": "Nome",
+    "email": "E-mail",
+    "yourEmail": "Indirizzo e-mail",
+    "message": "Messaggio",
+    "send": "Invia messaggio",
+    "sending": "Invio in corso...",
+    "success": "Messaggio Inviato",
+    "successMessage": "Ti risponderò entro un paio di giorni, abbi pazienza",
+    "backToHome": "Torna alla Home",
+    "error": "Impossibile inviare il messaggio. Riprova.",
+    "requiredField": "Questo campo è obbligatorio",
+    "invalidEmail": "Inserisci un indirizzo e-mail valido.",
+    "messageRequired": "Inserisci un messaggio.",
+    "emailTooLong": "L'indirizzo e-mail deve essere più corto di {{length}} caratteri.",
+    "messageTooLong": "Il messaggio deve essere più corto di {{length}} caratteri.",
+    "emailSubject": "Messaggio dal portfolio di {{email}}",
+    "emailFrom": "Da: {{email}}",
+    "social": {
+        "email": "Scrivimi un'e-mail",
+        "linkedin": "Collegati su LinkedIn",
+        "github": "Seguimi su GitHub",
+        "twitter": "Seguimi su X"
+    }
+}

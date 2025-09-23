@@ -6,6 +6,9 @@ node_modules.nosync
 .cache
 build
 
+# React Router generated types
+.react-router/
+
 # Environment files
 .env
 .dev.vars
@@ -17,8 +20,14 @@ build
 public/draco
 storybook-static
 
+# Template files
+template
+
 # System files
 .DS_Store
 
 # PNPM lock file
 pnpm-lock.yaml
+
+# Log files
+*.log

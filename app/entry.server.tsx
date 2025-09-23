@@ -1,16 +1,16 @@
 import * as i18n from './i18n/i18n';
 
-import type { AppLoadContext, EntryContext } from '@remix-run/node';
-import { I18nextProvider, initReactI18next } from 'react-i18next';
-import { createInstance, i18n as i18next } from 'i18next';
+import type { AppLoadContext, EntryContext } from 'react-router';
+import { I18nextProvider } from 'react-i18next';
+import { createInstance } from 'i18next';
 
 import { PassThrough } from 'node:stream';
-import { RemixServer } from '@remix-run/react';
-import { createReadableStreamFromReadable } from '@remix-run/node';
-import i18nServer from './i18n/i18n.server';
+import { ServerRouter } from 'react-router';
+import { createReadableStreamFromReadable } from '@react-router/node';
+import i18nServer from './services/i18n.server';
 import { isbot } from 'isbot';
 import { renderToPipeableStream } from 'react-dom/server.node';
-import { returnLanguageIfSupported } from './i18n/i18n.resources';
+import { returnLanguageIfSupported, resources } from './i18n/i18n.resources';
 
 const ABORT_DELAY = 5_000;
 
@@ -18,7 +18,7 @@ export default async function handleRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
-  remixContext: EntryContext,
+  reactRouterContext: EntryContext,
   // This is ignored so we can keep it in the template for visibility.  Feel
   // free to delete this parameter in your app if you're not using it!
 
@@ -29,17 +29,24 @@ export default async function handleRequest(
   const language = pathname.split('/')[1];
   const lng =
     returnLanguageIfSupported(language) ?? (await i18nServer.getLocale(request));
-  const ns = i18nServer.getRouteNamespaces(remixContext as never);
-  const instance = createInstance();
 
-  await instance.use(initReactI18next).init({ ...i18n, lng, ns });
+  // Create a properly configured i18next instance using the same resources as client
+  const instance = createInstance({
+    ...i18n.default,
+    lng,
+    resources,
+    fallbackLng: lng, // Ensure we don't fall back to English
+  });
+
+  // Initialize the instance
+  await instance.init();
 
   return isbot(request.headers.get('user-agent') || '')
     ? handleBotRequest(
         request,
         responseStatusCode,
         responseHeaders,
-        remixContext,
+        reactRouterContext,
         loadContext,
         instance
       )
@@ -47,7 +54,7 @@ export default async function handleRequest(
         request,
         responseStatusCode,
         responseHeaders,
-        remixContext,
+        reactRouterContext,
         loadContext,
         instance
       );
@@ -57,15 +64,15 @@ async function handleBotRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
-  remixContext: EntryContext,
+  reactRouterContext: EntryContext,
   _loadContext: AppLoadContext,
-  i18next: i18next
+  i18nextInstance: ReturnType<typeof createInstance>
 ) {
   return new Promise((resolve, reject) => {
     let shellRendered = false;
     const { pipe, abort } = renderToPipeableStream(
-      <I18nextProvider i18n={i18next}>
-        <RemixServer context={remixContext} url={request.url} abortDelay={ABORT_DELAY} />
+      <I18nextProvider i18n={i18nextInstance}>
+        <ServerRouter context={reactRouterContext} url={request.url} abortDelay={ABORT_DELAY} />
       </I18nextProvider>,
       {
         onAllReady() {
@@ -107,15 +114,15 @@ async function handleBrowserRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
-  remixContext: EntryContext,
+  reactRouterContext: EntryContext,
   _loadContext: AppLoadContext,
-  i18next: i18next
+  i18nextInstance: ReturnType<typeof createInstance>
 ) {
   return new Promise((resolve, reject) => {
     let shellRendered = false;
     const { pipe, abort } = renderToPipeableStream(
-      <I18nextProvider i18n={i18next}>
-        <RemixServer context={remixContext} url={request.url} abortDelay={ABORT_DELAY} />
+      <I18nextProvider i18n={i18nextInstance}>
+        <ServerRouter context={reactRouterContext} url={request.url} abortDelay={ABORT_DELAY} />
       </I18nextProvider>,
       {
         onShellReady() {

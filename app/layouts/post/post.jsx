@@ -1,28 +1,25 @@
-import { cssProps, msToNum, numToMs } from '~/utils/style';
-import { useEffect, useRef, useState } from 'react';
-import { useParallax, useScrollToHash } from '~/hooks';
-
 import { Divider } from '~/components/divider';
 import { Footer } from '~/components/footer';
 import { Heading } from '~/components/heading';
 import { Image } from '~/components/image';
-import { Link as RouterLink } from '@remix-run/react';
 import { Section } from '~/components/section';
 import { Text } from '~/components/text';
+import { tokens } from '~/components/theme-provider/theme';
 import { Transition } from '~/components/transition';
+import { useParallax, useScrollToHash } from '~/hooks';
+import { useRef } from 'react';
 import { clamp } from '~/utils/clamp';
 import { formatDate } from '~/utils/date';
+import { cssProps, msToNum, numToMs } from '~/utils/style';
 import styles from './post.module.css';
-import { tokens } from '~/config/theme.mjs';
+import { Link as RouterLink } from 'react-router';
 
-export const Post = ({ children, title, date, banner, timecode }) => {
+export const Post = ({ children, title, date, banner, timecode, language = 'en' }) => {
   const scrollToHash = useScrollToHash();
   const imageRef = useRef();
-  const [dateTime, setDateTime] = useState(null);
 
-  useEffect(() => {
-    setDateTime(formatDate(date));
-  }, [date, dateTime]);
+  // Calculate the formatted date directly during render
+  const dateTime = date ? formatDate(date, language) : null;
 
   useParallax(0.004, value => {
     if (!imageRef.current) return;

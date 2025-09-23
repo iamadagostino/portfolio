@@ -4,8 +4,8 @@ import { NavToggle } from './nav-toggle';
 import { ThemeToggle } from './theme-toggle';
 import { useNavbar } from '~/components/navbar-provider';
 
-export default function NavbarHeader() {
-  const { isMobile, menuOpen, setMenuOpen, setMenuLangOpen } = useNavbar();
+export default function NavbarHeader({ locale }) {
+  const { isMobile, menuOpen, setMenuOpen } = useNavbar();
 
   return (
     <Disclosure as="nav" className="bg-transparent fixed top-0 w-full z-10">
@@ -15,9 +15,9 @@ export default function NavbarHeader() {
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
             <LanguageDropdown
               data-mobile={isMobile}
-              menuLangOpen={setMenuLangOpen}
               hidden={isMobile}
               data-navbar-item
+              locale={locale}
             />
             <ThemeToggle data-navbar-item />
 

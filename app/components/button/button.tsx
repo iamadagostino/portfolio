@@ -1,7 +1,7 @@
 import { ReactNode, forwardRef } from 'react';
 
 import { Icon } from '~/components/icon';
-import { Link } from '@remix-run/react';
+import { Link } from 'react-router';
 import { Loader } from '~/components/loader';
 import { Transition } from '~/components/transition';
 import { classes } from '~/utils/style';

@@ -13,26 +13,77 @@ DESIGNER | デザイナー
 Angelo D'Agostino
 My Journey in Pixels and Ideas.
 
-Design tools:
-Affinity
-Figma
-Illustrator
-Photoshop
-Blender
+Site: https://www.angelo-dagostino.com
+Facebook: facebook.com/iamadagostino
+Instagram: instagram.com/iamadagostino
+X: x.com/iamadagostino
+GitHub: github.com/iamadagostino
+Location: Italy
 
-facebook.com/iamadagostino
-instagram.com/iamadagostino
-x.com/iamadagostino
-github.com/iamadagostino
+_______________________________________________________________________________
+
+TOOLS | ツール
+
+Design:
+Figma
+Affinity Designer
+Adobe Illustrator
+Adobe Photoshop
+Sketch
+
+3D & Animation:
+Blender
+Cinema 4D
+After Effects
+
+Development:
+Visual Studio Code
+WebStorm
+GitHub Desktop
+Insomnia
+Postman
+
+Productivity:
+Notion
+Linear
+Slack
+Discord
+
+Deployment:
+Vercel
+Netlify
+Cloudflare Pages
+Docker
 
 _______________________________________________________________________________
 
 TECHNOLOGY | テクノロジー
 
-React
-Remix
-Three.js
-Framer Motion
+Standards: HTML5, CSS3, ES2022, TypeScript
+Framework: React 19, Remix 2.17
+Frontend: React Three Fiber, Three.js, Framer Motion
+Styling: Tailwind CSS 4.1, PostCSS
+State Management: Jotai
+UI Components: Headless UI, Heroicons
+Animation: GSAP, Framer Motion
+3D Graphics: Three.js, React Three Fiber, Drei
+Internationalization: i18next, react-i18next
+Database: Prisma, PostgreSQL
+Build Tools: Vite 6, TypeScript 5
+Testing: Vitest, Storybook
+Deployment: Cloudflare Pages, Wrangler
+Package Manager: pnpm
+Development: ESLint, Prettier, Docker
+
+_______________________________________________________________________________
+
+SITE | サイト
+
+Last update: 2025/09/30
+Language: English/Italian (i18n)
+Doctype: HTML5
+IDE: Visual Studio Code
+Version Control: Git, GitHub
 
 _______________________________________________________________________________
 
@@ -41,3 +92,19 @@ FONTS | フォント
 Gotham
 IPA Gothic Regular
 Hiragino Kaku Gothic W8
+
+_______________________________________________________________________________
+
+THANKS | サンクス
+
+Hamish Williams
+https://hamishw.com
+Inspiration for this Portfolio Website
+
+React Three Fiber Community
+https://docs.pmnd.rs/react-three-fiber
+3D web development ecosystem
+
+Remix Team
+https://remix.run
+Full-stack web framework

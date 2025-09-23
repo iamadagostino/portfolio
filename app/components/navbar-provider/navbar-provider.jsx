@@ -2,7 +2,7 @@ import { createContext, useContext, useRef, useState } from 'react';
 import { useScrollToHash, useWindowSize } from '~/hooks';
 
 import { media } from '~/utils/style';
-import { useLocation } from '@remix-run/react';
+import { useLocation } from 'react-router';
 import { useTheme } from '../theme-provider';
 
 // Create the context
@@ -12,13 +12,13 @@ const NavbarContext = createContext();
 export const NavbarProvider = ({ children }) => {
   const { theme } = useTheme();
   const headerRef = useRef();
+  const location = useLocation();
   const scrollToHash = useScrollToHash();
   const windowSize = useWindowSize();
+  // Initialize as empty string to match server, then update via useEffect
   const [current, setCurrent] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
-  const [menuLangOpen, setMenuLangOpen] = useState(false);
   const [target, setTarget] = useState();
-  const location = useLocation();
   const isMobile = windowSize.width <= media.mobile || windowSize.height <= 696;
 
   const value = {
@@ -34,8 +34,6 @@ export const NavbarProvider = ({ children }) => {
     setCurrent,
     setMenuOpen,
     scrollToHash,
-    menuLangOpen,
-    setMenuLangOpen,
   };
 
   return <NavbarContext.Provider value={value}>{children}</NavbarContext.Provider>;

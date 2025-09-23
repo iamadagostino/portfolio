@@ -1,0 +1,15 @@
+{
+    "title": "Latest articles",
+    "featured": "Featured",
+    "readMore": "Read article",
+    "readTime": "{{minutes}} min read",
+    "publishedOn": "Published on",
+    "updatedOn": "Updated on",
+    "backToArticles": "Back to articles",
+    "noArticles": "No articles found",
+    "searchPlaceholder": "Search articles...",
+    "tags": "Tags",
+    "category": "Category",
+    "author": "Author",
+    "relatedArticles": "Related Articles"
+}

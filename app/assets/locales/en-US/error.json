@@ -1,0 +1,24 @@
+{
+    "pageTitle": "404 | Redacted",
+    "errors": {
+        "404": {
+            "summary": "Error: redacted",
+            "message": "This page could not be found. It either doesn't exist or was deleted. Or perhaps you don't exist and this webpage couldn't find you."
+        },
+        "405": {
+            "summary": "Error: method denied"
+        },
+        "default": {
+            "summary": "Error: anomaly"
+        },
+        "flatlined": {
+            "title": "Flatlined",
+            "button": "Emotional support",
+            "credit": "Animation from Berserk (1997)"
+        },
+        "notFound": {
+            "button": "Back to homepage",
+            "credit": "Animation from Ghost in the Shell (1995)"
+        }
+    }
+}

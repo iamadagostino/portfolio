@@ -8,4 +8,6 @@ export default {
   fallbackLng: 'en',
   // The default namespace of i18next is "translation", but you can customize it here
   defaultNS: 'common',
+  // Load all namespaces by default
+  ns: ['common', 'navbar', 'home', 'articles', 'contact', 'projects', 'error'],
 };

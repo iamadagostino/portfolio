@@ -1,0 +1,1 @@
+export { MainColorSwitcher } from './main-color-switcher';

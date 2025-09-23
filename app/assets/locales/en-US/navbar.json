@@ -1,0 +1,15 @@
+{
+    "Home": "Home",
+    "Projects": "Projects",
+    "Details": "Details",
+    "Articles": "Articles",
+    "Contact": "Contact",
+    "slugs": {
+        "home": "",
+        "project-1": "project-1",
+        "details": "details",
+        "articles": "articles",
+        "contact": "contact",
+        "projects": "projects"
+    }
+}

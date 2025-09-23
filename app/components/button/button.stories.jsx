@@ -1,6 +1,6 @@
 import { Button } from '~/components/button';
 import { useState } from 'react';
-import { action } from '@storybook/addon-actions';
+import { action } from 'storybook/actions';
 import { StoryContainer } from '../../../.storybook/story-container';
 
 export default {
