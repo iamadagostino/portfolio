@@ -1,16 +1,29 @@
+# Variables are managed in the deployment platform (e.g., Cloudflare, Vercel, Heroku).
+
+# The order of precedence for environment variables is as follows:
+# (Highest priority at the top)
+#   1. .env.local - Local overrides, never committed to git
+#   2. .env.development - Development-specific variables
+#   3. .env.production - Production-specific variables
+#   4. .env - Default fallback values, can be committed to git
+#   5. process.env - System environment variables
+#   6. .dev.vars - Cloudflare Workers specific (lowest priority in most frameworks)
+
 # Rename this file from .dev.vars.example to .dev.vars and paste in your credentials
 
 ENVIRONMENT=development
 
-# The email address to send emails to
+# Mail configuration
+# The e-mail address to send e-mails to
 EMAIL=you@website.com
 
-# The email address to send emails from (this needs to be set up in the AWS SES dashboard)
-FROM_EMAIL=portfolio-site@website.com
+# The e-mail address to send e-mails from (this needs to be set up in the AWS SES Dashboard)
+FROM_EMAIL=portfolio@website.com
 
 # Credentials from your AWS account
 AWS_ACCESS_KEY_ID=PASTE_YOUR_ACCESS_KEY
 AWS_SECRET_ACCESS_KEY=PASTE_YOUR_SECRET_KEY
 
+# Session configuration
 # This is a random string used for the session cookie for saving the preferred theme
 SESSION_SECRET=KEEP_IT_SECRET_KEEP_IT_SAFE

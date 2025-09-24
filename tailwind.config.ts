@@ -14,17 +14,12 @@ const withOpacityValue = (variable: string) => {
 export default {
   content: {
     relative: true,
-    files: [
-      './app/**/*.{js,jsx,ts,tsx}',
-      './admin-configuration/**/*.{js,jsx,ts,tsx}',
-      './node_modules/@left4code/tw-starter/**/*.js',
-    ],
+    files: ['./app/**/*.{js,jsx,ts,tsx}'],
   },
   darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        // Admin theme colors with CSS custom properties
         primary: withOpacityValue('--color-primary'),
         secondary: withOpacityValue('--color-secondary'),
         success: withOpacityValue('--color-success'),

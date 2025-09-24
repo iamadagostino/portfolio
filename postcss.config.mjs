@@ -4,7 +4,7 @@ export default {
     'postcss-advanced-variables': {},
     '@csstools/postcss-global-data': {
       files: [
-        'app/assets/css/app.global.module.css'
+        'app/assets/css/global.module.css'
       ],
     },
     'postcss-custom-media': {},

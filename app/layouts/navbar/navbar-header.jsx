@@ -13,12 +13,9 @@ export default function NavbarHeader({ locale }) {
         <div className="relative flex h-16 items-center justify-between">
           <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start"></div>
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-            <LanguageDropdown
-              data-mobile={isMobile}
-              hidden={isMobile}
-              data-navbar-item
-              locale={locale}
-            />
+            {!isMobile && (
+              <LanguageDropdown data-navbar-item locale={locale} />
+            )}
             <ThemeToggle data-navbar-item />
 
             {/* Mobile Toggle Menu */}
@@ -26,7 +23,6 @@ export default function NavbarHeader({ locale }) {
               <NavToggle
                 onClick={() => setMenuOpen(!menuOpen)}
                 data-mobile={isMobile}
-                menuOpen={menuOpen}
               />
             )}
           </div>

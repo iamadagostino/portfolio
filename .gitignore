@@ -29,5 +29,11 @@ template
 # PNPM lock file
 pnpm-lock.yaml
 
+# IDE files
+.claude
+.vscode
+.github
+.project
+
 # Log files
 *.log

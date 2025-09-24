@@ -59,7 +59,6 @@ module.exports = {
       },
     },
 
-
     // Typescript
     {
       files: ["**/*.{ts,tsx}"],
@@ -69,7 +68,7 @@ module.exports = {
         "import/internal-regex": "^~/",
         "import/resolver": {
           node: {
-            extensions: [".ts", ".tsx"],
+            extensions: [".ts", ".tsx", ".js", ".jsx"],
           },
           typescript: {
             alwaysTryTypes: true,

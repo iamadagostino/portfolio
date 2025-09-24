@@ -1,1 +1,0 @@
-export { SideMenuTooltip } from './side-menu-tooltip';

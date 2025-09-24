@@ -3,7 +3,7 @@ import { Icon } from '~/components/icon';
 import styles from './nav-toggle.module.css';
 import { useNavbar } from '~/components/navbar-provider';
 
-export const NavToggle = ({ menuOpen: _, ...rest }) => {
+export const NavToggle = ({ ...rest }) => {
   const { isMobile, menuOpen } = useNavbar();
 
   return (

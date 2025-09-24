@@ -9,8 +9,9 @@
     "**/.client/**/*.ts",
     "**/.client/**/*.tsx",
     "postcss.config.mjs",
-    "app/routes/$lang/article.$slug/article.tss",
-    "app/routes/$lang/articles/route.ts"
+    "app/routes/$lang/article.slug/article.tss",
+    "app/routes/$lang/articles/route.ts",
+    "app/routes/$lang/admin/dashboard/dashboard.jsx"
   ],
   "compilerOptions": {
     "types": [
@@ -33,7 +34,7 @@
     "allowJs": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "outDir": "./dist",
+    "outDir": "./public/dist",
     "baseUrl": ".",
     "paths": {
       "~/*": [

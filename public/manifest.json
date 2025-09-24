@@ -1,10 +1,20 @@
 {
   "short_name": "Angelo D'Agostino",
-  "name": "Pixels, Passion, and Projects by Angelo D'Agostino",
+  "name": "My Journey in Pixels and Ideas.",
   "icons": [
     {
       "src": "shortcut.png",
       "sizes": "64x64",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-64.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    },
+    {
+      "src": "128.png",
+      "sizes": "128x128",
       "type": "image/png"
     },
     {

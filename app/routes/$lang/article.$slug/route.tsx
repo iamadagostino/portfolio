@@ -1,11 +1,11 @@
-import type { LoaderFunctionArgs } from 'react-router';
-import { redirect } from 'react-router';
-import { returnLanguageIfSupported } from '../../../i18n/i18n.resources';
-import { formatTimecode } from '~/utils/timecode';
-import { useLoaderData } from 'react-router';
-import { Post } from '~/layouts/post';
+import { LoaderFunctionArgs, redirect, useLoaderData } from 'react-router';
+
 import { MarkdownContent } from '~/components/markdown-content';
+import { Post } from '~/layouts/post';
 import { getBlogPostWithSlugValidation } from '~/services/blog.server';
+import { formatTimecode } from '~/utils/timecode';
+
+import { returnLanguageIfSupported } from '../../../i18n/i18n.resources';
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   const lang = returnLanguageIfSupported(params.lang);
@@ -21,10 +21,7 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 
   try {
     // Get post and check if URL should redirect to correct slug
-    const { post, shouldRedirect, correctSlug } = await getBlogPostWithSlugValidation(
-      urlSlug,
-      lang
-    );
+    const { post, shouldRedirect, correctSlug } = await getBlogPostWithSlugValidation(urlSlug, lang);
 
     if (!post || !post.translation) {
       throw new Response('Article not found', { status: 404 });
@@ -37,9 +34,7 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
     }
 
     // Calculate timecode from reading time
-    const timecode = post.readTime
-      ? formatTimecode(post.readTime * 60 * 1000)
-      : formatTimecode(5 * 60 * 1000); // Default 5 minutes
+    const timecode = post.readTime ? formatTimecode(post.readTime * 60 * 1000) : formatTimecode(5 * 60 * 1000); // Default 5 minutes
 
     return {
       post,
@@ -55,9 +50,7 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 export const meta = ({
   data,
 }: {
-  data:
-    | { post: { translation: { title: string; metaDescription?: string } } }
-    | undefined;
+  data: { post: { translation: { title: string; metaDescription?: string } } } | undefined;
 }) => {
   if (!data?.post?.translation) return [];
   const { title, metaDescription } = data.post.translation;

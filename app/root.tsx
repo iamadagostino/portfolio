@@ -12,32 +12,34 @@ import {
   ScrollRestoration,
   useFetcher,
   useLoaderData,
+  useMatches,
   useNavigation,
   useRouteError,
 } from 'react-router';
 
 // Components, Layouts, Services, and Utilities
-import config from '~/config/app.json';
-import { Error } from '~/layouts/error';
-import { Navbar } from '~/layouts/navbar';
-import { Progress } from '~/components/progress';
+import clsxLib from 'clsx';
 import { useChangeLanguage } from 'remix-i18next/react';
 import GothamBook from '~/assets/fonts/gotham-book.woff2';
 import GothamMedium from '~/assets/fonts/gotham-medium.woff2';
 import { NavbarProvider } from '~/components/navbar-provider';
-import { VisuallyHidden } from '~/components/visually-hidden';
+import { Progress } from '~/components/progress';
 import { ThemeProvider, themeStyles } from '~/components/theme-provider';
+import { VisuallyHidden } from '~/components/visually-hidden';
+import config from '~/config/app.json';
+import { Error } from '~/layouts/error';
+import { Navbar } from '~/layouts/navbar';
 
 // Styles and Assets
+import { returnLanguageIfSupported } from './i18n/i18n.resources';
 import styles from './root.module.css';
 import i18next from './services/i18n.server';
-import { returnLanguageIfSupported } from './i18n/i18n.resources';
 
 import 'flag-icons/css/flag-icons.min.css';
 
-import './assets/css/_tailwind.css';
-import './assets/css/app.reset.module.css';
-import './assets/css/app.global.module.css';
+import './assets/css/global.module.css';
+import './assets/css/reset.module.css';
+import './assets/css/tailwind.css';
 
 export const links: LinksFunction = () => [
   {
@@ -177,6 +179,11 @@ export default function App() {
   const fetcher = useFetcher();
   const { state } = useNavigation();
   const { i18n } = useTranslation();
+  const matches = useMatches();
+  const isAdminRoute = matches.some((match) => {
+    const handle = match.handle as { layout?: string } | undefined;
+    return handle?.layout === 'admin';
+  });
   const hasLogged = useRef(false);
 
   let theme = initialTheme;
@@ -188,7 +195,7 @@ export default function App() {
     }
   }
 
-  function toggleTheme(newTheme: string) {
+  function toggleTheme(newTheme?: string) {
     fetcher.submit(
       { theme: newTheme ? newTheme : theme === 'dark' ? 'light' : 'dark' },
       { action: '/api/set-theme', method: 'post' }
@@ -197,10 +204,7 @@ export default function App() {
 
   useEffect(() => {
     if (!hasLogged.current) {
-      console.info(
-        `${config.ascii}\n`,
-        `\nFeeling inspired?\nExplore the source code here:\n\n${config.repo}\n`
-      );
+      console.info(`${config.ascii}\n`, `\nFeeling inspired?\nExplore the source code here:\n\n${config.repo}\n`);
       hasLogged.current = true; // Set the flag to prevent future executions
     }
   }, []);
@@ -209,34 +213,37 @@ export default function App() {
   useChangeLanguage(locale);
 
   return (
-    <html lang={locale} dir={i18n.dir()}>
+    <html
+      lang={locale}
+      dir={i18n.dir()}
+      className="text-zinc-950 antialiased lg:bg-zinc-100 dark:bg-zinc-900 dark:text-white dark:lg:bg-zinc-950"
+    >
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         {/* Theme color doesn't support oklch so I'm hard coding these hexes for now */}
         {/* Note: theme-color is not supported by Firefox, Firefox for Android, Opera - graceful degradation */}
         <meta name="theme-color" content={theme === 'dark' ? '#111' : '#F2F2F2'} />
-        <meta
-          name="color-scheme"
-          content={theme === 'light' ? 'light dark' : 'dark light'}
-        />
+        <meta name="color-scheme" content={theme === 'light' ? 'light dark' : 'dark light'} />
         <style dangerouslySetInnerHTML={{ __html: themeStyles }} />
         <Meta />
         <Links />
         <link rel="canonical" href={canonicalUrl} />
       </head>
       <body data-theme={theme}>
-        <ThemeProvider theme={theme} toggleTheme={toggleTheme} className="">
+        <ThemeProvider theme={theme as 'dark' | 'light'} toggleTheme={toggleTheme} className="">
           <Progress />
           <VisuallyHidden showOnFocus as="a" className={styles.skip} href="#main-content">
             Skip to main content
           </VisuallyHidden>
-          <NavbarProvider>
-            <Navbar locale={locale} />
-          </NavbarProvider>
+          {!isAdminRoute && (
+            <NavbarProvider>
+              <Navbar locale={locale} />
+            </NavbarProvider>
+          )}
           <main
             id="main-content"
-            className={styles.container}
+            className={clsxLib(!isAdminRoute && styles.container)}
             tabIndex={-1}
             data-loading={state === 'loading'}
           >

@@ -1,5 +1,5 @@
 import { HTMLAttributes, forwardRef } from 'react';
-import { classes, cssProps } from '~/utils/style';
+import { classes } from '~/utils/style';
 
 import { Text } from '~/components/text';
 import styles from './loader.module.css';

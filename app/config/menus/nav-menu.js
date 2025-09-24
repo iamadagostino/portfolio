@@ -8,12 +8,12 @@ export const navLinkKeys = [
   },
   {
     key: 'Projects',
-    type: 'page', // Changed back to page to use localized routing with smart highlighting
+    type: 'page',
     slug: 'projects',
   },
   {
     key: 'Details',
-    type: 'page', // Changed back to page to use localized routing with smart highlighting
+    type: 'page',
     slug: 'details',
   },
   {
