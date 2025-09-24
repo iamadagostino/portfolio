@@ -54,6 +54,7 @@
     "glob": "^11.0.3",
     "gray-matter": "^4.0.3",
     "highlight.js": "^11.11.1",
+    "hint": "^7.1.13",
     "i18next": "^25.5.2",
     "i18next-browser-languagedetector": "^8.2.0",
     "i18next-fetch-backend": "^6.0.0",

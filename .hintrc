@@ -1,5 +1,118 @@
 {
   "extends": [
     "development"
+  ],
+  "hints": {
+    "axe/language": [
+      "error",
+      {
+        "html-has-lang": "error",
+        "html-lang-valid": "error"
+      }
+    ],
+    "axe/parsing": [
+      "error",
+      {
+        "duplicate-id-active": "error",
+        "duplicate-id-aria": "error"
+      }
+    ],
+    "axe/keyboard": [
+      "error",
+      {
+        "focus-order-semantics": "error"
+      }
+    ],
+    "axe/forms": [
+      "error",
+      {
+        "label": "error"
+      }
+    ],
+    "axe/text-alternatives": [
+      "error",
+      {
+        "image-alt": "error"
+      }
+    ],
+    "axe/aria": [
+      "error",
+      {
+        "aria-valid-attr": "error",
+        "aria-valid-attr-value": "error"
+      }
+    ],
+    "axe/color": [
+      "error",
+      {
+        "color-contrast": "error"
+      }
+    ],
+    "axe/structure": [
+      "error",
+      {
+        "definition-list": "error",
+        "list": "error"
+      }
+    ],
+    "button-type": "error",
+    "create-element-svg": "error",
+    "disown-opener": "error",
+    "html-checker": "error",
+    "http-cache": "error",
+    "http-compression": [
+      "error",
+      {
+        "brotli": true,
+        "gzip": true
+      }
+    ],
+    "image-optimization-cloudinary": "off",
+    "leading-dot-classlist": "error",
+    "manifest-app-name": "error",
+    "manifest-exists": "error",
+    "manifest-file-extension": "error",
+    "meta-charset-utf-8": "error",
+    "meta-viewport": "error",
+    "no-disallowed-headers": "error",
+    "no-html-only-headers": "error",
+    "no-http-redirects": "error",
+    "no-inline-styles": "warning",
+    "no-protocol-relative-urls": "error",
+    "scoped-svg-styles": "error",
+    "sri": "error",
+    "ssllabs": "error",
+    "typescript-config/consistent-casing": "error",
+    "typescript-config/import-helpers": "error",
+    "typescript-config/is-valid": "error",
+    "typescript-config/no-comments": "error",
+    "typescript-config/strict": "error",
+    "typescript-config/target": "error"
+  },
+  "formatters": [
+    "stylish"
+  ],
+  "parsers": [
+    "typescript-config",
+    "manifest",
+    "css"
+  ],
+  "browserslist": [
+    "defaults",
+    "not IE 11"
+  ],
+  "ignoredUrls": [
+    {
+      "domain": ".*\\.local.*",
+      "hints": [
+        "*"
+      ]
+    },
+    {
+      "domain": ".*\\.(tsx|jsx|ts|js)$",
+      "hints": [
+        "html-checker"
+      ]
+    }
   ]
 }
