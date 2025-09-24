@@ -6,13 +6,22 @@ export const Select = forwardRef(function Select(
   {
     className,
     multiple,
+    title,
     ...props
-  }: { className?: string } & Omit<Headless.SelectProps, 'as' | 'className'>,
+  }: { className?: string; title?: string } & Omit<Headless.SelectProps, 'as' | 'className'>,
   ref: React.ForwardedRef<HTMLSelectElement>
 ) {
+  // Extract a few accessibility-related props to apply to the outer wrapper
+  const forwarded = props as Record<string, unknown>;
+  const spanProps: Record<string, unknown> = {};
+  if (forwarded['aria-label']) spanProps['aria-label'] = forwarded['aria-label'];
+  if (forwarded['aria-labelledby']) spanProps['aria-labelledby'] = forwarded['aria-labelledby'];
+
   return (
     <span
       data-slot="control"
+      title={title}
+      {...(spanProps as Record<string, string | undefined>)}
       className={clsx([
         className,
         // Basic layout
@@ -30,6 +39,7 @@ export const Select = forwardRef(function Select(
       <Headless.Select
         ref={ref}
         multiple={multiple}
+        title={title}
         {...props}
         className={clsx([
           // Basic layout
@@ -62,18 +72,8 @@ export const Select = forwardRef(function Select(
             aria-hidden="true"
             fill="none"
           >
-            <path
-              d="M5.75 10.75L8 13L10.25 10.75"
-              strokeWidth={1.5}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M10.25 5.25L8 3L5.75 5.25"
-              strokeWidth={1.5}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
+            <path d="M5.75 10.75L8 13L10.25 10.75" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M10.25 5.25L8 3L5.75 5.25" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </span>
       )}

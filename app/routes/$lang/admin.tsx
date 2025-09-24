@@ -44,9 +44,9 @@ import {
   SidebarSection,
   SidebarSpacer,
 } from '~/components/admin/sidebar';
+import { getAdminSideMenu } from '~/config/menus/admin-menu';
 import { getEvents } from '~/data/fake';
 import { SidebarLayout } from '~/layouts/admin/sidebar-layout';
-import { getAdminSideMenu } from '~/config/menus/admin-menu';
 
 import { createLocalizedLoader } from '../locale-loader';
 
@@ -60,7 +60,7 @@ export const loader = createLocalizedLoader(async ({ language, request }) => {
 
   const url = new URL(request.url);
   const adminBasePath = `/${language}/admin`;
-  
+
   // Redirect /admin to /admin/dashboard
   if (url.pathname === adminBasePath || url.pathname === `${adminBasePath}/`) {
     throw redirect(`${adminBasePath}/dashboard`);
@@ -108,6 +108,13 @@ type AdminLoaderData = {
   adminMenu: ReturnType<typeof getAdminSideMenu>;
 };
 
+type MenuItem = {
+  key: string;
+  pathname: string;
+  icon?: string;
+  title?: string;
+};
+
 const iconMap: Record<string, typeof HomeIcon> = {
   HomeIcon,
   Square2StackIcon,
@@ -118,8 +125,8 @@ const iconMap: Record<string, typeof HomeIcon> = {
 
 export default function Admin() {
   const { pathname } = useLocation();
-  const { events = [], lang, adminMenu } = useLoaderData<AdminLoaderData>();
-  
+  const { events = [], adminMenu } = useLoaderData<AdminLoaderData>();
+
   const isPathActive = (target: string) => {
     return pathname === target || pathname.startsWith(`${target}/`);
   };
@@ -149,7 +156,7 @@ export default function Admin() {
                 <ChevronDownIcon />
               </DropdownButton>
               <DropdownMenu className="min-w-80 lg:min-w-64" anchor="bottom start">
-                <DropdownItem href={adminMenu.find((item: any) => item.key === 'settings')?.pathname || '#'}>
+                <DropdownItem href={(adminMenu.find((item: MenuItem) => item.key === 'settings')?.pathname) || '#'}>
                   <Cog8ToothIcon />
                   <DropdownLabel>Settings</DropdownLabel>
                 </DropdownItem>
@@ -173,14 +180,10 @@ export default function Admin() {
 
           <SidebarBody>
             <SidebarSection>
-              {adminMenu.map((item: any) => {
-                const IconComponent = iconMap[item.icon] || HomeIcon;
+              {adminMenu.map((item: MenuItem) => {
+                const IconComponent = (item.icon && iconMap[item.icon]) || HomeIcon;
                 return (
-                  <SidebarItem 
-                    key={item.key} 
-                    href={item.pathname} 
-                    current={isPathActive(item.pathname)}
-                  >
+                  <SidebarItem key={item.key} href={item.pathname} current={isPathActive(item.pathname)}>
                     <IconComponent />
                     <SidebarLabel>{item.title}</SidebarLabel>
                   </SidebarItem>
@@ -191,7 +194,7 @@ export default function Admin() {
             <SidebarSection className="max-lg:hidden">
               <SidebarHeading>Upcoming Events</SidebarHeading>
               {events.map((event) => {
-                const eventsBasePath = adminMenu.find((item: any) => item.key === 'events')?.pathname || '#';
+                const eventsBasePath = (adminMenu.find((item: MenuItem) => item.key === 'events')?.pathname) || '#';
                 const href = `${eventsBasePath}/${event.id}`;
 
                 return (

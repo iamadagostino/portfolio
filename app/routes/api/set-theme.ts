@@ -1,4 +1,4 @@
-import { data, createCookieSessionStorage, ActionFunctionArgs } from 'react-router';
+import { ActionFunctionArgs, createCookieSessionStorage, data } from 'react-router';
 
 export const action = async ({ request, context }: ActionFunctionArgs) => {
   if (request.method !== 'POST') {
@@ -11,10 +11,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
 
     // Validate theme value
     if (!theme || (theme !== 'dark' && theme !== 'light')) {
-      return data(
-        { error: 'Invalid theme value' },
-        { status: 400 }
-      );
+      return data({ error: 'Invalid theme value' }, { status: 400 });
     }
 
     // Access environment variables with fallback for different context structures
@@ -22,7 +19,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
       cloudflare?: { env?: { SESSION_SECRET?: string } };
       env?: { SESSION_SECRET?: string };
     };
-    
+
     const sessionSecret =
       contextWithEnv?.cloudflare?.env?.SESSION_SECRET ||
       contextWithEnv?.env?.SESSION_SECRET ||
@@ -54,9 +51,6 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
     );
   } catch (error) {
     console.error('Theme setting error:', error);
-    return data(
-      { error: 'Failed to set theme' },
-      { status: 500 }
-    );
+    return data({ error: 'Failed to set theme' }, { status: 500 });
   }
-}
+};

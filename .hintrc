@@ -1,10 +1,5 @@
 {
   "extends": [
     "development"
-  ],
-  "hints": {
-    "compat-api/html": "off",
-    "no-inline-styles": "off",
-    "axe/aria": "off"
-  }
+  ]
 }

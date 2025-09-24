@@ -40,7 +40,7 @@ export default function Dashboard() {
       <div className="mt-8 flex items-end justify-between">
         <Subheading>Overview</Subheading>
         <div>
-          <Select name="period">
+          <Select aria-label="Select reporting period" name="period">
             <option value="last_week">Last week</option>
             <option value="last_two">Last two weeks</option>
             <option value="last_month">Last month</option>

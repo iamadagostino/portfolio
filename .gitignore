@@ -18,6 +18,7 @@ build
 
 # Public and static assets
 public/draco
+public/dist
 storybook-static
 
 # Template files

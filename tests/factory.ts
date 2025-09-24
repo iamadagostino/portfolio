@@ -1,6 +1,6 @@
+import { faker } from '@faker-js/faker';
 import { User } from '@prisma/client';
 import { createUser as createDbUser } from '~/.server/models/user.model';
-import { faker } from '@faker-js/faker';
 
 /**
  * Create a user specifying the role
@@ -15,6 +15,8 @@ const createUser = (role: User['role']) => () =>
     firstName: faker.person.firstName(),
     lastName: faker.person.lastName(),
     role,
+    createdAt: new Date(),
+    updatedAt: new Date(),
   });
 
 // Create a normal user

@@ -20,7 +20,7 @@ export const loader = async () => {
 export default function Events() {
   const { events } = useLoaderData<typeof loader>();
   const { lang } = useParams();
-  
+
   const getEventAdminUrl = (eventId: number) => `/${lang}/admin/event/${eventId}`;
 
   return (
@@ -36,7 +36,7 @@ export default function Events() {
               </InputGroup>
             </div>
             <div>
-              <Select name="sort_by">
+              <Select aria-label="Sort events by" name="sort_by">
                 <option value="name">Sort by name</option>
                 <option value="date">Sort by date</option>
                 <option value="status">Sort by status</option>

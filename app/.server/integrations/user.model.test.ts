@@ -15,6 +15,8 @@ describe('Creating users', () => {
       firstName: 'Test',
       lastName: 'User',
       role: 'USER',
+      createdAt: new Date(),
+      updatedAt: new Date(),
     });
     expect(user).toBeDefined();
   });
