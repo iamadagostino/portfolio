@@ -49,7 +49,7 @@ export const ThemeProvider = ({
       {isRootProvider && children}
       {/* Nested providers need a div to override theme tokens */}
       {!isRootProvider && (
-        <Component className={classes(className)} data-theme={theme} {...rest}>
+        <Component className={classes(className)} {...rest}>
           {children}
         </Component>
       )}
@@ -126,11 +126,11 @@ const tokenStyles = squish(`
 
   ${createMediaTokenProperties()}
 
-  [data-theme='dark'] {
+  body[data-theme='dark'] {
     ${createThemeProperties(themes.dark)}
   }
 
-  [data-theme='light'] {
+  body[data-theme='light'] {
     ${createThemeProperties(themes.light)}
   }
 `);

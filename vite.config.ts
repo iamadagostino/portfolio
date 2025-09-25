@@ -1,39 +1,35 @@
 import { reactRouter } from '@react-router/dev/vite';
 
-import { defineConfig, ViteDevServer } from 'vite';
-import { envOnlyMacros } from 'vite-env-only';
 import mdx from '@mdx-js/rollup';
+import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
+import { IncomingMessage, ServerResponse } from 'http';
 import rehypeImgSize from 'rehype-img-size';
-// import rehypePrism from '@mapbox/rehype-prism';
 import rehypeSlug from 'rehype-slug';
 import remarkFrontmatter from 'remark-frontmatter';
 import remarkMdxFrontmatter from 'remark-mdx-frontmatter';
-// import { remixDevTools } from 'remix-development-tools';
-import tailwindcss from '@tailwindcss/vite';
+import { defineConfig, ViteDevServer } from 'vite';
+import { envOnlyMacros } from 'vite-env-only';
 import topLevelAwait from 'vite-plugin-top-level-await';
 import tsconfigPaths from 'vite-tsconfig-paths';
-import { IncomingMessage, ServerResponse } from 'http';
 
-const isStorybook = process.argv.some(arg => arg.includes('storybook'));
+const isStorybook = process.argv.some((arg) => arg.includes('storybook'));
 
 // Simple plugin to add UTF-8 charset to .txt files
 const cloudflareHeaders = () => ({
   name: 'cloudflare-headers',
   configureServer(server: ViteDevServer) {
-    server.middlewares.use(
-      (req: IncomingMessage, res: ServerResponse, next: () => void) => {
-        const url = req.url || '';
+    server.middlewares.use((req: IncomingMessage, res: ServerResponse, next: () => void) => {
+      const url = req.url || '';
 
-        // Apply headers for .txt files based on _headers config
-        if (url.endsWith('.txt')) {
-          res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-          res.setHeader('Cache-Control', 'public, max-age=3600, s-maxage=3600');
-        }
-
-        next();
+      // Apply headers for .txt files based on _headers config
+      if (url.endsWith('.txt')) {
+        res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+        res.setHeader('Cache-Control', 'public, max-age=3600, s-maxage=3600');
       }
-    );
+
+      next();
+    });
   },
 });
 
@@ -65,7 +61,6 @@ export default defineConfig({
       rehypePlugins: [
         [rehypeImgSize, { dir: 'public' }], // Handle image sizes
         rehypeSlug, // Add slugs to headings
-        // rehypePrism, // Syntax highlighting for code blocks
       ],
       remarkPlugins: [
         remarkFrontmatter, // Support for YAML frontmatter
@@ -82,7 +77,7 @@ export default defineConfig({
       // The export name of top-level await promise for each chunk module
       promiseExportName: '__tla',
       // The function to generate import names of top-level await promise in each chunk module
-      promiseImportName: i => `__tla_${i}`,
+      promiseImportName: (i) => `__tla_${i}`,
     }),
     envOnlyMacros(), // Enable environment-only macros
     tsconfigPaths(), // Resolve paths from jsconfig.json

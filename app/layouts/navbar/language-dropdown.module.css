@@ -58,7 +58,7 @@
       background: rgba(0, 0, 0, 0.12);
     }
 
-    body[data-theme='dark'] & {
+    [data-theme='dark'] & {
       background: rgba(255, 255, 255, 0.15);
       color: rgba(255, 255, 255, 1);
 

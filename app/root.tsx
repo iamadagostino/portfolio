@@ -213,25 +213,21 @@ export default function App() {
   useChangeLanguage(locale);
 
   return (
-    <html
-      lang={locale}
-      dir={i18n.dir()}
-      className="text-zinc-950 antialiased lg:bg-zinc-100 dark:bg-zinc-900 dark:text-white dark:lg:bg-zinc-950"
-    >
+    <html lang={locale} dir={i18n.dir()} className="antialiased">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         {/* Theme color doesn't support oklch so I'm hard coding these hexes for now */}
         {/* Note: theme-color is not supported by Firefox, Firefox for Android, Opera - graceful degradation */}
         <meta name="theme-color" content={theme === 'dark' ? '#111' : '#F2F2F2'} />
-        <meta name="color-scheme" content={theme === 'light' ? 'light dark' : 'dark light'} />
+        <meta name="color-scheme" content={theme as 'dark' | 'light'} />
         <style dangerouslySetInnerHTML={{ __html: themeStyles }} />
         <Meta />
         <Links />
         <link rel="canonical" href={canonicalUrl} />
       </head>
-      <body data-theme={theme}>
-        <ThemeProvider theme={theme as 'dark' | 'light'} toggleTheme={toggleTheme} className="">
+      <body className={theme as 'dark' | 'light'} data-theme={theme as 'dark' | 'light'}>
+        <ThemeProvider theme={theme as 'dark' | 'light'} toggleTheme={toggleTheme}>
           <Progress />
           <VisuallyHidden showOnFocus as="a" className={styles.skip} href="#main-content">
             {t('skipToMain')}

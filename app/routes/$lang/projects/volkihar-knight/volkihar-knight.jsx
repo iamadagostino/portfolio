@@ -60,11 +60,11 @@ export function VolkiharKnight() {
       <style
         dangerouslySetInnerHTML={{
           __html: `
-            [data-theme='dark'] {
+            body[data-theme='dark'] {
               --primary: oklch(87.71% 0.084 85.29);
               --accent: oklch(87.71% 0.084 85.29);
             }
-            [data-theme='light'] {
+            body[data-theme='light'] {
               --primary: oklch(52.25% 0.121 81.53);
               --accent: oklch(52.25% 0.121 81.53);
             }
