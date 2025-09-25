@@ -128,7 +128,7 @@
   fill: var(--textTitle);
 
   &[data-visible='true'] {
-    opacity: 1;
+    opacity: var(--opacity);
   }
 }
 

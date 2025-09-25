@@ -1,5 +1,5 @@
 import { Suspense, lazy, useEffect, useState } from 'react';
-import { useInterval, usePrevious, useScrollToHash } from '~/hooks';
+import { useInterval, usePrevious, useScrollToHash, useWindowSize } from '~/hooks';
 
 import { Link as RouterLink } from 'react-router';
 import { DecoderText } from '~/components/decoder-text';
@@ -12,7 +12,7 @@ import config from '~/config/app.json';
 import { tokens } from '~/config/theme.mjs';
 import { useHydrated } from '~/hooks/useHydrated';
 import { useCurrentLanguage, useHomeTranslation, useNavbarTranslation } from '~/i18n/i18n.hooks';
-import { cssProps } from '~/utils/style';
+import { cssProps, media } from '~/utils/style';
 import styles from './intro.module.css';
 
 const DisplacementSphere = lazy(() =>
@@ -21,6 +21,7 @@ const DisplacementSphere = lazy(() =>
 
 export function Intro({ id, sectionRef, scrollIndicatorHidden, ...rest }) {
   const { theme } = useTheme();
+  const { width } = useWindowSize();
   const { t } = useHomeTranslation();
   const { t: tNav } = useNavbarTranslation();
   const currentLanguage = useCurrentLanguage();
@@ -44,6 +45,7 @@ export function Intro({ id, sectionRef, scrollIndicatorHidden, ...rest }) {
   const titleId = `${id}-title`;
   const scrollToHash = useScrollToHash();
   const isHydrated = useHydrated();
+  const isMobile = width <= media.mobile;
 
   useInterval(
     () => {
@@ -92,6 +94,7 @@ export function Intro({ id, sectionRef, scrollIndicatorHidden, ...rest }) {
                 <span aria-hidden className={styles.row}>
                   <span
                     className={styles.word}
+                    data-mobile={isMobile}
                     data-status={status}
                     style={cssProps({ delay: tokens.base.durationXS })}
                   >

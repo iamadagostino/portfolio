@@ -3,7 +3,9 @@ import { pxToRem } from '~/utils/style';
 // Full list of tokens
 const baseTokens = {
   black: 'oklch(0% 0 0)',
+  blackHex: '#000000',
   white: 'oklch(100% 0 0)',
+  whiteHex: '#ffffff',
   bezierFastoutSlowin: 'cubic-bezier(0.4, 0.0, 0.2, 1)',
   durationXS: '200ms',
   durationS: '300ms',
@@ -115,14 +117,23 @@ const tokensMobileSmall = {
 // Tokens that change based on theme
 const dark = {
   background: 'oklch(17.76% 0 0)', //#111111
+  backgroundHex: '#111111',
   backgroundInverted: 'oklch(96.12% 0 0)', // #f2f2f2
+  backgroundInvertedHex: '#f2f2f2',
   backgroundLight: 'oklch(21.78% 0 0)', //1a1a1a
+  backgroundLightHex: '#1a1a1a',
   backgroundLightInverted: 'var(--white)', // #ffffff
-  primary: 'oklch(62.43% 0.20557727502427348 255.48611841539625)', //#  vec3 color = vec3(vUv * (0.2 - 2.0 * noise), 1.0);
+  backgroundLightInvertedHex: '#ffffff',
+  primary: 'var(--black)', //#  vec3 color = vec3(vUv * (0.2 - 2.0 * noise), 1.0);
+  primaryHex: '#0A84FF',
   accent: 'oklch(62.43% 0.20557727502427348 255.48611841539625)',//#0a84ff
+  accentHex: '#0A84FF',
   error: 'oklch(65.91% 0.249 13.76)', // #ff2463
+  errorHex: '#ff2463',
   text: 'var(--white)', //#ffffff
+  textHex: '#ffffff',
   textInverted: 'var(--black)', //#000000
+  textInvertedHex: '#000000',
   textTitle: 'var(--text)',
   textTitleInverted: 'var(--textInverted)',
   textBody: 'color-mix(in lab, var(--text) 80%, transparent)',
@@ -133,14 +144,23 @@ const dark = {
 
 const light = {
   background: 'oklch(96.12% 0 0)', // #f2f2f2
+  backgroundHex: '#f2f2f2',
   backgroundInverted: 'oklch(17.76% 0 0)', //#111111
+  backgroundInvertedHex: '#111111',
   backgroundLight: 'var(--white)', // #ffffff
+  backgroundLightHex: '#ffffff',
   backgroundLightInverted: 'oklch(21.78% 0 0)', //1a1a1a
-  primary: 'var(--black)', // #000000
+  backgroundLightInvertedHex: '#1a1a1a',
+  primary: 'var(--black)', // #000000 vec3 color = vec3(vUv * (0.2 - 2.0 * noise), 1.0);
+  primaryHex: '#000000',
   accent: 'oklch(62.43% 0.20557727502427348 255.48611841539625)', //#0a84ff
+  accentHex: '#0A84FF',
   error: 'oklch(61.22% 0.2082 22.24)', //#e63946
+  errorHex: '#e63946',
   text: 'var(--black)', // #000000
+  textHex: '#000000',
   textInverted: 'var(--white)', //#ffffff
+  textInvertedHex: '#ffffff',
   textTitle: 'color-mix(in lab, var(--text) 90%, transparent)',
   textTitleInverted: 'color-mix(in lab, var(--textInverted) 90%, transparent)',
   textBody: 'color-mix(in lab, var(--text) 75%, transparent)',

@@ -20,6 +20,10 @@
     max-width: 780px;
   }
 
+  @media (--mediaTablet) {
+    max-width: 640px;
+  }
+
   @media (--mediaMobile) {
     top: calc(var(--space3XL) * -1);
   }
@@ -117,6 +121,10 @@
   color: color-mix(in lab, var(--text) 0%, transparent);
   transition: opacity 0.5s ease var(--durationM);
   isolation: isolate;
+
+  &[data-mobile='true'] {
+    flex-shrink: 1;
+  }
 
   &::after {
     content: '';

@@ -1,5 +1,7 @@
 @layer layout {
   .toggle {
+    --buttonSize: 4rem;
+
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -7,8 +9,6 @@
     background: transparent;
     border: none;
     cursor: pointer;
-
-    --buttonSize: 80px;
 
     --offset: var(--spaceXS);
     --inset: calc(var(--spaceOuter) - var(--offset));
@@ -20,12 +20,13 @@
 
     @media (--mediaMobile), (--mediaMobileLS) {
       display: flex;
+      --offset: var(--spaceXS);
+      --inset: calc(var(--spaceXL) - var(--offset));
     }
 
     &[data-mobile='true'] {
       --offset: var(--spaceXS);
       --inset: calc(var(--spaceXL) - var(--offset));
-      --3dExperienceOffsetMobile: 9px; /* Position to the left of theme toggle on mobile */
     }
   }
 
@@ -37,13 +38,17 @@
   .icon {
     position: absolute;
     inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    filter: invert(1) brightness(0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     opacity: 0;
     transition: opacity var(--3dExperienceCrossfade, 300ms) ease;
     pointer-events: none;
+  }
+
+  .icon > div {
+    width: 100% !important;
+    height: 100% !important;
   }
 
   .iconVisible {

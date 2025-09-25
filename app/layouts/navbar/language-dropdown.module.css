@@ -22,18 +22,6 @@
     &[data-mobile='true'] {
       --offset: var(--spaceXS);
       --inset: calc(var(--spaceXL) - var(--offset));
-      --languageOffsetMobile: 80px; /* Position to the left of theme toggle on mobile */
-
-      position: fixed;
-      top: unset;
-      bottom: var(--inset);
-      right: calc(var(--inset) + var(--languageOffsetMobile));
-      margin-top: 0;
-      margin-right: 0;
-      transform: translate3d(0, 0, 0);
-      height: auto;
-      display: flex;
-      width: auto;
     }
   }
 
@@ -104,7 +92,7 @@
 
   .panel {
     position: absolute;
-    top: calc(100% + 4px);
+    top: calc(100% + 10px);
     right: 0;
     width: 180px;
     z-index: 50;
@@ -119,13 +107,6 @@
       background: rgba(0, 0, 0, 0.95);
       border: 1px solid rgba(255, 255, 255, 0.1);
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-    }
-
-    /* Dropup on mobile */
-    .dropdown[data-mobile='true'] & {
-      top: unset;
-      bottom: calc(100% + 4px);
-      transform-origin: bottom right;
     }
   }
   .item {

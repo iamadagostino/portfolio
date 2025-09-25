@@ -175,7 +175,7 @@
   }
 
   .mobileNavLink {
-    width: 100%;
+    width: 80%;
     font-size: var(--headerNavFontSize);
     text-align: center;
     text-decoration: none;

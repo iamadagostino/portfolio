@@ -9,9 +9,10 @@ import { Heading } from '~/components/heading';
 import { Image } from '~/components/image';
 import { Section } from '~/components/section';
 import { Text } from '~/components/text';
+import { useTheme } from '~/components/theme-provider';
 import { Transition } from '~/components/transition';
 import { useCurrentLanguage, useHomeTranslation, useNavbarTranslation } from '~/i18n/i18n.hooks';
-import { media } from '~/utils/style';
+import { cssProps, media } from '~/utils/style';
 import katakana from './katakana.svg';
 import styles from './profile.module.css';
 
@@ -39,6 +40,8 @@ export const Profile = ({ id, visible, sectionRef }) => {
   const currentLanguage = useCurrentLanguage();
   const { t: tNav } = useNavbarTranslation();
   const titleId = `${id}-title`;
+  const { theme } = useTheme();
+  const svgOpacity = theme === 'light' ? 0.7 : 1;
 
   return (
     <Section
@@ -74,6 +77,15 @@ export const Profile = ({ id, visible, sectionRef }) => {
                 </div>
               </div>
               <div className={styles.image}>
+                <svg
+                  data-visible={visible}
+                  data-light={theme === 'light'}
+                  style={cssProps({ opacity: svgOpacity })}
+                  className={styles.svg}
+                  viewBox="0 0 136 766"
+                >
+                  <use href={`${katakana}#katakana-profile`} />
+                </svg>
                 <Image
                   reveal
                   delay={100}
@@ -84,9 +96,6 @@ export const Profile = ({ id, visible, sectionRef }) => {
                   sizes={`(max-width: ${media.mobile}px) 100vw, 480px`}
                   alt={t('profile.imageAlt')}
                 />
-                <svg className={styles.svg} data-visible={visible} viewBox="0 0 136 766">
-                  <use href={`${katakana}#katakana-profile`} />
-                </svg>
               </div>
             </div>
           </div>
