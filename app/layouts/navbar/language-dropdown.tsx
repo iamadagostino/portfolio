@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import { useLanguageChanger } from '~/i18n/i18n.hooks';
+import type { Language as LanguageCode } from '~/i18n/i18n.resources';
 import { supportedLanguages } from '~/i18n/i18n.resources';
 import { getClientLanguageSwitchUrl } from '~/services/language-switch.client';
-import type { Language as LanguageCode } from '~/i18n/i18n.resources';
 import styles from './language-dropdown.module.css';
 
 interface Language {
@@ -40,16 +40,12 @@ interface LanguageDropdownProps {
   'data-navbar-item'?: boolean;
 }
 
-export const LanguageDropdown = ({
-  isMobile,
-  locale,
-  ...rest
-}: LanguageDropdownProps) => {
+export const LanguageDropdown = ({ isMobile, locale, ...rest }: LanguageDropdownProps) => {
   const { currentLanguage: clientLanguage } = useLanguageChanger();
   const currentLanguage = locale || clientLanguage; // Use server locale first
   const [languages, setLanguages] = useState<Language[]>([]);
   const [isOpen, setIsOpen] = useState(false);
-  const selectedLanguage = languages.find(language => language.key === currentLanguage);
+  const selectedLanguage = languages.find((language) => language.key === currentLanguage);
 
   // Filter out React-specific props that shouldn't be passed to DOM
   const { 'data-navbar-item': dataNavbarItem, ...domProps } = rest;
@@ -69,10 +65,7 @@ export const LanguageDropdown = ({
       const newUrl = await getClientLanguageSwitchUrl(currentPath, currentLang, newLang);
       window.location.href = newUrl + currentHash;
     } catch (error) {
-      console.warn(
-        'Error during intelligent language switching, falling back to simple switching:',
-        error
-      );
+      console.warn('Error during intelligent language switching, falling back to simple switching:', error);
 
       // Fallback to simple replacement
       let newUrl;
@@ -89,7 +82,7 @@ export const LanguageDropdown = ({
 
   useEffect(() => {
     const setupLanguages = async () => {
-      const appLanguages = supportedLanguages.map(lang => ({
+      const appLanguages = supportedLanguages.map((lang) => ({
         key: lang,
         name: LANGUAGE_MAP[lang]?.name || lang,
         nativeName: LANGUAGE_MAP[lang]?.nativeName || lang,
@@ -118,12 +111,7 @@ export const LanguageDropdown = ({
   }
 
   return (
-    <div
-      className={styles.dropdown}
-      data-mobile={isMobile}
-      data-navbar-item={dataNavbarItem}
-      {...domProps}
-    >
+    <div className={styles.dropdown} data-mobile={isMobile} data-navbar-item={dataNavbarItem} {...domProps}>
       <button
         type="button"
         id={LANGUAGE_SELECTOR_ID}
@@ -131,7 +119,7 @@ export const LanguageDropdown = ({
         data-mobile={isMobile}
         aria-label="Select language"
         aria-haspopup="menu"
-        aria-expanded={isOpen}
+        {...(isOpen ? { 'aria-expanded': true } : { 'aria-expanded': false })}
         onClick={() => setIsOpen(!isOpen)}
       >
         <FlagIcon countryCode={selectedLanguage.key} />
@@ -154,20 +142,16 @@ export const LanguageDropdown = ({
 
       {isOpen && (
         <>
-          <div
-            className={styles.backdrop}
-            onClick={() => setIsOpen(false)}
-            aria-hidden="true"
-          />
+          <div className={styles.backdrop} onClick={() => setIsOpen(false)} aria-hidden="true" />
 
           <div className={styles.panel}>
-            {languages.map(language => {
+            {languages.map((language) => {
               const isSelected = selectedLanguage.key === language.key;
               return (
                 <Link
                   key={language.key}
                   to={language.key}
-                  onClick={e => {
+                  onClick={(e) => {
                     e.preventDefault();
                     handleLanguageChange(language);
                   }}
@@ -179,12 +163,7 @@ export const LanguageDropdown = ({
                   <FlagIcon countryCode={language.key} />
                   <span className={styles.itemText}>{language.nativeName}</span>
                   {isSelected && (
-                    <svg
-                      className={styles.checkmark}
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      aria-hidden="true"
-                    >
+                    <svg className={styles.checkmark} fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                       <path
                         fillRule="evenodd"
                         d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"

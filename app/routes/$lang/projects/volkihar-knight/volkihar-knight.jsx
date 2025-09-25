@@ -1,25 +1,26 @@
-import volkiharBackgroundLarge from '~/assets/projects/volkihar/volkihar-background-large.jpg';
-import volkiharBackgroundPlaceholder from '~/assets/projects/volkihar/volkihar-background-placeholder.jpg';
-import volkiharBackground from '~/assets/projects/volkihar/volkihar-background.jpg';
-import volkiharBannerLarge from '~/assets/projects/volkihar/volkihar-banner-large.jpg';
-import volkiharBannerPlaceholder from '~/assets/projects/volkihar/volkihar-banner-placeholder.jpg';
-import volkiharBanner from '~/assets/projects/volkihar/volkihar-banner.jpg';
-import volkiharBookLarge from '~/assets/projects/volkihar/volkihar-book-large.png';
-import volkiharBookPlaceholder from '~/assets/projects/volkihar/volkihar-book-placeholder.png';
-import volkiharBook from '~/assets/projects/volkihar/volkihar-book.png';
-import volkiharEnderalLarge from '~/assets/projects/volkihar/volkihar-enderal-large.jpg';
-import volkiharEnderalLogoLarge from '~/assets/projects/volkihar/volkihar-enderal-logo-large.png';
-import volkiharEnderalLogoPlaceholder from '~/assets/projects/volkihar/volkihar-enderal-logo-placeholder.png';
-import volkiharEnderalLogo from '~/assets/projects/volkihar/volkihar-enderal-logo.png';
-import volkiharEnderalPlaceholder from '~/assets/projects/volkihar/volkihar-enderal-placeholder.jpg';
-import volkiharEnderal from '~/assets/projects/volkihar/volkihar-enderal.jpg';
-import volkiharSlide1Large from '~/assets/projects/volkihar/volkihar-slide-1-large.jpg';
-import volkiharSlide1 from '~/assets/projects/volkihar/volkihar-slide-1.jpg';
-import volkiharSlide2Large from '~/assets/projects/volkihar/volkihar-slide-2-large.jpg';
-import volkiharSlide2 from '~/assets/projects/volkihar/volkihar-slide-2.jpg';
-import volkiharSlide3Large from '~/assets/projects/volkihar/volkihar-slide-3-large.jpg';
-import volkiharSlide3 from '~/assets/projects/volkihar/volkihar-slide-3.jpg';
-import volkiharSlidePlaceholder from '~/assets/projects/volkihar/volkihar-slide-placeholder.jpg';
+import { Fragment, Suspense, lazy } from 'react';
+import volkiharBackgroundLarge from '~/assets/images/projects/volkihar-knight/volkihar-background-large.jpg';
+import volkiharBackgroundPlaceholder from '~/assets/images/projects/volkihar-knight/volkihar-background-placeholder.jpg';
+import volkiharBackground from '~/assets/images/projects/volkihar-knight/volkihar-background.jpg';
+import volkiharBannerLarge from '~/assets/images/projects/volkihar-knight/volkihar-banner-large.jpg';
+import volkiharBannerPlaceholder from '~/assets/images/projects/volkihar-knight/volkihar-banner-placeholder.jpg';
+import volkiharBanner from '~/assets/images/projects/volkihar-knight/volkihar-banner.jpg';
+import volkiharBookLarge from '~/assets/images/projects/volkihar-knight/volkihar-book-large.png';
+import volkiharBookPlaceholder from '~/assets/images/projects/volkihar-knight/volkihar-book-placeholder.png';
+import volkiharBook from '~/assets/images/projects/volkihar-knight/volkihar-book.png';
+import volkiharEnderalLarge from '~/assets/images/projects/volkihar-knight/volkihar-enderal-large.jpg';
+import volkiharEnderalLogoLarge from '~/assets/images/projects/volkihar-knight/volkihar-enderal-logo-large.png';
+import volkiharEnderalLogoPlaceholder from '~/assets/images/projects/volkihar-knight/volkihar-enderal-logo-placeholder.png';
+import volkiharEnderalLogo from '~/assets/images/projects/volkihar-knight/volkihar-enderal-logo.png';
+import volkiharEnderalPlaceholder from '~/assets/images/projects/volkihar-knight/volkihar-enderal-placeholder.jpg';
+import volkiharEnderal from '~/assets/images/projects/volkihar-knight/volkihar-enderal.jpg';
+import volkiharSlide1Large from '~/assets/images/projects/volkihar-knight/volkihar-slide-1-large.jpg';
+import volkiharSlide1 from '~/assets/images/projects/volkihar-knight/volkihar-slide-1.jpg';
+import volkiharSlide2Large from '~/assets/images/projects/volkihar-knight/volkihar-slide-2-large.jpg';
+import volkiharSlide2 from '~/assets/images/projects/volkihar-knight/volkihar-slide-2.jpg';
+import volkiharSlide3Large from '~/assets/images/projects/volkihar-knight/volkihar-slide-3-large.jpg';
+import volkiharSlide3 from '~/assets/images/projects/volkihar-knight/volkihar-slide-3.jpg';
+import volkiharSlidePlaceholder from '~/assets/images/projects/volkihar-knight/volkihar-slide-placeholder.jpg';
 import { Button } from '~/components/button';
 import { Footer } from '~/components/footer';
 import { Image } from '~/components/image';
@@ -35,17 +36,14 @@ import {
   ProjectSectionText,
   ProjectTextRow,
 } from '~/layouts/project';
-import { Fragment, Suspense, lazy } from 'react';
-import { media } from '~/utils/style';
 import { baseMeta } from '~/utils/meta';
-import { VolkiharLogo } from './volkihar-logo';
+import { media } from '~/utils/style';
 import styles from './volkihar-knight.module.css';
+import { VolkiharLogo } from './volkihar-logo';
 
-const Carousel = lazy(() =>
-  import('~/components/carousel').then(module => ({ default: module.Carousel }))
-);
+const Carousel = lazy(() => import('~/components/carousel').then((module) => ({ default: module.Carousel })));
 
-const Armor = lazy(() => import('./armor').then(module => ({ default: module.Armor })));
+const Armor = lazy(() => import('./armor').then((module) => ({ default: module.Armor })));
 
 const title = 'Volkihar Knight';
 const description =
@@ -122,17 +120,15 @@ export function VolkiharKnight() {
             <div className={styles.textSection}>
               <ProjectSectionHeading>Armor design</ProjectSectionHeading>
               <ProjectSectionText>
-                As a player I noticed there weren’t any heavy armor options for the
-                Volkihar faction. This kinda sucks when you’ve specialised in heavy armor
-                and decide to join the faction and discover they all wear light armor.
+                As a player I noticed there weren’t any heavy armor options for the Volkihar faction. This kinda sucks
+                when you’ve specialised in heavy armor and decide to join the faction and discover they all wear light
+                armor.
               </ProjectSectionText>
               <ProjectSectionText>
-                My solution was to create a mod that combines meshes from the Volkihar
-                faction armor with heavy plate armor. The mod builds upon textures and
-                meshes from the base game, so it unifies with Skyrim’s overall aesthetic.
-                I combined and modified the meshes in 3DS Max. To establish a cohesive
-                design across the set, I edited existing textures, and designed custom
-                textures in Photoshop.
+                My solution was to create a mod that combines meshes from the Volkihar faction armor with heavy plate
+                armor. The mod builds upon textures and meshes from the base game, so it unifies with Skyrim’s overall
+                aesthetic. I combined and modified the meshes in 3DS Max. To establish a cohesive design across the set,
+                I edited existing textures, and designed custom textures in Photoshop.
               </ProjectSectionText>
             </div>
           </ProjectSectionColumns>
@@ -140,17 +136,13 @@ export function VolkiharKnight() {
         <ProjectSection>
           <ProjectSectionContent>
             <div className={styles.logoContainer}>
-              <VolkiharLogo
-                role="img"
-                aria-label="The Volkihar Knight logo, a monogram using the letters 'V' and 'K"
-              />
+              <VolkiharLogo role="img" aria-label="The Volkihar Knight logo, a monogram using the letters 'V' and 'K" />
             </div>
             <ProjectTextRow center noMargin>
               <ProjectSectionHeading>Identity design</ProjectSectionHeading>
               <ProjectSectionText>
-                The monogram uses custom designed typography to get the right balance of
-                weight and angularity. I combined this with Trajan for the text, which is
-                also used for Skyrim’s game title wordmark.
+                The monogram uses custom designed typography to get the right balance of weight and angularity. I
+                combined this with Trajan for the text, which is also used for Skyrim’s game title wordmark.
               </ProjectSectionText>
             </ProjectTextRow>
           </ProjectSectionContent>
@@ -208,10 +200,9 @@ export function VolkiharKnight() {
               />
               <ProjectSectionHeading>Featured in Enderal</ProjectSectionHeading>
               <ProjectSectionText>
-                I was super stoked to have my work featured in the major standalone mod
-                Enderal, which won best fan creation at the game awards in 2016. Within
-                the game my armor design can be found being used for the Wandering Mage
-                armor set.
+                I was super stoked to have my work featured in the major standalone mod Enderal, which won best fan
+                creation at the game awards in 2016. Within the game my armor design can be found being used for the
+                Wandering Mage armor set.
               </ProjectSectionText>
               <Button
                 secondary

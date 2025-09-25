@@ -10,6 +10,7 @@ import { Transition } from '~/components/transition';
 import config from '~/config/app.json';
 import { tokens } from '~/config/theme.mjs';
 import { useCurrentLanguage, useNavbarTranslation } from '~/i18n/i18n.hooks';
+import { ExperienceToggle } from './experience-toggle';
 import { LanguageDropdown } from './language-dropdown';
 import NavbarHeader from './navbar-header';
 import styles from './navbar.module.css';
@@ -403,6 +404,7 @@ export const Navbar = ({ locale: serverLocale }) => {
               <div className="mt-6 flex items-center justify-center gap-3">
                 <LanguageDropdown isMobile locale={currentLanguage} />
                 <ThemeToggle isMobile />
+                <ExperienceToggle isMobile />
               </div>
             </nav>
           )}
