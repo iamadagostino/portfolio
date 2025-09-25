@@ -13,7 +13,7 @@
         "subtitle": "Full-Stack Developer & Designer",
         "description": "I create digital experiences that combine beautiful design with powerful functionality.",
         "cta": "View my work",
-        "scrollDown": "Scroll to explore"
+        "scrollToProjects": "Scroll to projects"
     },
     "about": {
         "title": "About me",
@@ -44,5 +44,22 @@
         "cta": "Send me a message",
         "tagLabel": "About me",
         "imageAlt": "Angelo D'Agostino, Software Engineer and Full-Stack Developer"
+    },
+    "projects": {
+        "project1": {
+            "title": "Designing the future of education",
+            "description": "Designing a platform to help educators build better online courseware",
+            "buttonText": "View project"
+        },
+        "project2": {
+            "title": "Video game progress tracking",
+            "description": "Design and development for a video game tracking app built in React Native",
+            "buttonText": "View website"
+        },
+        "project3": {
+            "title": "Biomedical image collaboration",
+            "description": "Increasing the amount of collaboration in Slice, an app for biomedical imaging",
+            "buttonText": "View project"
+        }
     }
 }

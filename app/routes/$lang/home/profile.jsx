@@ -1,3 +1,4 @@
+import { Fragment, useState } from 'react';
 import profileImgLarge from '~/assets/images/misc/profile-large.jpg';
 import profileImgPlaceholder from '~/assets/images/misc/profile-placeholder.jpg';
 import profileImg from '~/assets/images/misc/profile.jpg';
@@ -9,11 +10,10 @@ import { Image } from '~/components/image';
 import { Section } from '~/components/section';
 import { Text } from '~/components/text';
 import { Transition } from '~/components/transition';
-import { Fragment, useState } from 'react';
+import { useCurrentLanguage, useHomeTranslation, useNavbarTranslation } from '~/i18n/i18n.hooks';
 import { media } from '~/utils/style';
 import katakana from './katakana.svg';
 import styles from './profile.module.css';
-import { useHomeTranslation } from '~/i18n/i18n.hooks';
 
 const ProfileText = ({ visible, titleId }) => {
   const { t } = useHomeTranslation();
@@ -36,6 +36,8 @@ const ProfileText = ({ visible, titleId }) => {
 export const Profile = ({ id, visible, sectionRef }) => {
   const [focused, setFocused] = useState(false);
   const { t } = useHomeTranslation();
+  const currentLanguage = useCurrentLanguage();
+  const { t: tNav } = useNavbarTranslation();
   const titleId = `${id}-title`;
 
   return (
@@ -58,7 +60,7 @@ export const Profile = ({ id, visible, sectionRef }) => {
                 secondary
                 className={styles.button}
                 data-visible={visible}
-                href="/contact"
+                href={`/${currentLanguage}/${tNav('slugs.contact', { defaultValue: 'contact' })}`}
                 icon="send"
               >
                 {t('profile.cta')}
@@ -66,12 +68,7 @@ export const Profile = ({ id, visible, sectionRef }) => {
             </div>
             <div className={styles.column}>
               <div className={styles.tag} aria-hidden>
-                <Divider
-                  notchWidth="64px"
-                  notchHeight="8px"
-                  collapsed={!visible}
-                  collapseDelay={1000}
-                />
+                <Divider notchWidth="64px" notchHeight="8px" collapsed={!visible} collapseDelay={1000} />
                 <div className={styles.tagText} data-visible={visible}>
                   {t('profile.tagLabel')}
                 </div>

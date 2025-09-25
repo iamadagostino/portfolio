@@ -1,26 +1,27 @@
-import sliceAnnotationLarge from '~/assets/projects/slice/slice-annotation-large.png';
-import sliceAnnotationPlaceholder from '~/assets/projects/slice/slice-annotation-placeholder.png';
-import sliceAnnotation from '~/assets/projects/slice/slice-annotation.png';
-import sliceAppLarge from '~/assets/projects/slice/slice-app-large.jpg';
-import sliceAppPlaceholder from '~/assets/projects/slice/slice-app-placeholder.jpg';
-import sliceApp from '~/assets/projects/slice/slice-app.jpg';
-import sliceBackgroundBarLarge from '~/assets/projects/slice/slice-background-bar-large.jpg';
-import sliceBackgroundBarPlaceholder from '~/assets/projects/slice/slice-background-bar-placeholder.jpg';
-import sliceBackgroundBar from '~/assets/projects/slice/slice-background-bar.jpg';
-import sliceBackgroundLarge from '~/assets/projects/slice/slice-background-large.jpg';
-import sliceBackgroundPlaceholder from '~/assets/projects/slice/slice-background-placeholder.jpg';
-import sliceBackground from '~/assets/projects/slice/slice-background.jpg';
-import sliceIrlPlaceholder from '~/assets/projects/slice/slice-irl-placeholder.jpg';
-import sliceIrl from '~/assets/projects/slice/slice-irl.jpg';
-import sliceSidebarAnnotationsLarge from '~/assets/projects/slice/slice-sidebar-annotations-large.png';
-import sliceSidebarAnnotationsPlaceholder from '~/assets/projects/slice/slice-sidebar-annotations-placeholder.png';
-import sliceSidebarAnnotations from '~/assets/projects/slice/slice-sidebar-annotations.png';
-import sliceSidebarLayersLarge from '~/assets/projects/slice/slice-sidebar-layers-large.png';
-import sliceSidebarLayersPlaceholder from '~/assets/projects/slice/slice-sidebar-layers-placeholder.png';
-import sliceSidebarLayers from '~/assets/projects/slice/slice-sidebar-layers.png';
-import sliceSlidesLarge from '~/assets/projects/slice/slice-slides-large.jpg';
-import sliceSlidesPlaceholder from '~/assets/projects/slice/slice-slides-placeholder.jpg';
-import sliceSlides from '~/assets/projects/slice/slice-slides.jpg';
+import { Fragment } from 'react';
+import sliceAnnotationLarge from '~/assets/images/projects/slice/slice-annotation-large.png';
+import sliceAnnotationPlaceholder from '~/assets/images/projects/slice/slice-annotation-placeholder.png';
+import sliceAnnotation from '~/assets/images/projects/slice/slice-annotation.png';
+import sliceAppLarge from '~/assets/images/projects/slice/slice-app-large.jpg';
+import sliceAppPlaceholder from '~/assets/images/projects/slice/slice-app-placeholder.jpg';
+import sliceApp from '~/assets/images/projects/slice/slice-app.jpg';
+import sliceBackgroundBarLarge from '~/assets/images/projects/slice/slice-background-bar-large.jpg';
+import sliceBackgroundBarPlaceholder from '~/assets/images/projects/slice/slice-background-bar-placeholder.jpg';
+import sliceBackgroundBar from '~/assets/images/projects/slice/slice-background-bar.jpg';
+import sliceBackgroundLarge from '~/assets/images/projects/slice/slice-background-large.jpg';
+import sliceBackgroundPlaceholder from '~/assets/images/projects/slice/slice-background-placeholder.jpg';
+import sliceBackground from '~/assets/images/projects/slice/slice-background.jpg';
+import sliceIrlPlaceholder from '~/assets/images/projects/slice/slice-irl-placeholder.jpg';
+import sliceIrl from '~/assets/images/projects/slice/slice-irl.jpg';
+import sliceSidebarAnnotationsLarge from '~/assets/images/projects/slice/slice-sidebar-annotations-large.png';
+import sliceSidebarAnnotationsPlaceholder from '~/assets/images/projects/slice/slice-sidebar-annotations-placeholder.png';
+import sliceSidebarAnnotations from '~/assets/images/projects/slice/slice-sidebar-annotations.png';
+import sliceSidebarLayersLarge from '~/assets/images/projects/slice/slice-sidebar-layers-large.png';
+import sliceSidebarLayersPlaceholder from '~/assets/images/projects/slice/slice-sidebar-layers-placeholder.png';
+import sliceSidebarLayers from '~/assets/images/projects/slice/slice-sidebar-layers.png';
+import sliceSlidesLarge from '~/assets/images/projects/slice/slice-slides-large.jpg';
+import sliceSlidesPlaceholder from '~/assets/images/projects/slice/slice-slides-placeholder.jpg';
+import sliceSlides from '~/assets/images/projects/slice/slice-slides.jpg';
 import { Footer } from '~/components/footer';
 import { Image } from '~/components/image';
 import {
@@ -35,9 +36,8 @@ import {
   ProjectSectionText,
   ProjectTextRow,
 } from '~/layouts/project';
-import { Fragment } from 'react';
-import { media } from '~/utils/style';
 import { baseMeta } from '~/utils/meta';
+import { media } from '~/utils/style';
 import styles from './slice.module.css';
 
 const title = 'Biomedical image collaboration';
@@ -84,14 +84,13 @@ export const Slice = () => {
             <div className={styles.imagesText}>
               <ProjectSectionHeading>Bringing it together</ProjectSectionHeading>
               <ProjectSectionText>
-                Teachers needed a better way to create collaborative group activities by
-                annotating slides on Slice. Before starting this project, a layer could
-                only be annotated by a single user, making it difficult for learners to
-                work together.
+                Teachers needed a better way to create collaborative group activities by annotating slides on Slice.
+                Before starting this project, a layer could only be annotated by a single user, making it difficult for
+                learners to work together.
               </ProjectSectionText>
               <ProjectSectionText>
-                Our solution was to allow users to be invited to a layer, where they can
-                see others’ annotations and make their own.
+                Our solution was to allow users to be invited to a layer, where they can see others’ annotations and
+                make their own.
               </ProjectSectionText>
             </div>
             <div className={styles.sidebarImages}>
@@ -121,12 +120,10 @@ export const Slice = () => {
             <ProjectTextRow>
               <ProjectSectionHeading>Improving the experience</ProjectSectionHeading>
               <ProjectSectionText>
-                A problem we heard about often form users was that it was difficult to
-                find images they had previously seen or worked on. To solve this we added
-                a new tab that lists all previously annotated slides. In addition, we
-                added the ability to favorite slides, so if users find an interesting
-                slide they want to annotate later, they can easily save it to their
-                account.
+                A problem we heard about often form users was that it was difficult to find images they had previously
+                seen or worked on. To solve this we added a new tab that lists all previously annotated slides. In
+                addition, we added the ability to favorite slides, so if users find an interesting slide they want to
+                annotate later, they can easily save it to their account.
               </ProjectSectionText>
             </ProjectTextRow>
             <Image
@@ -167,11 +164,10 @@ export const Slice = () => {
             <div className={styles.gridText}>
               <ProjectSectionHeading>Meaningful details</ProjectSectionHeading>
               <ProjectSectionText>
-                Marking and annotating areas on high resolution biomedical images is the
-                core experience of the app, and it was easy to get lost or lose sense of
-                scale when zooming in on details. Adding measurements for the perimeter
-                and area of an annotation both helped to communicate the overall scale of
-                the image and how large the annotated feature is in comparison.
+                Marking and annotating areas on high resolution biomedical images is the core experience of the app, and
+                it was easy to get lost or lose sense of scale when zooming in on details. Adding measurements for the
+                perimeter and area of an annotation both helped to communicate the overall scale of the image and how
+                large the annotated feature is in comparison.
               </ProjectSectionText>
             </div>
           </ProjectSectionContent>
@@ -181,11 +177,10 @@ export const Slice = () => {
             <ProjectTextRow>
               <ProjectSectionHeading>Project outcomes</ProjectSectionHeading>
               <ProjectSectionText>
-                Real-time collaborative annotation facilitated better collaboration
-                between learners, and was much easier to run group exercises with the new
-                shared layers feature. Learners gave feedback that is was enjoyable to
-                work together and see what others were doing, and liked how interactive
-                and easy to use the application was.
+                Real-time collaborative annotation facilitated better collaboration between learners, and was much
+                easier to run group exercises with the new shared layers feature. Learners gave feedback that is was
+                enjoyable to work together and see what others were doing, and liked how interactive and easy to use the
+                application was.
               </ProjectSectionText>
             </ProjectTextRow>
             <Image

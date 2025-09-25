@@ -1,8 +1,15 @@
 {
+  // 'extends' imports a preset configuration. 'development' provides a
+  // broadly-useful set of hints and settings tuned for local development.
   "extends": [
     "development"
   ],
+  // 'hints' defines the rules webhint will check. Each key is a hint id or
+  // a plugin namespace (e.g., axe/*). Values are either a severity string
+  // or an array [severity, options].
   "hints": {
+    // axe/language: Accessibility rule ensuring the <html> element has a
+    // valid 'lang' attribute and that it's populated correctly.
     "axe/language": [
       "error",
       {
@@ -10,6 +17,8 @@
         "html-lang-valid": "error"
       }
     ],
+    // axe/parsing: Checks for parsing-related accessibility issues, such as
+    // duplicate IDs that affect Active descendant relationships or ARIA.
     "axe/parsing": [
       "error",
       {
@@ -17,24 +26,30 @@
         "duplicate-id-aria": "error"
       }
     ],
+    // axe/keyboard: Keyboard accessibility checks (focus order, tabbing
+    // behavior). We enforce focus-order semantics.
     "axe/keyboard": [
       "error",
       {
         "focus-order-semantics": "error"
       }
     ],
+    // axe/forms: Form related accessibility checks (labels, form controls).
     "axe/forms": [
       "error",
       {
         "label": "error"
       }
     ],
+    // axe/text-alternatives: Ensures images and non-text content have
+    // appropriate alternative text.
     "axe/text-alternatives": [
       "error",
       {
         "image-alt": "error"
       }
     ],
+    // axe/aria: ARIA attribute validity checks.
     "axe/aria": [
       "error",
       {
@@ -42,12 +57,15 @@
         "aria-valid-attr-value": "error"
       }
     ],
+    // axe/color: Color contrast checks to meet accessibility contrast
+    // requirements.
     "axe/color": [
       "error",
       {
         "color-contrast": "error"
       }
     ],
+    // axe/structure: Structural checks (lists, definition lists, etc.).
     "axe/structure": [
       "error",
       {
@@ -55,11 +73,20 @@
         "list": "error"
       }
     ],
+    // button-type: Enforce explicit type attributes on <button> elements
+    // to avoid accidental form submissions.
     "button-type": "error",
+    // create-element-svg: Ensure creating SVG elements uses the right
+    // namespaces and patterns (prevent common SVG mistakes).
     "create-element-svg": "error",
+    // disown-opener: Ensure links using target="_blank" include
+    // rel="noopener" to prevent security issues.
     "disown-opener": "error",
+    // html-checker: Run an HTML validator against generated output.
     "html-checker": "error",
+    // http-cache: Ensure responses have sensible caching headers.
     "http-cache": "error",
+    // http-compression: Enforce compression; options enable brotli and gzip.
     "http-compression": [
       "error",
       {
@@ -67,21 +94,38 @@
         "gzip": true
       }
     ],
+    // image-optimization-cloudinary: Disabled because we don't use Cloudinary
+    // in all contexts; leave off to avoid false positives.
     "image-optimization-cloudinary": "off",
+    // leading-dot-classlist: Disallow class names that start with a dot (CSS
+    // authoring mistakes).
     "leading-dot-classlist": "error",
+    // Web App Manifest checks: ensure name exists and manifest file is present
+    // and correctly named.
     "manifest-app-name": "error",
     "manifest-exists": "error",
     "manifest-file-extension": "error",
+    // meta charset and viewport checks
     "meta-charset-utf-8": "error",
     "meta-viewport": "error",
+    // Security and header-related checks
     "no-disallowed-headers": "error",
     "no-html-only-headers": "error",
+    // Avoid server-side redirects in HTML pages
     "no-http-redirects": "error",
+    // Inline styles are discouraged; we surface them as a warning rather
+    // than an error so developers can make exceptions when necessary.
     "no-inline-styles": "warning",
+    // Disallow protocol-relative URLs (e.g., //example.com) for clarity
     "no-protocol-relative-urls": "error",
+    // Scoped SVG styles checks
     "scoped-svg-styles": "error",
+    // Subresource Integrity checks
     "sri": "error",
+    // SSL Labs integration to check TLS/HTTPS quality
     "ssllabs": "error",
+    // TypeScript config checks: ensure tsconfig adheres to code-quality
+    // rules enforced across the repo.
     "typescript-config/consistent-casing": "error",
     "typescript-config/import-helpers": "error",
     "typescript-config/is-valid": "error",
@@ -89,29 +133,53 @@
     "typescript-config/strict": "error",
     "typescript-config/target": "error"
   },
+  // 'formatters' controls the output format for webhint reports. 'stylish'
+  // is a human-friendly console output; other options include 'json'.
   "formatters": [
     "stylish"
   ],
+  // 'parsers' registers additional file parsers webhint should use when
+  // analyzing files. This can include manifest and TypeScript config parsing.
   "parsers": [
     "typescript-config",
     "manifest",
     "css"
   ],
+  // 'browserslist' sets the target browsers used by compatibility hints
+  // (e.g., compat-api/html). This determines which APIs are considered
+  // compatible or not.
   "browserslist": [
     "defaults",
     "not IE 11"
   ],
+  // 'ignoredUrls' allows you to suppress specific hints for matching URL
+  // or file path patterns. Each entry contains 'domain' (a regex) and a
+  // 'hints' array of hint ids to ignore for matches.
   "ignoredUrls": [
+    // Ignore all hints for local development domains (e.g. mysite.local)
     {
       "domain": ".*\\.local.*",
       "hints": [
         "*"
       ]
     },
+    // Ignore html-checker for source files (tsx/jsx/ts/js). These are
+    // application sources, not final HTML outputs; running the HTML validator
+    // on them is noisy and not useful in this context.
     {
       "domain": ".*\\.(tsx|jsx|ts|js)$",
       "hints": [
         "html-checker"
+      ]
+    },
+    // Narrow suppression: disable only the compat-api/html hint for the
+    // app/root.tsx file. This avoids a global disabling of the compatibility
+    // checks while removing the specific warning about meta[name=theme-color]
+    // in our root template.
+    {
+      "domain": ".*/app/root\\.tsx$",
+      "hints": [
+        "compat-api/html"
       ]
     }
   ]

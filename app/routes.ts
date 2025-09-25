@@ -50,23 +50,23 @@ const routesFunction = async () => {
 
     // Exclude known component files and utility files
     const componentFiles = [
-      'contact.jsx',
-      'home.jsx',
-      'uses.jsx',
+      'armor.jsx',
       'articles.jsx',
-      'slice.jsx',
-      'smart-sparrow.jsx',
-      'volkihar-knight.jsx',
-      'intro.jsx',
-      'profile.jsx',
-      'project-summary.jsx',
+      'config.ts', // Utility file, not a route
+      'contact.jsx',
       'displacement-sphere.jsx',
       'earth.jsx',
-      'armor.jsx',
-      'volkihar-logo.jsx',
-      'posts.server.js',
-      'config.ts', // Utility file, not a route
+      'home.jsx',
+      'intro.jsx',
       'locale-loader.ts', // Utility file, not a route
+      'posts.server.js',
+      'profile.jsx',
+      'project-summary.jsx',
+      'slice.jsx',
+      'smart-sparrow.jsx',
+      'uses.jsx',
+      'volkihar-knight.jsx',
+      'volkihar-logo.jsx',
     ];
 
     return !componentFiles.includes(fileName) && !fileName.includes('.module.');
@@ -91,7 +91,7 @@ const routesFunction = async () => {
     // Handle all admin nested routes properly
     if (filePath.includes('routes/$lang/admin/') && !filePath.endsWith('routes/$lang/admin.tsx')) {
       const adminPath = filePath.split('routes/$lang/admin/')[1];
-      
+
       if (adminPath.includes('/')) {
         // Handle nested admin routes with subdirectories
         const pathParts = adminPath.split('/');
@@ -109,6 +109,26 @@ const routesFunction = async () => {
         // Direct admin child route (like debug.tsx)
         const routeName = adminPath.replace('.tsx', '').replace('/route.tsx', '');
         routeId = `admin.${routeName}`;
+      }
+    }
+
+    // Handle project nested routes properly
+    if (filePath.includes('routes/$lang/projects/') && !filePath.endsWith('routes/$lang/projects/route.tsx')) {
+      const projectPath = filePath.split('routes/$lang/projects/')[1];
+
+      if (projectPath.includes('/')) {
+        // Handle nested project routes with subdirectories
+        const pathParts = projectPath.split('/');
+        if (pathParts.length >= 2 && (pathParts[1] === 'route.ts' || pathParts[1] === 'route.tsx')) {
+          // This is a project/route.ts pattern - make the ID more specific
+          routeId = `projects.${pathParts[0]}`;
+        } else if (pathParts[1] && !pathParts[1].startsWith('route.')) {
+          // Other nested patterns
+          routeId = `projects.${pathParts[0]}.${pathParts[1].replace('.ts', '').replace('.tsx', '')}`;
+        } else {
+          // Standard nested route
+          routeId = `projects.${pathParts[0]}`;
+        }
       }
     }
 

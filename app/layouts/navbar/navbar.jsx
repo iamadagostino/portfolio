@@ -1,19 +1,19 @@
 import { cssProps, msToNum, numToMs } from '~/utils/style';
 import { getNavLinks, socialLinks } from '../../config/menus/nav-menu';
 
-import { Icon } from '~/components/icon';
-import { LanguageDropdown } from './language-dropdown';
-import { Monogram } from '~/components/monogram';
-import NavbarHeader from './navbar-header';
+import { useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router';
-import { ThemeToggle } from './theme-toggle';
+import { Icon } from '~/components/icon';
+import { Monogram } from '~/components/monogram';
+import { useNavbar } from '~/components/navbar-provider';
 import { Transition } from '~/components/transition';
 import config from '~/config/app.json';
-import styles from './navbar.module.css';
 import { tokens } from '~/config/theme.mjs';
-import { useEffect, useState } from 'react';
-import { useNavbar } from '~/components/navbar-provider';
-import { useNavbarTranslation, useCurrentLanguage } from '~/i18n/i18n.hooks';
+import { useCurrentLanguage, useNavbarTranslation } from '~/i18n/i18n.hooks';
+import { LanguageDropdown } from './language-dropdown';
+import NavbarHeader from './navbar-header';
+import styles from './navbar.module.css';
+import { ThemeToggle } from './theme-toggle';
 
 export const Navbar = ({ locale: serverLocale }) => {
   const [isHydrated, setIsHydrated] = useState(false);
@@ -55,8 +55,7 @@ export const Navbar = ({ locale: serverLocale }) => {
     if (!target) return;
 
     // Check if we're on home page (with any locale)
-    const isOnHomePage =
-      location.pathname === homeLink || location.pathname === `${homeLink}/`;
+    const isOnHomePage = location.pathname === homeLink || location.pathname === `${homeLink}/`;
     if (!isOnHomePage) return;
 
     // Scroll to the target hash when navigating from other pages
@@ -91,13 +90,11 @@ export const Navbar = ({ locale: serverLocale }) => {
     };
 
     const handleInversion = () => {
-      const invertedElements = document.querySelectorAll(
-        `[data-theme='${inverseTheme}'][data-invert]`
-      );
+      const invertedElements = document.querySelectorAll(`[data-theme='${inverseTheme}'][data-invert]`);
 
       if (!invertedElements) return;
 
-      inverseMeasurements = Array.from(invertedElements).map(item => ({
+      inverseMeasurements = Array.from(invertedElements).map((item) => ({
         element: item,
         top: item.offsetTop,
         bottom: item.offsetTop + item.offsetHeight,
@@ -108,10 +105,7 @@ export const Navbar = ({ locale: serverLocale }) => {
       resetNavTheme();
 
       for (const inverseMeasurement of inverseMeasurements) {
-        if (
-          inverseMeasurement.top - scrollY > innerHeight ||
-          inverseMeasurement.bottom - scrollY < 0
-        ) {
+        if (inverseMeasurement.top - scrollY > innerHeight || inverseMeasurement.bottom - scrollY < 0) {
           continue;
         }
 
@@ -127,7 +121,7 @@ export const Navbar = ({ locale: serverLocale }) => {
 
     // Currently only the light theme has dark full-width elements
     if (theme === 'light') {
-      navItemMeasurements = Array.from(navItems).map(item => {
+      navItemMeasurements = Array.from(navItems).map((item) => {
         const rect = item.getBoundingClientRect();
 
         return {
@@ -162,7 +156,7 @@ export const Navbar = ({ locale: serverLocale }) => {
     if (type === 'page') {
       // Create mapping for ALL localized route matching
       const routeMatches = {
-        articles: ['/articles', '/articoli'],
+        articles: ['/articles', '/articoli', '/article', '/articolo'],
         contact: ['/contact', '/contatti'],
         projects: ['/projects', '/progetti'],
         details: ['/details', '/dettagli'],
@@ -170,10 +164,8 @@ export const Navbar = ({ locale: serverLocale }) => {
 
       // Check if URL contains any route segment and current path matches
       for (const [, variations] of Object.entries(routeMatches)) {
-        const urlContainsRoute = variations.some(variation => url.includes(variation));
-        const currentPathMatches = variations.some(variation =>
-          currentPath.includes(variation)
-        );
+        const urlContainsRoute = variations.some((variation) => url.includes(variation));
+        const currentPathMatches = variations.some((variation) => currentPath.includes(variation));
 
         if (urlContainsRoute && currentPathMatches) {
           return 'page';
@@ -190,7 +182,16 @@ export const Navbar = ({ locale: serverLocale }) => {
           '/dettagli': 'details',
         };
 
-        // Check if this navbar URL corresponds to the current anchor
+        // If the current hash is any project (project-1, project-2, ...),
+        // and this navbar URL corresponds to the projects route or is an
+        // anchor for projects, mark it active.
+        if (currentHash.startsWith('project-')) {
+          if (url.includes('/projects') || url.includes('/progetti') || url.startsWith('#project-')) {
+            return 'page';
+          }
+        }
+
+        // Check if this navbar URL corresponds to the current anchor (exact matches)
         for (const [urlSegment, anchorId] of Object.entries(urlToAnchorMapping)) {
           if (url.includes(urlSegment) && currentHash === anchorId) {
             return 'page';
@@ -198,7 +199,6 @@ export const Navbar = ({ locale: serverLocale }) => {
         }
       }
     }
-
     // Enhanced highlighting for anchor sections
     if (type === 'anchor' || url.startsWith('#')) {
       // If we have a current hash, check if it matches this URL
@@ -215,13 +215,25 @@ export const Navbar = ({ locale: serverLocale }) => {
 
       if (anchorToRouteMapping[anchorId]) {
         const routeVariations = anchorToRouteMapping[anchorId];
-        const isOnCorrespondingRoute = routeVariations.some(route =>
-          currentPath.includes(route)
-        );
+        const isOnCorrespondingRoute = routeVariations.some((route) => currentPath.includes(route));
 
         if (isOnCorrespondingRoute) {
           return 'page';
         }
+      }
+    }
+
+    // Home link handling: mark Home active when on the locale home path
+    // Only match exact home path or a home path with a hash (e.g. '/en' or '/en#project-1').
+    if (type === 'home') {
+      const homeUrl = url;
+      const currentBase = current ? current.split('#')[0] : '';
+      // Only mark the Home link active when there is no hash (pure home)
+      // or when the hash is the intro section. This prevents Home from
+      // claiming active state when the user is on a section like
+      // '#details' or '#project-1'.
+      if ((currentPath === homeUrl || currentBase === homeUrl) && (!currentHash || currentHash === 'intro')) {
+        return 'page';
       }
     }
 
@@ -234,7 +246,7 @@ export const Navbar = ({ locale: serverLocale }) => {
   };
 
   // Store the current hash to scroll to
-  const handleNavItemClick = event => {
+  const handleNavItemClick = (event) => {
     const href = event.currentTarget.href || event.currentTarget.getAttribute('href');
 
     // For anchor links, handle them consistently
@@ -242,8 +254,7 @@ export const Navbar = ({ locale: serverLocale }) => {
       const hash = href.split('#')[1];
 
       // Check if we're dealing with a hash link on the same page
-      const isOnHomePage =
-        location.pathname === homeLink || location.pathname === `${homeLink}/`;
+      const isOnHomePage = location.pathname === homeLink || location.pathname === `${homeLink}/`;
 
       if (hash && isOnHomePage) {
         // Prevent default browser behavior to avoid conflicts
@@ -261,12 +272,21 @@ export const Navbar = ({ locale: serverLocale }) => {
           window.history.replaceState(null, '', `${location.pathname}#${hash}`);
           setCurrent(`${location.pathname}#${hash}`);
         }
+      } else if (hash && !isOnHomePage) {
+        // If clicking an anchor that points to home from another page,
+        // store the target so the NavbarProvider can scroll to it after navigation
+        // We don't preventDefault here so RouterLink/navigation proceeds normally.
+        try {
+          setTarget(`#${hash}`);
+        } catch {
+          // ignore if setTarget isn't available for some reason
+        }
       }
       // For hash links from other pages, let RouterLink handle navigation naturally
     }
   };
 
-  const handleMobileNavClick = event => {
+  const handleMobileNavClick = (event) => {
     handleNavItemClick(event);
     if (menuOpen) setMenuOpen(false);
   };
@@ -295,8 +315,11 @@ export const Navbar = ({ locale: serverLocale }) => {
         <nav className={styles.nav} hidden={isMobile}>
           <div className={styles.navList}>
             {navLinks.map(({ label, pathname, key, type }) => {
-              // For anchor links on the same page, use regular anchor tag
-              if (type === 'anchor' && pathname.startsWith('#')) {
+              // Render a native anchor when the pathname is an in-page hash.
+              // Note: getNavLinks may return '#project-1' even for items with
+              // type === 'page' when on the home page, so rely on pathname
+              // content rather than the declared type.
+              if (pathname && pathname.startsWith('#')) {
                 return (
                   <a
                     href={pathname}
@@ -336,8 +359,10 @@ export const Navbar = ({ locale: serverLocale }) => {
           {({ visible, nodeRef }) => (
             <nav className={styles.mobileNav} data-visible={visible} ref={nodeRef}>
               {navLinks.map(({ label, pathname, key, type }, index) => {
-                // For anchor links on the same page, use regular anchor tag
-                if (type === 'anchor' && pathname.startsWith('#')) {
+                // Use native anchor when pathname is an in-page hash. See note
+                // in desktop rendering: getNavLinks can return hashes for page
+                // items when on the home page.
+                if (pathname && pathname.startsWith('#')) {
                   return (
                     <a
                       href={pathname}
@@ -347,9 +372,7 @@ export const Navbar = ({ locale: serverLocale }) => {
                       aria-current={getCurrent(pathname, type)}
                       onClick={handleMobileNavClick}
                       style={cssProps({
-                        transitionDelay: numToMs(
-                          Number(msToNum(tokens.base.durationS)) + index * 50
-                        ),
+                        transitionDelay: numToMs(Number(msToNum(tokens.base.durationS)) + index * 50),
                       })}
                     >
                       {label}
@@ -369,9 +392,7 @@ export const Navbar = ({ locale: serverLocale }) => {
                     aria-current={getCurrent(pathname, type)}
                     onClick={handleMobileNavClick}
                     style={cssProps({
-                      transitionDelay: numToMs(
-                        Number(msToNum(tokens.base.durationS)) + index * 50
-                      ),
+                      transitionDelay: numToMs(Number(msToNum(tokens.base.durationS)) + index * 50),
                     })}
                   >
                     {label}
@@ -379,7 +400,7 @@ export const Navbar = ({ locale: serverLocale }) => {
                 );
               })}
               <NavbarIcons />
-              <div className="flex items-center justify-center gap-3 mt-6">
+              <div className="mt-6 flex items-center justify-center gap-3">
                 <LanguageDropdown isMobile locale={currentLanguage} />
                 <ThemeToggle isMobile />
               </div>

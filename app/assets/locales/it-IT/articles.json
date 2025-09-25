@@ -1,15 +1,16 @@
 {
-    "title": "Articoli Recenti",
+    "author": "Autore",
+    "backToArticles": "Torna agli articoli",
+    "category": "Categoria",
+    "comingSoon": "Prossimamente",
     "featured": "In Evidenza",
+    "noArticles": "Nessun articolo trovato",
+    "publishedOn": "Pubblicato il",
     "readMore": "Leggi articolo",
     "readTime": "{{minutes}} min di lettura",
-    "publishedOn": "Pubblicato il",
-    "updatedOn": "Aggiornato il",
-    "backToArticles": "Torna agli articoli",
-    "noArticles": "Nessun articolo trovato",
+    "relatedArticles": "Articoli Correlati",
     "searchPlaceholder": "Cerca articoli...",
     "tags": "Tag",
-    "category": "Categoria",
-    "author": "Autore",
-    "relatedArticles": "Articoli Correlati"
+    "title": "Articoli Recenti",
+    "updatedOn": "Aggiornato il"
 }

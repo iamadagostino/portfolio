@@ -1,15 +1,16 @@
 {
-    "title": "Latest articles",
+    "author": "Author",
+    "backToArticles": "Back to articles",
+    "category": "Category",
+    "comingSoon": "Coming soon",
     "featured": "Featured",
+    "noArticles": "No articles found",
+    "publishedOn": "Published on",
     "readMore": "Read article",
     "readTime": "{{minutes}} min read",
-    "publishedOn": "Published on",
-    "updatedOn": "Updated on",
-    "backToArticles": "Back to articles",
-    "noArticles": "No articles found",
+    "relatedArticles": "Related Articles",
     "searchPlaceholder": "Search articles...",
     "tags": "Tags",
-    "category": "Category",
-    "author": "Author",
-    "relatedArticles": "Related Articles"
+    "title": "Latest articles",
+    "updatedOn": "Updated on"
 }

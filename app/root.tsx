@@ -178,7 +178,7 @@ export default function App() {
   }>();
   const fetcher = useFetcher();
   const { state } = useNavigation();
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation('common');
   const matches = useMatches();
   const isAdminRoute = matches.some((match) => {
     const handle = match.handle as { layout?: string } | undefined;
@@ -234,21 +234,20 @@ export default function App() {
         <ThemeProvider theme={theme as 'dark' | 'light'} toggleTheme={toggleTheme} className="">
           <Progress />
           <VisuallyHidden showOnFocus as="a" className={styles.skip} href="#main-content">
-            Skip to main content
+            {t('skipToMain')}
           </VisuallyHidden>
-          {!isAdminRoute && (
-            <NavbarProvider>
-              <Navbar locale={locale} />
-            </NavbarProvider>
-          )}
-          <main
-            id="main-content"
-            className={clsxLib(!isAdminRoute && styles.container)}
-            tabIndex={-1}
-            data-loading={state === 'loading'}
-          >
-            <Outlet />
-          </main>
+          <NavbarProvider>
+            {!isAdminRoute && <Navbar locale={locale} />}
+
+            <main
+              id="main-content"
+              className={clsxLib(!isAdminRoute && styles.container)}
+              tabIndex={-1}
+              data-loading={state === 'loading'}
+            >
+              <Outlet />
+            </main>
+          </NavbarProvider>
         </ThemeProvider>
         <ScrollRestoration />
         <Scripts />
@@ -270,7 +269,7 @@ export function ErrorBoundary() {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         {/* Note: theme-color is not supported by Firefox, Firefox for Android, Opera - graceful degradation */}
-        <meta name="theme-color" content="#111" />
+        <meta name="theme-color" content="#111" media="(prefers-color-scheme: dark)" />
         <meta name="color-scheme" content="dark light" />
         <style dangerouslySetInnerHTML={{ __html: themeStyles }} />
         <Meta />

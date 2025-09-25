@@ -1,25 +1,10 @@
+import { redirect } from 'react-router';
 import { createLocalizedLoader } from '../../locale-loader';
 
-// Use the DRY localized loader
-export const loader = createLocalizedLoader();
+// Redirect /:lang/projects to the projects section on the home page
+export const loader = createLocalizedLoader(({ language, request }) => {
+  const url = new URL(request.url);
+  const search = url.search;
 
-// We need to create a proper details component
-export default function Details() {
-  return (
-    <div>
-      <h1>Details</h1>
-      <p>Details content goes here</p>
-    </div>
-  );
-}
-
-export const meta = () => {
-  return [
-    { title: 'Details' },
-    { name: 'description', content: 'Project and career details.' },
-  ];
-};
-
-export const handle = {
-  i18n: ['common'],
-};
+  return redirect(`/${language}${search}#details`);
+});

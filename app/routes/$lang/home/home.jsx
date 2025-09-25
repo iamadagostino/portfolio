@@ -1,25 +1,26 @@
 import { useEffect, useRef, useState } from 'react';
+import { useNavbar } from '~/components/navbar-provider';
 
+import gamestackTexture2Large from '~/assets/images/projects/gamestack/gamestack-list-large.jpg';
+import gamestackTexture2Placeholder from '~/assets/images/projects/gamestack/gamestack-list-placeholder.jpg';
+import gamestackTexture2 from '~/assets/images/projects/gamestack/gamestack-list.jpg';
+import gamestackTextureLarge from '~/assets/images/projects/gamestack/gamestack-login-large.jpg';
+import gamestackTexturePlaceholder from '~/assets/images/projects/gamestack/gamestack-login-placeholder.jpg';
+import gamestackTexture from '~/assets/images/projects/gamestack/gamestack-login.jpg';
+import sliceTextureLarge from '~/assets/images/projects/slice/slice-app-large.jpg';
+import sliceTexturePlaceholder from '~/assets/images/projects/slice/slice-app-placeholder.jpg';
+import sliceTexture from '~/assets/images/projects/slice/slice-app.jpg';
+import sprTextureLarge from '~/assets/images/projects/smart-sparrow/spr-lesson-builder-dark-large.jpg';
+import sprTexturePlaceholder from '~/assets/images/projects/smart-sparrow/spr-lesson-builder-dark-placeholder.jpg';
+import sprTexture from '~/assets/images/projects/smart-sparrow/spr-lesson-builder-dark.jpg';
 import { Footer } from '~/components/footer';
+import config from '~/config/app.json';
+import { useCurrentLanguage, useHomeTranslation } from '~/i18n/i18n.hooks';
+import { baseMeta } from '~/utils/meta';
+import styles from './home.module.css';
 import { Intro } from './intro';
 import { Profile } from './profile';
 import { ProjectSummary } from './project-summary';
-import { baseMeta } from '~/utils/meta';
-import config from '~/config/app.json';
-import { useCurrentLanguage } from '~/i18n/i18n.hooks';
-import gamestackTexture from '~/assets/projects/gamestack/gamestack-login.jpg';
-import gamestackTexture2 from '~/assets/projects/gamestack/gamestack-list.jpg';
-import gamestackTexture2Large from '~/assets/projects/gamestack/gamestack-list-large.jpg';
-import gamestackTexture2Placeholder from '~/assets/projects/gamestack/gamestack-list-placeholder.jpg';
-import gamestackTextureLarge from '~/assets/projects/gamestack/gamestack-login-large.jpg';
-import gamestackTexturePlaceholder from '~/assets/projects/gamestack/gamestack-login-placeholder.jpg';
-import sliceTexture from '~/assets/projects/slice/slice-app.jpg';
-import sliceTextureLarge from '~/assets/projects/slice/slice-app-large.jpg';
-import sliceTexturePlaceholder from '~/assets/projects/slice/slice-app-placeholder.jpg';
-import sprTexture from '~/assets/projects/spr/spr-lesson-builder-dark.jpg';
-import sprTextureLarge from '~/assets/projects/spr/spr-lesson-builder-dark-large.jpg';
-import sprTexturePlaceholder from '~/assets/projects/spr/spr-lesson-builder-dark-placeholder.jpg';
-import styles from './home.module.css';
 
 export const handle = {
   i18n: ['common', 'navbar', 'home'],
@@ -61,9 +62,11 @@ export const Home = () => {
   const projectTwo = useRef();
   const projectThree = useRef();
   const details = useRef();
+  const { setCurrent } = useNavbar();
+  const { t } = useHomeTranslation();
 
   // Create localized project links
-  const getProjectLink = projectSlug => {
+  const getProjectLink = (projectSlug) => {
     // Check if we have the language prefix, default to 'en' if not found
     const lang = currentLanguage || 'en';
     const projectPath = lang === 'it' ? 'progetti' : 'projects';
@@ -73,18 +76,46 @@ export const Home = () => {
   useEffect(() => {
     const sections = [intro, projectOne, projectTwo, projectThree, details];
 
+    // Keep a map of intersection ratios for each section so we can
+    // deterministically pick the most visible section regardless of
+    // scroll direction. This fixes missed highlights when scrolling up.
+    const ratioMap = {};
+
     const sectionObserver = new IntersectionObserver(
-      (entries, observer) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const section = entry.target;
-            observer.unobserve(section);
-            if (visibleSections.includes(section)) return;
-            setVisibleSections(prevSections => [...prevSections, section]);
-          }
+      (entries) => {
+        // Update ratios for entries we receive
+        entries.forEach((entry) => {
+          const id = entry.target.id;
+          ratioMap[id] = entry.intersectionRatio;
         });
+
+        // Determine which sections are currently visible (ratio >= 0.1)
+        const visible = sections
+          .map((ref) => ref.current)
+          .filter(Boolean)
+          .filter((el) => (ratioMap[el.id] || 0) >= 0.1);
+
+        setVisibleSections(visible);
+
+        // Pick the section with the highest intersectionRatio
+        let bestId = null;
+        let bestRatio = 0;
+        for (const ref of sections) {
+          const el = ref.current;
+          if (!el) continue;
+          const r = ratioMap[el.id] || 0;
+          if (r > bestRatio) {
+            bestRatio = r;
+            bestId = el.id;
+          }
+        }
+
+        if (bestId) {
+          const path = `/${currentLanguage}`;
+          setCurrent(`${path}#${bestId}`);
+        }
       },
-      { rootMargin: '0px 0px -10% 0px', threshold: 0.1 }
+      { rootMargin: '0px 0px -10% 0px', threshold: [0, 0.1, 0.25, 0.5, 0.75, 1] }
     );
 
     const indicatorObserver = new IntersectionObserver(
@@ -94,33 +125,29 @@ export const Home = () => {
       { rootMargin: '-100% 0px 0px 0px' }
     );
 
-    sections.forEach(section => {
-      sectionObserver.observe(section.current);
+    sections.forEach((section) => {
+      if (section.current) sectionObserver.observe(section.current);
     });
 
-    indicatorObserver.observe(intro.current);
+    if (intro.current) indicatorObserver.observe(intro.current);
 
     return () => {
       sectionObserver.disconnect();
       indicatorObserver.disconnect();
     };
-  }, [visibleSections]);
+  }, [visibleSections, currentLanguage, setCurrent]);
 
   return (
     <div className={styles.home}>
-      <Intro
-        id="intro"
-        sectionRef={intro}
-        scrollIndicatorHidden={scrollIndicatorHidden}
-      />
+      <Intro id="intro" sectionRef={intro} scrollIndicatorHidden={scrollIndicatorHidden} />
       <ProjectSummary
         id="project-1"
         sectionRef={projectOne}
         visible={visibleSections.includes(projectOne.current)}
         index={1}
-        title="Designing the future of education"
-        description="Designing a platform to help educators build better online courseware"
-        buttonText="View project"
+        title={t('projects.project1.title')}
+        description={t('projects.project1.description')}
+        buttonText={t('projects.project1.buttonText')}
         buttonLink={getProjectLink('smart-sparrow')}
         model={{
           type: 'laptop',
@@ -139,9 +166,9 @@ export const Home = () => {
         sectionRef={projectTwo}
         visible={visibleSections.includes(projectTwo.current)}
         index={2}
-        title="Video game progress tracking"
-        description="Design and development for a video game tracking app built in React Native"
-        buttonText="View website"
+        title={t('projects.project2.title')}
+        description={t('projects.project2.description')}
+        buttonText={t('projects.project2.buttonText')}
         buttonLink="https://gamestack.hamishw.com"
         model={{
           type: 'phone',
@@ -163,9 +190,9 @@ export const Home = () => {
         sectionRef={projectThree}
         visible={visibleSections.includes(projectThree.current)}
         index={3}
-        title="Biomedical image collaboration"
-        description="Increasing the amount of collaboration in Slice, an app for biomedical imaging"
-        buttonText="View project"
+        title={t('projects.project3.title')}
+        description={t('projects.project3.description')}
+        buttonText={t('projects.project3.buttonText')}
         buttonLink={getProjectLink('slice')}
         model={{
           type: 'laptop',
@@ -178,11 +205,7 @@ export const Home = () => {
           ],
         }}
       />
-      <Profile
-        sectionRef={details}
-        visible={visibleSections.includes(details.current)}
-        id="details"
-      />
+      <Profile sectionRef={details} visible={visibleSections.includes(details.current)} id="details" />
       <Footer />
     </div>
   );

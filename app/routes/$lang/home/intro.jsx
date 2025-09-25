@@ -1,26 +1,22 @@
 import { Suspense, lazy, useEffect, useState } from 'react';
 import { useInterval, usePrevious, useScrollToHash } from '~/hooks';
 
+import { Link as RouterLink } from 'react-router';
 import { DecoderText } from '~/components/decoder-text';
 import { Heading } from '~/components/heading';
-import { Link as RouterLink } from 'react-router';
 import { Section } from '~/components/section';
+import { useTheme } from '~/components/theme-provider';
 import { Transition } from '~/components/transition';
 import { VisuallyHidden } from '~/components/visually-hidden';
 import config from '~/config/app.json';
-import { cssProps } from '~/utils/style';
-import styles from './intro.module.css';
 import { tokens } from '~/config/theme.mjs';
 import { useHydrated } from '~/hooks/useHydrated';
-import { useTheme } from '~/components/theme-provider';
-import {
-  useHomeTranslation,
-  useNavbarTranslation,
-  useCurrentLanguage,
-} from '~/i18n/i18n.hooks';
+import { useCurrentLanguage, useHomeTranslation, useNavbarTranslation } from '~/i18n/i18n.hooks';
+import { cssProps } from '~/utils/style';
+import styles from './intro.module.css';
 
 const DisplacementSphere = lazy(() =>
-  import('./displacement-sphere').then(module => ({ default: module.DisplacementSphere }))
+  import('./displacement-sphere').then((module) => ({ default: module.DisplacementSphere }))
 );
 
 export function Intro({ id, sectionRef, scrollIndicatorHidden, ...rest }) {
@@ -31,9 +27,7 @@ export function Intro({ id, sectionRef, scrollIndicatorHidden, ...rest }) {
 
   // Use translated disciplines with fallback to config
   const translatedDisciplines = t('hero.disciplines', { returnObjects: true });
-  const disciplines = Array.isArray(translatedDisciplines)
-    ? translatedDisciplines
-    : config.disciplines;
+  const disciplines = Array.isArray(translatedDisciplines) ? translatedDisciplines : config.disciplines;
   const translatedRole = t('hero.role', { defaultValue: config.role });
 
   const [disciplineIndex, setDisciplineIndex] = useState(0);
@@ -45,9 +39,7 @@ export function Intro({ id, sectionRef, scrollIndicatorHidden, ...rest }) {
   const projectsSlug = tNav('slugs.project-1', { defaultValue: 'project-1' });
   const projectsLink = `${localePrefix}/#${projectsSlug}`;
 
-  const introLabel = [disciplines.slice(0, -1).join(', '), disciplines.slice(-1)[0]].join(
-    conjunction
-  );
+  const introLabel = [disciplines.slice(0, -1).join(', '), disciplines.slice(-1)[0]].join(conjunction);
   const currentDiscipline = disciplines.find((item, index) => index === disciplineIndex);
   const titleId = `${id}-title`;
   const scrollToHash = useScrollToHash();
@@ -68,7 +60,7 @@ export function Intro({ id, sectionRef, scrollIndicatorHidden, ...rest }) {
     }
   }, [theme, prevTheme]);
 
-  const handleScrollClick = event => {
+  const handleScrollClick = (event) => {
     event.preventDefault();
     scrollToHash(event.currentTarget.href);
   };
@@ -93,15 +85,10 @@ export function Intro({ id, sectionRef, scrollIndicatorHidden, ...rest }) {
             )}
             <header className={styles.text}>
               <h1 className={styles.name} data-visible={visible} id={titleId}>
-                <DecoderText
-                  text={t('hero.title', { defaultValue: config.name })}
-                  delay={500}
-                />
+                <DecoderText text={t('hero.title', { defaultValue: config.name })} delay={500} />
               </h1>
               <Heading level={0} as="h2" className={styles.title}>
-                <VisuallyHidden className={styles.label}>
-                  {`${translatedRole} + ${introLabel}`}
-                </VisuallyHidden>
+                <VisuallyHidden className={styles.label}>{`${translatedRole} + ${introLabel}`}</VisuallyHidden>
                 <span aria-hidden className={styles.row}>
                   <span
                     className={styles.word}
@@ -113,7 +100,7 @@ export function Intro({ id, sectionRef, scrollIndicatorHidden, ...rest }) {
                   <span className={styles.line} data-status={status} />
                 </span>
                 <div className={styles.row}>
-                  {disciplines.map(item => (
+                  {disciplines.map((item) => (
                     <Transition
                       unmount
                       in={item === currentDiscipline}
@@ -144,7 +131,7 @@ export function Intro({ id, sectionRef, scrollIndicatorHidden, ...rest }) {
               data-hidden={scrollIndicatorHidden}
               onClick={handleScrollClick}
             >
-              <VisuallyHidden>Scroll to projects</VisuallyHidden>
+              <VisuallyHidden>{t('hero.scrollToProjects')}</VisuallyHidden>
             </RouterLink>
             <RouterLink
               to={projectsLink}
@@ -153,14 +140,8 @@ export function Intro({ id, sectionRef, scrollIndicatorHidden, ...rest }) {
               data-hidden={scrollIndicatorHidden}
               onClick={handleScrollClick}
             >
-              <VisuallyHidden>Scroll to projects</VisuallyHidden>
-              <svg
-                aria-hidden
-                stroke="currentColor"
-                width="43"
-                height="15"
-                viewBox="0 0 43 15"
-              >
+              <VisuallyHidden>{t('hero.scrollToProjects')}</VisuallyHidden>
+              <svg aria-hidden stroke="currentColor" width="43" height="15" viewBox="0 0 43 15">
                 <path d="M1 1l20.5 12L42 1" strokeWidth="2" fill="none" />
               </svg>
             </RouterLink>

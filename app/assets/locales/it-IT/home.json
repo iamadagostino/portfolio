@@ -13,7 +13,7 @@
         "subtitle": "Sviluppatore Full-Stack e Designer",
         "description": "Creo esperienze digitali che combinano un design accattivante con funzionalità potenti.",
         "cta": "Visualizza il mio lavoro",
-        "scrollDown": "Scrolla per esplorare"
+        "scrollToProjects": "Scrolla ai progetti"
     },
     "about": {
         "title": "Chi sono",
@@ -44,5 +44,22 @@
         "cta": "Inviami un messaggio",
         "tagLabel": "Chi sono",
         "imageAlt": "Angelo D'Agostino, Ingegnere Software e Sviluppatore Full-Stack"
+    },
+    "projects": {
+        "project1": {
+            "title": "Progettare il futuro dell'istruzione",
+            "description": "Progettare una piattaforma per aiutare gli educatori a costruire materiali didattici online migliori",
+            "buttonText": "Visualizza il progetto"
+        },
+        "project2": {
+            "title": "Tracciamento dei progressi nei videogiochi",
+            "description": "Progettazione e sviluppo di un'app per il tracciamento dei progressi nei videogiochi sviluppata in React Native",
+            "buttonText": "Visualizza il sito"
+        },
+        "project3": {
+            "title": "Collaborazione su immagini biomedicali",
+            "description": "Aumentare la collaborazione in Slice, un'app per l'imaging biomedico",
+            "buttonText": "Visualizza il progetto"
+        }
     }
 }

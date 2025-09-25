@@ -1,4 +1,4 @@
-import { prisma, getPrismaClient } from '~/.server/db';
+import { getPrismaClient, prisma } from '~/.server/db';
 import type { Language } from '~/i18n/i18n.resources';
 import { markdownToHtmlSync } from '~/services/markdown.server';
 
@@ -84,10 +84,10 @@ export async function getBlogPosts(language: Language): Promise<BlogPostSummary[
     });
 
     return posts
-      .map(post => {
+      .map((post) => {
         // Find the best translation: requested language first, then English fallback
-        const requestedTranslation = post.translations.find(t => t.language === langEnum);
-        const fallbackTranslation = post.translations.find(t => t.language === 'EN');
+        const requestedTranslation = post.translations.find((t) => t.language === langEnum);
+        const fallbackTranslation = post.translations.find((t) => t.language === 'EN');
         const selectedTranslation = requestedTranslation || fallbackTranslation;
 
         if (!selectedTranslation) {
@@ -108,7 +108,7 @@ export async function getBlogPosts(language: Language): Promise<BlogPostSummary[
           },
         };
       })
-      .filter(post => post !== null) as BlogPostSummary[]; // Type assertion after filtering
+      .filter((post) => post !== null) as BlogPostSummary[]; // Type assertion after filtering
   } catch (error) {
     console.error('Error in getBlogPosts:', error);
     // Return empty array instead of throwing error
@@ -117,9 +117,7 @@ export async function getBlogPosts(language: Language): Promise<BlogPostSummary[
 }
 
 // Get all published blog posts with caching (when Accelerate is available)
-export async function getBlogPostsWithCache(
-  language: Language
-): Promise<BlogPostSummary[]> {
+export async function getBlogPostsWithCache(language: Language): Promise<BlogPostSummary[]> {
   try {
     const langEnum = language.toUpperCase() as 'EN' | 'IT';
 
@@ -176,10 +174,10 @@ export async function getBlogPostsWithCache(
     }[];
 
     return typedPosts
-      .map(post => {
+      .map((post) => {
         // Find the best translation: requested language first, then English fallback
-        const requestedTranslation = post.translations.find(t => t.language === langEnum);
-        const fallbackTranslation = post.translations.find(t => t.language === 'EN');
+        const requestedTranslation = post.translations.find((t) => t.language === langEnum);
+        const fallbackTranslation = post.translations.find((t) => t.language === 'EN');
         const selectedTranslation = requestedTranslation || fallbackTranslation;
 
         if (!selectedTranslation) {
@@ -200,7 +198,7 @@ export async function getBlogPostsWithCache(
           },
         };
       })
-      .filter(post => post !== null) as BlogPostSummary[]; // Type assertion after filtering
+      .filter((post) => post !== null) as BlogPostSummary[]; // Type assertion after filtering
   } catch (error) {
     console.error('Error in getBlogPostsWithCache:', error);
     // Fallback to regular method
@@ -209,10 +207,7 @@ export async function getBlogPostsWithCache(
 }
 
 // Get a specific blog post by slug and language
-export async function getBlogPost(
-  slug: string,
-  language: Language
-): Promise<BlogPost | null> {
+export async function getBlogPost(slug: string, language: Language): Promise<BlogPost | null> {
   const langEnum = language.toUpperCase() as 'EN' | 'IT';
 
   const post = await prisma.post.findUnique({
@@ -255,8 +250,8 @@ export async function getBlogPost(
   if (!post) return null;
 
   // Find the best translation: requested language first, then English fallback
-  const requestedTranslation = post.translations.find(t => t.language === langEnum);
-  const fallbackTranslation = post.translations.find(t => t.language === 'EN');
+  const requestedTranslation = post.translations.find((t) => t.language === langEnum);
+  const fallbackTranslation = post.translations.find((t) => t.language === 'EN');
   const selectedTranslation = requestedTranslation || fallbackTranslation;
 
   // Process markdown content to HTML if translation exists
@@ -281,10 +276,7 @@ export async function getBlogPost(
 }
 
 // Get a specific blog post with caching (when Accelerate is available)
-export async function getBlogPostWithCache(
-  slug: string,
-  language: Language
-): Promise<BlogPost | null> {
+export async function getBlogPostWithCache(slug: string, language: Language): Promise<BlogPost | null> {
   const langEnum = language.toUpperCase() as 'EN' | 'IT';
 
   if (!process.env.ACCELERATE_URL) {
@@ -358,8 +350,8 @@ export async function getBlogPostWithCache(
   if (!typedPost) return null;
 
   // Find the best translation: requested language first, then English fallback
-  const requestedTranslation = typedPost.translations.find(t => t.language === langEnum);
-  const fallbackTranslation = typedPost.translations.find(t => t.language === 'EN');
+  const requestedTranslation = typedPost.translations.find((t) => t.language === langEnum);
+  const fallbackTranslation = typedPost.translations.find((t) => t.language === 'EN');
   const selectedTranslation = requestedTranslation || fallbackTranslation;
 
   // Process markdown content to HTML if translation exists
@@ -384,10 +376,7 @@ export async function getBlogPostWithCache(
 }
 
 // Get featured posts for homepage
-export async function getFeaturedBlogPosts(
-  language: Language,
-  limit = 3
-): Promise<BlogPostSummary[]> {
+export async function getFeaturedBlogPosts(language: Language, limit = 3): Promise<BlogPostSummary[]> {
   const langEnum = language.toUpperCase() as 'EN' | 'IT';
 
   const posts = await prisma.post.findMany({
@@ -413,7 +402,7 @@ export async function getFeaturedBlogPosts(
     take: limit,
   });
 
-  return posts.map(post => ({
+  return posts.map((post) => ({
     id: post.id,
     slug: post.slug,
     featured: post.featured,
@@ -430,10 +419,7 @@ export async function getFeaturedBlogPosts(
 }
 
 // Get featured posts with caching (when Accelerate is available)
-export async function getFeaturedBlogPostsWithCache(
-  language: Language,
-  limit = 3
-): Promise<BlogPostSummary[]> {
+export async function getFeaturedBlogPostsWithCache(language: Language, limit = 3): Promise<BlogPostSummary[]> {
   const langEnum = language.toUpperCase() as 'EN' | 'IT';
 
   if (!process.env.ACCELERATE_URL) {
@@ -476,7 +462,7 @@ export async function getFeaturedBlogPostsWithCache(
     translations: { title: string; abstract: string; slug: string | null }[];
   }[];
 
-  return typedPosts.map(post => ({
+  return typedPosts.map((post) => ({
     id: post.id,
     slug: post.slug,
     featured: post.featured,
@@ -546,8 +532,8 @@ export async function getBlogPostWithSlugValidation(
   }
 
   // Find the best translation: requested language first, then English fallback
-  const requestedTranslation = post.translations.find(t => t.language === langEnum);
-  const fallbackTranslation = post.translations.find(t => t.language === 'EN');
+  const requestedTranslation = post.translations.find((t) => t.language === langEnum);
+  const fallbackTranslation = post.translations.find((t) => t.language === 'EN');
   const selectedTranslation = requestedTranslation || fallbackTranslation;
 
   if (!selectedTranslation) {
@@ -561,15 +547,15 @@ export async function getBlogPostWithSlugValidation(
   const shouldRedirect = urlSlug !== correctSlug;
 
   // Debug logging to understand the redirect loop
-  console.log('🐛 getBlogPostWithSlugValidation debug:', {
-    urlSlug,
-    language,
-    'post.slug': post.slug,
-    'selectedTranslation.slug': selectedTranslation.slug,
-    correctSlug,
-    shouldRedirect,
-    'selectedTranslation.language': selectedTranslation.language,
-  });
+  // console.log('🐛 getBlogPostWithSlugValidation debug:', {
+  //   urlSlug,
+  //   language,
+  //   'post.slug': post.slug,
+  //   'selectedTranslation.slug': selectedTranslation.slug,
+  //   correctSlug,
+  //   shouldRedirect,
+  //   'selectedTranslation.language': selectedTranslation.language,
+  // });
 
   // Process markdown content to HTML if translation exists
   const processedTranslation = {
@@ -597,10 +583,7 @@ export async function getBlogPostWithSlugValidation(
 }
 
 // Get a blog post by either main slug or locale-specific slug
-export async function getBlogPostByAnySlug(
-  urlSlug: string,
-  language: Language
-): Promise<BlogPost | null> {
+export async function getBlogPostByAnySlug(urlSlug: string, language: Language): Promise<BlogPost | null> {
   const langEnum = language.toUpperCase() as 'EN' | 'IT';
 
   // First try to find by main slug
@@ -690,8 +673,8 @@ export async function getBlogPostByAnySlug(
   if (!post) return null;
 
   // Find the best translation: requested language first, then English fallback
-  const requestedTranslation = post.translations.find(t => t.language === langEnum);
-  const fallbackTranslation = post.translations.find(t => t.language === 'EN');
+  const requestedTranslation = post.translations.find((t) => t.language === langEnum);
+  const fallbackTranslation = post.translations.find((t) => t.language === 'EN');
   const selectedTranslation = requestedTranslation || fallbackTranslation;
 
   // Process markdown content to HTML if translation exists
@@ -716,10 +699,7 @@ export async function getBlogPostByAnySlug(
 }
 
 // Get a blog post by either main slug or locale-specific slug with caching
-export async function getBlogPostByAnySlugWithCache(
-  urlSlug: string,
-  language: Language
-): Promise<BlogPost | null> {
+export async function getBlogPostByAnySlugWithCache(urlSlug: string, language: Language): Promise<BlogPost | null> {
   const langEnum = language.toUpperCase() as 'EN' | 'IT';
 
   if (!process.env.ACCELERATE_URL) {
@@ -843,8 +823,8 @@ export async function getBlogPostByAnySlugWithCache(
   if (!typedPost) return null;
 
   // Find the best translation: requested language first, then English fallback
-  const requestedTranslation = typedPost.translations.find(t => t.language === langEnum);
-  const fallbackTranslation = typedPost.translations.find(t => t.language === 'EN');
+  const requestedTranslation = typedPost.translations.find((t) => t.language === langEnum);
+  const fallbackTranslation = typedPost.translations.find((t) => t.language === 'EN');
   const selectedTranslation = requestedTranslation || fallbackTranslation;
 
   // Process markdown content to HTML if translation exists
