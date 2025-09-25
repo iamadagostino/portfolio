@@ -10,7 +10,7 @@ import { Transition } from '~/components/transition';
 import config from '~/config/app.json';
 import { tokens } from '~/config/theme.mjs';
 import { useCurrentLanguage, useNavbarTranslation } from '~/i18n/i18n.hooks';
-import { ExperienceToggle } from './experience-toggle';
+import { ExperienceToggle } from './3d-experience-toggle';
 import { LanguageDropdown } from './language-dropdown';
 import NavbarHeader from './navbar-header';
 import styles from './navbar.module.css';

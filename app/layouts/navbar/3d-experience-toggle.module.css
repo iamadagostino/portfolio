@@ -1,0 +1,56 @@
+@layer layout {
+  .toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+
+    --buttonSize: 80px;
+
+    --offset: var(--spaceXS);
+    --inset: calc(var(--spaceOuter) - var(--offset));
+
+    position: fixed;
+    top: calc(var(--inset) * 3);
+    right: var(--inset);
+    z-index: var(--zIndex4);
+
+    @media (--mediaMobile), (--mediaMobileLS) {
+      display: flex;
+    }
+
+    &[data-mobile='true'] {
+      --offset: var(--spaceXS);
+      --inset: calc(var(--spaceXL) - var(--offset));
+      --3dExperienceOffsetMobile: 9px; /* Position to the left of theme toggle on mobile */
+    }
+  }
+
+  .iconWrapper {
+    position: relative;
+    display: inline-block;
+  }
+
+  .icon {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: invert(1) brightness(0.9);
+    opacity: 0;
+    transition: opacity var(--3dExperienceCrossfade, 300ms) ease;
+    pointer-events: none;
+  }
+
+  .iconVisible {
+    opacity: 1;
+  }
+
+  .iconHidden {
+    opacity: 0;
+  }
+}
