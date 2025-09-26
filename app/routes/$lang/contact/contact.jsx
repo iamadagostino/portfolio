@@ -1,24 +1,24 @@
-import { Form, useActionData, useNavigation } from 'react-router';
 import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses';
+import { Form, useActionData, useNavigation } from 'react-router';
 import { cssProps, msToNum, numToMs } from '~/utils/style';
 
-import { Button } from '~/components/button';
-import { DecoderText } from '~/components/decoder-text';
-import { Divider } from '~/components/divider';
-import { Footer } from '~/components/footer';
-import { Heading } from '~/components/heading';
-import { Icon } from '~/components/icon';
-import { Input } from '~/components/input';
-import { Section } from '~/components/section';
-import { Text } from '~/components/text';
-import { Transition } from '~/components/transition';
-import { baseMeta } from '~/utils/meta';
-import styles from './contact.module.css';
+import { useEffect, useRef } from 'react';
+import { Button } from '~/components/main/button';
+import { DecoderText } from '~/components/main/decoder-text';
+import { Divider } from '~/components/main/divider';
+import { Footer } from '~/components/main/footer';
+import { Heading } from '~/components/main/heading';
+import { Icon } from '~/components/main/icon';
+import { Input } from '~/components/main/input';
+import { Section } from '~/components/main/section';
+import { Text } from '~/components/main/text';
+import { Transition } from '~/components/main/transition';
 import { tokens } from '~/config/theme.mjs';
 import { useFormInput } from '~/hooks';
-import { useRef, useEffect } from 'react';
 import { useContactTranslation, useCurrentLanguage } from '~/i18n/i18n.hooks';
 import { resources } from '~/i18n/i18n.resources';
+import { baseMeta } from '~/utils/meta';
+import styles from './contact.module.css';
 
 export const handle = {
   i18n: ['common', 'navbar', 'contact'],
@@ -77,17 +77,11 @@ export async function action({ context, request }) {
   }
 
   if (email.length > MAX_EMAIL_LENGTH) {
-    errors.email = contactTranslations.emailTooLong.replace(
-      '{{length}}',
-      MAX_EMAIL_LENGTH
-    );
+    errors.email = contactTranslations.emailTooLong.replace('{{length}}', MAX_EMAIL_LENGTH);
   }
 
   if (message.length > MAX_MESSAGE_LENGTH) {
-    errors.message = contactTranslations.messageTooLong.replace(
-      '{{length}}',
-      MAX_MESSAGE_LENGTH
-    );
+    errors.message = contactTranslations.messageTooLong.replace('{{length}}', MAX_MESSAGE_LENGTH);
   }
 
   if (Object.keys(errors).length > 0) {
@@ -103,10 +97,7 @@ export async function action({ context, request }) {
       Message: {
         Body: {
           Text: {
-            Data: `${contactTranslations.emailFrom.replace(
-              '{{email}}',
-              email
-            )}\n\n${message}`,
+            Data: `${contactTranslations.emailFrom.replace('{{email}}', email)}\n\n${message}`,
           },
         },
         Subject: {
@@ -168,12 +159,7 @@ export const Contact = () => {
               style={getDelay(tokens.base.durationXS, initDelay, 0.4)}
             />
             {/* Hidden honeypot field to identify bots */}
-            <Input
-              className={styles.botkiller}
-              label="Name"
-              name="name"
-              maxLength={MAX_EMAIL_LENGTH}
-            />
+            <Input className={styles.botkiller} label="Name" name="name" maxLength={MAX_EMAIL_LENGTH} />
             <Input
               required
               className={styles.input}
@@ -198,11 +184,7 @@ export const Contact = () => {
               maxLength={MAX_MESSAGE_LENGTH}
               {...message}
             />
-            <Transition
-              unmount
-              in={!sending && actionData?.errors}
-              timeout={msToNum(tokens.base.durationM)}
-            >
+            <Transition unmount in={!sending && actionData?.errors} timeout={msToNum(tokens.base.durationM)}>
               {({ status: errorStatus, nodeRef }) => (
                 <div
                   className={styles.formError}
@@ -241,12 +223,7 @@ export const Contact = () => {
       <Transition unmount in={actionData?.success}>
         {({ status, nodeRef }) => (
           <div className={styles.complete} aria-live="polite" ref={nodeRef}>
-            <Heading
-              level={3}
-              as="h3"
-              className={styles.completeTitle}
-              data-status={status}
-            >
+            <Heading level={3} as="h3" className={styles.completeTitle} data-status={status}>
               {t('success')}
             </Heading>
             <Text

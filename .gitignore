@@ -10,7 +10,7 @@ build
 .react-router/
 
 # Environment files
-.env
+.env.local
 .dev.vars
 
 # Wrangler configuration

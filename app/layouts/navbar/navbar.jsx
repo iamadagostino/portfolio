@@ -3,10 +3,10 @@ import { getNavLinks, socialLinks } from '../../config/menus/nav-menu';
 
 import { useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router';
-import { Icon } from '~/components/icon';
-import { Monogram } from '~/components/monogram';
-import { useNavbar } from '~/components/navbar-provider';
-import { Transition } from '~/components/transition';
+import { Icon } from '~/components/main/icon';
+import { Monogram } from '~/components/main/monogram';
+import { useNavbar } from '~/components/main/navbar-provider';
+import { Transition } from '~/components/main/transition';
 import config from '~/config/app.json';
 import { tokens } from '~/config/theme.mjs';
 import { useCurrentLanguage, useNavbarTranslation } from '~/i18n/i18n.hooks';

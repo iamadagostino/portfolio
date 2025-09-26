@@ -1,13 +1,12 @@
-import { HTMLAttributes, forwardRef } from 'react';
+import { HTMLAttributes, forwardRef, useCallback } from 'react';
 import { classes } from '~/utils/style';
 
+import { useReducedMotion } from 'framer-motion';
 import { Text } from '~/components/text';
 import styles from './loader.module.css';
-import { useReducedMotion } from 'framer-motion';
 
 interface LoaderProps extends HTMLAttributes<HTMLDivElement> {
   className?: string;
-  style?: React.CSSProperties;
   width?: number;
   height?: number;
   size?: number | 's' | 'm' | 'l' | 'xl';
@@ -16,11 +15,40 @@ interface LoaderProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export const Loader = forwardRef<HTMLDivElement, LoaderProps>(
-  (
-    { className, style, width = 32, height = 4, text = 'Loading...', center, ...rest },
-    ref
-  ) => {
+  ({ className, width, height, size = 'm', text = 'Loading...', center, ...rest }, ref) => {
     const reduceMotion = useReducedMotion();
+
+    // Determine size class based on size prop
+    const sizeClass =
+      typeof size === 'string' ? styles[`size${size.charAt(0).toUpperCase() + size.slice(1)}`] : styles.customSize;
+
+    // Callback ref to set CSS custom properties without inline styles
+    const setCustomProperties = useCallback(
+      (element: HTMLDivElement | null) => {
+        if (element && !reduceMotion && (width !== undefined || height !== undefined || typeof size === 'number')) {
+          if (width !== undefined) {
+            element.style.setProperty('--width', `${width}px`);
+          }
+
+          if (height !== undefined) {
+            element.style.setProperty('--height', `${height}px`);
+          }
+
+          if (typeof size === 'number') {
+            element.style.setProperty('--width', `${size}px`);
+            element.style.setProperty('--height', `${Math.round(size / 8)}px`);
+          }
+        }
+
+        // Forward the ref
+        if (typeof ref === 'function') {
+          ref(element);
+        } else if (ref) {
+          ref.current = element;
+        }
+      },
+      [width, height, size, reduceMotion, ref]
+    );
 
     if (reduceMotion) {
       return (
@@ -32,17 +60,10 @@ export const Loader = forwardRef<HTMLDivElement, LoaderProps>(
 
     return (
       <div
-        ref={ref}
-        className={classes(styles.loader, className)}
+        ref={setCustomProperties}
+        className={classes(styles.loader, sizeClass, className)}
         data-center={center}
         {...rest}
-        style={
-          {
-            '--width': `${width}px`,
-            '--height': `${height}px`,
-            ...style,
-          } as React.CSSProperties
-        }
       >
         <div className={styles.span} />
       </div>

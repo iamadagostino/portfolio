@@ -12,9 +12,13 @@ const createUser = (role: User['role']) => () =>
   createDbUser({
     email: faker.internet.email(),
     username: faker.internet.username(),
+    passwordHash: 'hashedpassword',
     firstName: faker.person.firstName(),
     lastName: faker.person.lastName(),
+    profilePicture: null,
     role,
+    isActive: true,
+    isVerified: false,
     createdAt: new Date(),
     updatedAt: new Date(),
   });

@@ -1,5 +1,5 @@
 import { Disclosure } from '@headlessui/react';
-import { useNavbar } from '~/components/navbar-provider';
+import { useNavbar } from '~/components/main/navbar-provider';
 import { ExperienceToggle } from './3d-experience-toggle';
 import { LanguageDropdown } from './language-dropdown';
 import { NavToggle } from './nav-toggle';

@@ -85,9 +85,7 @@ export async function requireAdminUser(request: Request, redirectTo: string = '/
 
   if (!adminUser) {
     const url = new URL(request.url);
-    const searchParams = new URLSearchParams([
-      ['redirectTo', `${url.pathname}${url.search}`],
-    ]);
+    const searchParams = new URLSearchParams([['redirectTo', `${url.pathname}${url.search}`]]);
     throw redirect(`${redirectTo}?${searchParams}`);
   }
 
@@ -112,7 +110,7 @@ export async function isAdmin(request: Request): Promise<boolean> {
 
 // Admin login utility (for development/testing)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export async function adminLogin(email: string, _password?: string) {
+export async function adminLogin(email: string, password: string) {
   // For development, allow login with just email for admin users
   // In production, you would verify password hash here
   // Note: _password parameter is kept for future implementation

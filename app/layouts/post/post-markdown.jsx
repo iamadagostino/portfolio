@@ -1,12 +1,12 @@
-import { Code } from '~/components/code';
-import { Heading } from '~/components/heading';
-import { Icon } from '~/components/icon';
-import { Link } from '~/components/link';
-import { List, ListItem } from '~/components/list';
-import { Text } from '~/components/text';
 import { Children } from 'react';
-import styles from './post-markdown.module.css';
 import { Link as RouterLink } from 'react-router';
+import { Code } from '~/components/main/code';
+import { Heading } from '~/components/main/heading';
+import { Icon } from '~/components/main/icon';
+import { Link } from '~/components/main/link';
+import { List, ListItem } from '~/components/main/list';
+import { Text } from '~/components/main/text';
+import styles from './post-markdown.module.css';
 
 const PostHeadingLink = ({ id }) => {
   return (
@@ -62,11 +62,11 @@ const PostParagraph = ({ children, ...rest }) => {
 
 const PostLink = ({ ...props }) => <Link {...props} />;
 
-const PostUl = props => {
+const PostUl = (props) => {
   return <List className={styles.list} {...props} />;
 };
 
-const PostOl = props => {
+const PostOl = (props) => {
   return <List className={styles.list} ordered {...props} />;
 };
 
@@ -80,7 +80,7 @@ const PostCode = ({ children, ...rest }) => (
   </code>
 );
 
-const PostPre = props => {
+const PostPre = (props) => {
   return (
     <div className={styles.pre}>
       <Code {...props} />
@@ -88,30 +88,20 @@ const PostPre = props => {
   );
 };
 
-const PostBlockquote = props => {
+const PostBlockquote = (props) => {
   return <blockquote className={styles.blockquote} {...props} />;
 };
 
-const PostHr = props => {
+const PostHr = (props) => {
   return <hr className={styles.hr} {...props} />;
 };
 
-const PostStrong = props => {
+const PostStrong = (props) => {
   return <strong className={styles.strong} {...props} />;
 };
 
 const PostImage = ({ src, alt, width, height, ...rest }) => {
-  return (
-    <img
-      className={styles.image}
-      src={src}
-      loading="lazy"
-      alt={alt}
-      width={width}
-      height={height}
-      {...rest}
-    />
-  );
+  return <img className={styles.image} src={src} loading="lazy" alt={alt} width={width} height={height} {...rest} />;
 };
 
 const Embed = ({ src }) => {

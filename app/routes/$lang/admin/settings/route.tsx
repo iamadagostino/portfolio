@@ -7,7 +7,7 @@ import { Input } from '~/components/admin/input';
 import { Select } from '~/components/admin/select';
 import { Text } from '~/components/admin/text';
 import { Textarea } from '~/components/admin/textarea';
-import { useTheme } from '~/components/theme-provider';
+import { useTheme } from '~/components/main/theme-provider';
 import { Address } from './address';
 
 export const meta = () => [{ title: 'Settings · Admin' }];
@@ -26,12 +26,7 @@ export default function Settings() {
           <Text>Choose your preferred color scheme for the admin interface.</Text>
         </div>
         <div>
-          <Select 
-            aria-label="Theme" 
-            name="theme" 
-            value={theme}
-            onChange={(e) => toggleTheme(e.target.value)}
-          >
+          <Select aria-label="Theme" name="theme" value={theme} onChange={(e) => toggleTheme(e.target.value)}>
             <option value="light">Light Mode</option>
             <option value="dark">Dark Mode</option>
           </Select>

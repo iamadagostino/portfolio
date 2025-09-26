@@ -22,8 +22,8 @@ import sliceSidebarLayers from '~/assets/images/projects/slice/slice-sidebar-lay
 import sliceSlidesLarge from '~/assets/images/projects/slice/slice-slides-large.jpg';
 import sliceSlidesPlaceholder from '~/assets/images/projects/slice/slice-slides-placeholder.jpg';
 import sliceSlides from '~/assets/images/projects/slice/slice-slides.jpg';
-import { Footer } from '~/components/footer';
-import { Image } from '~/components/image';
+import { Footer } from '~/components/main/footer';
+import { Image } from '~/components/main/image';
 import {
   ProjectBackground,
   ProjectContainer,

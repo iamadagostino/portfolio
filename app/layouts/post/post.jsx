@@ -1,18 +1,18 @@
-import { Divider } from '~/components/divider';
-import { Footer } from '~/components/footer';
-import { Heading } from '~/components/heading';
-import { Image } from '~/components/image';
-import { Section } from '~/components/section';
-import { Text } from '~/components/text';
-import { tokens } from '~/components/theme-provider/theme';
-import { Transition } from '~/components/transition';
-import { useParallax, useScrollToHash } from '~/hooks';
 import { useRef } from 'react';
+import { Link as RouterLink } from 'react-router';
+import { Divider } from '~/components/main/divider';
+import { Footer } from '~/components/main/footer';
+import { Heading } from '~/components/main/heading';
+import { Image } from '~/components/main/image';
+import { Section } from '~/components/main/section';
+import { Text } from '~/components/main/text';
+import { tokens } from '~/components/main/theme-provider/theme';
+import { Transition } from '~/components/main/transition';
+import { useParallax, useScrollToHash } from '~/hooks';
 import { clamp } from '~/utils/clamp';
 import { formatDate } from '~/utils/date';
 import { cssProps, msToNum, numToMs } from '~/utils/style';
 import styles from './post.module.css';
-import { Link as RouterLink } from 'react-router';
 
 export const Post = ({ children, title, date, banner, timecode, language = 'en' }) => {
   const scrollToHash = useScrollToHash();
@@ -21,12 +21,12 @@ export const Post = ({ children, title, date, banner, timecode, language = 'en' 
   // Calculate the formatted date directly during render
   const dateTime = date ? formatDate(date, language) : null;
 
-  useParallax(0.004, value => {
+  useParallax(0.004, (value) => {
     if (!imageRef.current) return;
     imageRef.current.style.setProperty('--blurOpacity', clamp(value, 0, 1));
   });
 
-  const handleScrollIndicatorClick = event => {
+  const handleScrollIndicatorClick = (event) => {
     event.preventDefault();
     scrollToHash(event.currentTarget.href);
   };
@@ -42,12 +42,7 @@ export const Post = ({ children, title, date, banner, timecode, language = 'en' 
               <Image role="presentation" src={banner} placeholder={placeholder} alt="" />
             </div>
             <div className={styles.bannerImageBlur}>
-              <Image
-                role="presentation"
-                src={placeholder}
-                placeholder={placeholder}
-                alt=""
-              />
+              <Image role="presentation" src={placeholder} placeholder={placeholder} alt="" />
             </div>
           </div>
         )}
@@ -66,10 +61,7 @@ export const Post = ({ children, title, date, banner, timecode, language = 'en' 
             <Heading level={2} as="h1" className={styles.title} aria-label={title}>
               {title.split(' ').map((word, index) => (
                 <span className={styles.titleWordWrapper} key={`${word}-${index}`}>
-                  <span
-                    className={styles.titleWord}
-                    style={cssProps({ delay: numToMs(index * 100 + 100) })}
-                  >
+                  <span className={styles.titleWord} style={cssProps({ delay: numToMs(index * 100 + 100) })}>
                     {word}
                     {index !== title.split(' ').length - 1 ? ' ' : ''}
                   </span>
@@ -83,13 +75,7 @@ export const Post = ({ children, title, date, banner, timecode, language = 'en' 
                 aria-label="Scroll to post content"
                 onClick={handleScrollIndicatorClick}
               >
-                <svg
-                  aria-hidden
-                  stroke="currentColor"
-                  width="43"
-                  height="15"
-                  viewBox="0 0 43 15"
-                >
+                <svg aria-hidden stroke="currentColor" width="43" height="15" viewBox="0 0 43 15">
                   <path d="M1 1l20.5 12L42 1" strokeWidth="2" fill="none" />
                 </svg>
               </RouterLink>

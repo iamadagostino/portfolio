@@ -2,8 +2,8 @@
   .loader {
     display: grid;
     grid-template-columns: 100%;
-    width: var(--width);
-    height: var(--height);
+    width: var(--width, 32px);
+    height: var(--height, 4px);
     background: color-mix(in lab, currentColor 20%, transparent);
 
     &[data-center='true'] {
@@ -12,6 +12,30 @@
       left: 50%;
       transform: translate(-50%, -50%);
     }
+  }
+
+  .sizeS {
+    --width: 24px;
+    --height: 3px;
+  }
+
+  .sizeM {
+    --width: 32px;
+    --height: 4px;
+  }
+
+  .sizeL {
+    --width: 48px;
+    --height: 6px;
+  }
+
+  .sizeXl {
+    --width: 64px;
+    --height: 8px;
+  }
+
+  .customSize {
+    /* Custom sizes will be handled via CSS custom properties on the element */
   }
 
   .text {

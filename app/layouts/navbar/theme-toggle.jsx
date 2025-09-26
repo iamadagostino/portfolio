@@ -1,7 +1,7 @@
-import { Button } from '~/components/button';
-import styles from './theme-toggle.module.css';
 import { useId } from 'react';
-import { useTheme } from '~/components/theme-provider';
+import { Button } from '~/components/main/button';
+import { useTheme } from '~/components/main/theme-provider';
+import styles from './theme-toggle.module.css';
 
 export const ThemeToggle = ({ isMobile, ...rest }) => {
   const id = useId();
@@ -28,13 +28,7 @@ export const ThemeToggle = ({ isMobile, ...rest }) => {
           className={styles.path}
           d="M19 3v7M19 35v-7M32.856 11l-6.062 3.5M5.144 27l6.062-3.5M5.144 11l6.062 3.5M32.856 27l-6.062-3.5"
         />
-        <circle
-          className={styles.circle}
-          mask={`url(#${maskId})`}
-          cx="19"
-          cy="19"
-          r="12"
-        />
+        <circle className={styles.circle} mask={`url(#${maskId})`} cx="19" cy="19" r="12" />
       </svg>
     </Button>
   );

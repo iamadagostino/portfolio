@@ -1,14 +1,26 @@
-import { useReducedMotion } from 'framer-motion';
-import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import { Button } from '~/components/button';
 import { Icon } from '~/components/icon';
+import { useTheme } from '~/components/theme-provider';
+import { useReducedMotion } from 'framer-motion';
 import { useHasMounted, useInViewport } from '~/hooks';
+import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import { resolveSrcFromSrcSet } from '~/utils/image';
 import { classes, cssProps, numToMs } from '~/utils/style';
 import styles from './image.module.css';
 
-export const Image = ({ className, style, reveal, delay = 0, raised, src: baseSrc, srcSet, placeholder, ...rest }) => {
+export const Image = ({
+  className,
+  style,
+  reveal,
+  delay = 0,
+  raised,
+  src: baseSrc,
+  srcSet,
+  placeholder,
+  ...rest
+}) => {
   const [loaded, setLoaded] = useState(false);
+  const { theme } = useTheme();
   const containerRef = useRef();
   const src = baseSrc || srcSet.split(' ')[0];
   const inViewport = useInViewport(containerRef, !getIsVideo(src));
@@ -23,6 +35,7 @@ export const Image = ({ className, style, reveal, delay = 0, raised, src: baseSr
       data-visible={inViewport || loaded}
       data-reveal={reveal}
       data-raised={raised}
+      data-theme={theme}
       style={cssProps({ delay: numToMs(delay) }, style)}
       ref={containerRef}
     >
@@ -114,7 +127,7 @@ const ImageElements = ({
     }
   }, [inViewport, play, reduceMotion, restartOnPause, videoInteracted, videoSrc]);
 
-  const togglePlaying = (event) => {
+  const togglePlaying = event => {
     event.preventDefault();
 
     setVideoInteracted(true);

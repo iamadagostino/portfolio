@@ -29,7 +29,7 @@
     }
 
     /* Based on the Poimandres theme */
-    body[data-theme='dark'] {
+    &[data-theme='dark'] {
       --surface: rgb(26 26 28);
       --className: #5de4c7;
       --comment: #a6accd;
@@ -45,7 +45,7 @@
       --char: #add7ff;
     }
 
-    body[data-theme='light'] {
+    &[data-theme='light'] {
       --surface: rgb(255 255 255);
       --comment: rgba(0 0 0 / 0.6);
       --keyword: #00378c;

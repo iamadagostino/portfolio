@@ -6,9 +6,8 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 enum Role {
@@ -28,16 +27,22 @@ enum PostStatus {
 }
 
 model User {
-  id        Int    @id @default(autoincrement())
-  email     String @unique
-  username  String @unique
-  firstName String
-  lastName  String
+  id             Int     @id @default(autoincrement())
+  username       String  @unique
+  email          String  @unique
+  passwordHash   String
+  firstName      String?
+  lastName       String?
+  profilePicture String?
 
+  // User role for access control
   role Role @default(USER)
 
   // Blog post relationships
   posts Post[]
+
+  isActive   Boolean @default(true)
+  isVerified Boolean @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

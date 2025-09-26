@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
-// eslint-disable-next-line no-unused-vars
-import { $, chalk } from "zx";
+import { chalk } from "zx";
+import argv from "argv";
+
 const fs = require("fs");
 const log = require("fancy-log");
 const https = require('https');
@@ -13,7 +14,6 @@ const FONTS_DEFINITIONS = `${FONTS_FOLDER}/definitions`;
 
 
 // Pass CLI arguments
-// eslint-disable-next-line no-undef
 let FONT_KIT_URL = argv.url;
 
 if(!FONT_KIT_URL){
@@ -84,7 +84,6 @@ async function create_definition() {
                 let empty_content = '';
 
                 // Create class name we want to add to the .css
-                // eslint-disable-next-line no-unused-vars
                 let css_class_str = `.tk-${fontFamily} { font-family: "${fontFamily}", sans-serif; }`;
 
                 // First check if the definition already exists
@@ -231,7 +230,6 @@ create_definition().then(() => {
                 const fontFamily = fontFaceRule.match(/font-family:\s*"([^"]+)"/)[1];
                 const fontWeight = fontFaceRule.match(/font-weight:\s*([^;]+);/)[1];
                 const fontStyle = fontFaceRule.match(/font-style:\s*([^;]+);/)[1];
-                // eslint-disable-next-line no-unused-vars
                 const fontUrlAndFormats = fontFaceRule.match(/url\("([^"]+)"\)\s+format\("([^"]+)"\)/g);
                 
                 FONT_FAMILY_NAME = fontFamily;

@@ -21,9 +21,9 @@ import volkiharSlide2 from '~/assets/images/projects/volkihar-knight/volkihar-sl
 import volkiharSlide3Large from '~/assets/images/projects/volkihar-knight/volkihar-slide-3-large.jpg';
 import volkiharSlide3 from '~/assets/images/projects/volkihar-knight/volkihar-slide-3.jpg';
 import volkiharSlidePlaceholder from '~/assets/images/projects/volkihar-knight/volkihar-slide-placeholder.jpg';
-import { Button } from '~/components/button';
-import { Footer } from '~/components/footer';
-import { Image } from '~/components/image';
+import { Button } from '~/components/main/button';
+import { Footer } from '~/components/main/footer';
+import { Image } from '~/components/main/image';
 import {
   ProjectBackground,
   ProjectContainer,
@@ -41,7 +41,7 @@ import { media } from '~/utils/style';
 import styles from './volkihar-knight.module.css';
 import { VolkiharLogo } from './volkihar-logo';
 
-const Carousel = lazy(() => import('~/components/carousel').then((module) => ({ default: module.Carousel })));
+const Carousel = lazy(() => import('~/components/main/carousel').then((module) => ({ default: module.Carousel })));
 
 const Armor = lazy(() => import('./armor').then((module) => ({ default: module.Armor })));
 

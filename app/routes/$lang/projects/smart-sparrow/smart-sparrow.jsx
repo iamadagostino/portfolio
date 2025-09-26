@@ -44,11 +44,11 @@ import imageSprStoryboarderDark from '~/assets/images/projects/smart-sparrow/spr
 import imageSprStoryboarderLightLarge from '~/assets/images/projects/smart-sparrow/spr-storyboarder-light-large.png';
 import imageSprStoryboarderLightPlaceholder from '~/assets/images/projects/smart-sparrow/spr-storyboarder-light-placeholder.png';
 import imageSprStoryboarderLight from '~/assets/images/projects/smart-sparrow/spr-storyboarder-light.png';
-import { Footer } from '~/components/footer';
-import { Image } from '~/components/image';
-import { Link } from '~/components/link';
-import { SegmentedControl, SegmentedControlOption } from '~/components/segmented-control';
-import { ThemeProvider, useTheme } from '~/components/theme-provider';
+import { Footer } from '~/components/main/footer';
+import { Image } from '~/components/main/image';
+import { Link } from '~/components/main/link';
+import { SegmentedControl, SegmentedControlOption } from '~/components/main/segmented-control';
+import { ThemeProvider, useTheme } from '~/components/main/theme-provider';
 import {
   ProjectBackground,
   ProjectContainer,

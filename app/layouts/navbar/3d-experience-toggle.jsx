@@ -3,8 +3,8 @@ import { createRef, useEffect, useMemo, useRef, useState } from 'react';
 import experienceHoverPinchAnimation from '~/assets/images/anim/json/3d-hover-pinch.json';
 import experienceHoverRollAnimation from '~/assets/images/anim/json/3d-hover-roll.json';
 import experienceRevealAnimation from '~/assets/images/anim/json/3d-reveal.json';
-import { Button } from '~/components/button';
-import { useTheme } from '~/components/theme-provider/theme-provider';
+import { Button } from '~/components/main/button';
+import { useTheme } from '~/components/main/theme-provider/theme-provider';
 import { themes, tokens } from '~/config/theme.mjs';
 import styles from './3d-experience-toggle.module.css';
 

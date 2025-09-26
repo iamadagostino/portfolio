@@ -270,7 +270,11 @@ export async function getBlogPost(slug: string, language: Language): Promise<Blo
     banner: post.banner,
     readTime: post.readTime,
     publishedAt: post.publishedAt,
-    author: post.author,
+    author: {
+      username: post.author.username,
+      firstName: post.author.firstName || '',
+      lastName: post.author.lastName || '',
+    },
     translation: processedTranslation,
   };
 }
@@ -571,7 +575,11 @@ export async function getBlogPostWithSlugValidation(
     banner: post.banner,
     readTime: post.readTime,
     publishedAt: post.publishedAt,
-    author: post.author,
+    author: {
+      username: post.author.username,
+      firstName: post.author.firstName || '',
+      lastName: post.author.lastName || '',
+    },
     translation: processedTranslation,
   };
 
@@ -693,7 +701,11 @@ export async function getBlogPostByAnySlug(urlSlug: string, language: Language):
     banner: post.banner,
     readTime: post.readTime,
     publishedAt: post.publishedAt,
-    author: post.author,
+    author: {
+      username: post.author.username,
+      firstName: post.author.firstName || '',
+      lastName: post.author.lastName || '',
+    },
     translation: processedTranslation,
   };
 }

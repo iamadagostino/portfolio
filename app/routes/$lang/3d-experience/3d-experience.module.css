@@ -1,0 +1,97 @@
+@layer base {
+  @font-face {
+    font-family: 'Chakra Petch';
+    font-weight: 300;
+    font-style: normal;
+    src: url('assets/fonts/ChakraPetch-Light.ttf') format('truetype');
+  }
+
+  @font-face {
+    font-family: 'Chakra Petch';
+    font-weight: 300;
+    font-style: italic;
+    src: url('assets/fonts/ChakraPetch-LightItalic.ttf') format('truetype');
+  }
+
+  @font-face {
+    font-family: 'Chakra Petch';
+    font-weight: 400;
+    font-style: normal;
+    src: url('assets/fonts/ChakraPetch-Regular.ttf') format('truetype');
+  }
+
+  @font-face {
+    font-family: 'Chakra Petch';
+    font-weight: 400;
+    font-style: italic;
+    src: url('assets/fonts/ChakraPetch-RegularItalic.ttf') format('truetype');
+  }
+
+  @font-face {
+    font-family: 'Chakra Petch';
+    font-weight: 500;
+    font-style: normal;
+    src: url('assets/fonts/ChakraPetch-Medium.ttf') format('truetype');
+  }
+
+  @font-face {
+    font-family: 'Chakra Petch';
+    font-weight: 500;
+    font-style: italic;
+    src: url('assets/fonts/ChakraPetch-MediumItalic.ttf') format('truetype');
+  }
+
+  @font-face {
+    font-family: 'Chakra Petch';
+    font-weight: 600;
+    font-style: normal;
+    src: url('assets/fonts/ChakraPetch-SemiBold.ttf') format('truetype');
+  }
+
+  @font-face {
+    font-family: 'Chakra Petch';
+    font-weight: 600;
+    font-style: italic;
+    src: url('assets/fonts/ChakraPetch-SemiBoldItalic.ttf') format('truetype');
+  }
+
+  @font-face {
+    font-family: 'Chakra Petch';
+    font-weight: 700;
+    font-style: normal;
+    src: url('assets/fonts/ChakraPetch-Bold.ttf') format('truetype');
+  }
+
+  @font-face {
+    font-family: 'Chakra Petch';
+    font-weight: 700;
+    font-style: italic;
+    src: url('assets/fonts/ChakraPetch-BoldItalic.ttf') format('truetype');
+  }
+}
+
+#main-content {
+  width: 100vw;
+  height: 100vh;
+}
+
+body {
+  margin: 0;
+}
+
+/* Hide scrollbar for Chrome, Safari, and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge, and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Expose class used by route styles.experience */
+.experience {
+  width: 100vw;
+  height: 100vh;
+}

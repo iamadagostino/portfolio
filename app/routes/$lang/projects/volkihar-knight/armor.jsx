@@ -1,3 +1,5 @@
+import { useReducedMotion, useSpring } from 'framer-motion';
+import { startTransition, useCallback, useEffect, useRef, useState } from 'react';
 import {
   ACESFilmicToneMapping,
   CubeTextureLoader,
@@ -12,22 +14,20 @@ import {
 } from 'three';
 import { classes, cssProps, msToNum, numToMs } from '~/utils/style';
 import { cleanRenderer, cleanScene, modelLoader, removeLights } from '~/utils/three';
-import { startTransition, useCallback, useEffect, useRef, useState } from 'react';
-import { useReducedMotion, useSpring } from 'framer-motion';
 
-import { Loader } from '~/components/loader';
-import { Transition } from '~/components/transition';
-import armor from '~/assets/volkihar-knight.glb';
-import styles from './armor.module.css';
-import { throttle } from '~/utils/throttle';
-import { tokens } from '~/config/theme.mjs';
-import { useInViewport } from '~/hooks';
 import vknx from '~/assets/volkihar-cube-nx.jpg';
 import vkny from '~/assets/volkihar-cube-ny.jpg';
 import vknz from '~/assets/volkihar-cube-nz.jpg';
 import vkpx from '~/assets/volkihar-cube-px.jpg';
 import vkpy from '~/assets/volkihar-cube-py.jpg';
 import vkpz from '~/assets/volkihar-cube-pz.jpg';
+import armor from '~/assets/volkihar-knight.glb';
+import { Loader } from '~/components/main/loader';
+import { Transition } from '~/components/main/transition';
+import { tokens } from '~/config/theme.mjs';
+import { useInViewport } from '~/hooks';
+import { throttle } from '~/utils/throttle';
+import styles from './armor.module.css';
 
 const rotationSpringConfig = {
   stiffness: 40,
@@ -35,13 +35,7 @@ const rotationSpringConfig = {
   mass: 1.5,
 };
 
-export const Armor = ({
-  showDelay = 0,
-  cameraPosition = { x: 0, y: 0, z: 6 },
-  className,
-  alt,
-  ...rest
-}) => {
+export const Armor = ({ showDelay = 0, cameraPosition = { x: 0, y: 0, z: 6 }, className, alt, ...rest }) => {
   const [loaded, setLoaded] = useState(false);
   const [visible, setVisible] = useState(false);
   const [loaderVisible, setLoaderVisible] = useState(false);
@@ -93,7 +87,7 @@ export const Armor = ({
     fillLight.position.set(-1, 0.1, 8);
     backLight.position.set(-2, 2, -3);
     lights.current = [backLight, keyLight, fillLight];
-    lights.current.forEach(light => scene.current.add(light));
+    lights.current.forEach((light) => scene.current.add(light));
 
     const load = async () => {
       const loadGltf = modelLoader.loadAsync(armor);
@@ -111,7 +105,7 @@ export const Armor = ({
 
       await renderer.current.initTexture(scene.current.environment);
 
-      modelGroup.current.traverse(async node => {
+      modelGroup.current.traverse(async (node) => {
         if (node.material) {
           await renderer.current.initTexture(node.material);
         }
@@ -129,12 +123,12 @@ export const Armor = ({
       }, 1000);
     });
 
-    const unsubscribeX = rotationX.on('change', value => {
+    const unsubscribeX = rotationX.on('change', (value) => {
       modelGroup.current.rotation.x = value;
       renderFrame();
     });
 
-    const unsubscribeY = rotationY.on('change', value => {
+    const unsubscribeY = rotationY.on('change', (value) => {
       modelGroup.current.rotation.y = value;
       renderFrame();
     });
@@ -146,8 +140,7 @@ export const Armor = ({
       unsubscribeX();
       unsubscribeY();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [cameraPosition.x, cameraPosition.y, cameraPosition.z, renderFrame, rotationX, rotationY]);
 
   // Handle render passes for a single frame
   const renderFrame = useCallback(() => {
@@ -156,7 +149,7 @@ export const Armor = ({
 
   // Handle mouse move animation
   useEffect(() => {
-    const onMouseMove = throttle(event => {
+    const onMouseMove = throttle((event) => {
       const { innerWidth, innerHeight } = window;
 
       const position = {
@@ -204,18 +197,8 @@ export const Armor = ({
   }, [renderFrame]);
 
   return (
-    <div
-      className={classes(styles.armor, className)}
-      ref={container}
-      role="img"
-      aria-label={alt}
-      {...rest}
-    >
-      <Transition
-        unmount
-        in={!loaded && loaderVisible}
-        timeout={msToNum(tokens.base.durationL)}
-      >
+    <div className={classes(styles.armor, className)} ref={container} role="img" aria-label={alt} {...rest}>
+      <Transition unmount in={!loaded && loaderVisible} timeout={msToNum(tokens.base.durationL)}>
         {({ visible }) => <Loader className={styles.loader} data-visible={visible} />}
       </Transition>
       <canvas

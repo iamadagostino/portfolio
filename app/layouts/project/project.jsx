@@ -1,32 +1,22 @@
-import { classes, cssProps, msToNum, numToMs } from '~/utils/style';
 import { forwardRef, useRef } from 'react';
+import { classes, cssProps, msToNum, numToMs } from '~/utils/style';
 
-import { Button } from '~/components/button';
-import { Heading } from '~/components/heading';
-import { Image } from '~/components/image';
-import { Section } from '~/components/section';
-import { Text } from '~/components/text';
-import { Transition } from '~/components/transition';
-import styles from './project.module.css';
+import { Button } from '~/components/main/button';
+import { Heading } from '~/components/main/heading';
+import { Image } from '~/components/main/image';
+import { Section } from '~/components/main/section';
+import { Text } from '~/components/main/text';
+import { Transition } from '~/components/main/transition';
 import { tokens } from '~/config/theme.mjs';
 import { useParallax } from '~/hooks';
+import styles from './project.module.css';
 
 const initDelay = 300;
 
-export function ProjectHeader({
-  title,
-  description,
-  linkLabel = 'Visit website',
-  url,
-  roles,
-  className,
-}) {
+export function ProjectHeader({ title, description, linkLabel = 'Visit website', url, roles, className }) {
   return (
     <Section className={classes(styles.header, className)} as="section">
-      <div
-        className={styles.headerContent}
-        style={cssProps({ initDelay: numToMs(initDelay) })}
-      >
+      <div className={styles.headerContent} style={cssProps({ initDelay: numToMs(initDelay) })}>
         <div className={styles.details}>
           <Heading className={styles.title} level={2} as="h1">
             {title}
@@ -35,13 +25,7 @@ export function ProjectHeader({
             {description}
           </Text>
           {!!url && (
-            <Button
-              secondary
-              iconHoverShift
-              className={styles.linkButton}
-              icon="chevron-right"
-              href={url}
-            >
+            <Button secondary iconHoverShift className={styles.linkButton} icon="chevron-right" href={url}>
               {linkLabel}
             </Button>
           )}
@@ -90,10 +74,7 @@ export const ProjectSection = forwardRef(
       {...rest}
     >
       {!!backgroundElement && (
-        <div
-          className={styles.sectionBackground}
-          style={cssProps({ opacity: backgroundOverlayOpacity })}
-        >
+        <div className={styles.sectionBackground} style={cssProps({ opacity: backgroundOverlayOpacity })}>
           {backgroundElement}
         </div>
       )}
@@ -107,7 +88,7 @@ export const ProjectSection = forwardRef(
 export const ProjectBackground = ({ opacity = 0.7, className, ...rest }) => {
   const imageRef = useRef();
 
-  useParallax(0.6, value => {
+  useParallax(0.6, (value) => {
     if (!imageRef.current) return;
     imageRef.current.style.setProperty('--offset', `${value}px`);
   });
@@ -115,11 +96,7 @@ export const ProjectBackground = ({ opacity = 0.7, className, ...rest }) => {
   return (
     <Transition in timeout={msToNum(tokens.base.durationM)}>
       {({ visible, nodeRef }) => (
-        <div
-          className={classes(styles.backgroundImage, className)}
-          data-visible={visible}
-          ref={nodeRef}
-        >
+        <div className={classes(styles.backgroundImage, className)} data-visible={visible} ref={nodeRef}>
           <div className={styles.backgroundImageElement} ref={imageRef}>
             <Image cover alt="" role="presentation" {...rest} />
           </div>
@@ -137,21 +114,11 @@ export const ProjectImage = ({ className, alt, ...rest }) => (
 );
 
 export const ProjectSectionContent = ({ className, width = 'l', ...rest }) => (
-  <div
-    className={classes(styles.sectionContent, className)}
-    data-width={width}
-    {...rest}
-  />
+  <div className={classes(styles.sectionContent, className)} data-width={width} {...rest} />
 );
 
 export const ProjectSectionHeading = ({ className, level = 3, as = 'h2', ...rest }) => (
-  <Heading
-    className={classes(styles.sectionHeading, className)}
-    as={as}
-    level={level}
-    align="auto"
-    {...rest}
-  />
+  <Heading className={classes(styles.sectionHeading, className)} as={as} level={level} align="auto" {...rest} />
 );
 
 export const ProjectSectionText = ({ className, ...rest }) => (
@@ -181,9 +148,5 @@ export const ProjectTextRow = ({
 );
 
 export const ProjectSectionColumns = ({ className, centered, ...rest }) => (
-  <ProjectSectionContent
-    className={classes(styles.sectionColumns, className)}
-    data-centered={centered}
-    {...rest}
-  />
+  <ProjectSectionContent className={classes(styles.sectionColumns, className)} data-centered={centered} {...rest} />
 );

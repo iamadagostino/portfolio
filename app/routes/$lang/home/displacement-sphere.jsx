@@ -1,7 +1,4 @@
-import { useTheme } from '~/components/theme-provider';
-import { Transition } from '~/components/transition';
 import { useReducedMotion, useSpring } from 'framer-motion';
-import { useInViewport, useWindowSize } from '~/hooks';
 import { startTransition, useEffect, useRef } from 'react';
 import {
   AmbientLight,
@@ -16,9 +13,12 @@ import {
   Vector2,
   WebGLRenderer,
 } from 'three';
+import { useTheme } from '~/components/main/theme-provider';
+import { Transition } from '~/components/main/transition';
+import { useInViewport, useWindowSize } from '~/hooks';
 import { media } from '~/utils/style';
-import { throttle } from '~/utils/throttle';
 import { cleanRenderer, cleanScene, removeLights } from '~/utils/three';
+import { throttle } from '~/utils/throttle';
 import fragmentShader from './displacement-sphere-fragment.glsl?raw';
 import vertexShader from './displacement-sphere-vertex.glsl?raw';
 import styles from './displacement-sphere.module.css';
@@ -29,7 +29,7 @@ const springConfig = {
   mass: 2,
 };
 
-export const DisplacementSphere = props => {
+export const DisplacementSphere = (props) => {
   const { theme } = useTheme();
   const start = useRef(Date.now());
   const canvasRef = useRef();
@@ -68,11 +68,8 @@ export const DisplacementSphere = props => {
     scene.current = new Scene();
 
     material.current = new MeshPhongMaterial();
-    material.current.onBeforeCompile = shader => {
-      uniforms.current = UniformsUtils.merge([
-        shader.uniforms,
-        { time: { type: 'f', value: 0 } },
-      ]);
+    material.current.onBeforeCompile = (shader) => {
+      uniforms.current = UniformsUtils.merge([shader.uniforms, { time: { type: 'f', value: 0 } }]);
 
       shader.uniforms = uniforms.current;
       shader.vertexShader = vertexShader;
@@ -102,7 +99,7 @@ export const DisplacementSphere = props => {
     dirLight.position.y = 100;
 
     lights.current = [dirLight, ambientLight];
-    lights.current.forEach(light => scene.current.add(light));
+    lights.current.forEach((light) => scene.current.add(light));
 
     return () => {
       removeLights(lights.current);
@@ -135,7 +132,7 @@ export const DisplacementSphere = props => {
   }, [reduceMotion, windowSize]);
 
   useEffect(() => {
-    const onMouseMove = throttle(event => {
+    const onMouseMove = throttle((event) => {
       const position = {
         x: event.clientX / window.innerWidth,
         y: event.clientY / window.innerHeight,
@@ -185,13 +182,7 @@ export const DisplacementSphere = props => {
   return (
     <Transition in timeout={3000} nodeRef={canvasRef}>
       {({ visible, nodeRef }) => (
-        <canvas
-          aria-hidden
-          className={styles.canvas}
-          data-visible={visible}
-          ref={nodeRef}
-          {...props}
-        />
+        <canvas aria-hidden className={styles.canvas} data-visible={visible} ref={nodeRef} {...props} />
       )}
     </Transition>
   );

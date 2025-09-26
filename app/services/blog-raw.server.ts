@@ -4,10 +4,7 @@ import type { Language } from '~/i18n/i18n.resources';
 import type { BlogPost } from './blog.server';
 
 // Get a blog post with raw markdown content (for MDXProvider)
-export async function getBlogPostWithRawMarkdown(
-  slug: string,
-  language: Language
-): Promise<BlogPost | null> {
+export async function getBlogPostWithRawMarkdown(slug: string, language: Language): Promise<BlogPost | null> {
   const langEnum = language.toUpperCase() as 'EN' | 'IT';
 
   let post = await prisma.post.findFirst({
@@ -90,7 +87,11 @@ export async function getBlogPostWithRawMarkdown(
     banner: post.banner,
     readTime: post.readTime,
     publishedAt: post.publishedAt,
-    author: post.author,
+    author: {
+      username: post.author.username,
+      firstName: post.author.firstName || '',
+      lastName: post.author.lastName || '',
+    },
     translation: rawTranslation,
   };
 }

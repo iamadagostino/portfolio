@@ -1,22 +1,20 @@
-import { Button } from '~/components/button';
-import { Divider } from '~/components/divider';
-import { Heading } from '~/components/heading';
-import { deviceModels } from '~/components/model/device-models';
-import { Section } from '~/components/section';
-import { Text } from '~/components/text';
-import { useTheme } from '~/components/theme-provider';
-import { Transition } from '~/components/transition';
-import { Loader } from '~/components/loader';
-import { useWindowSize } from '~/hooks';
 import { Suspense, lazy, useState } from 'react';
-import { cssProps, media } from '~/utils/style';
+import { Button } from '~/components/main/button';
+import { Divider } from '~/components/main/divider';
+import { Heading } from '~/components/main/heading';
+import { Loader } from '~/components/main/loader';
+import { deviceModels } from '~/components/main/model/device-models';
+import { Section } from '~/components/main/section';
+import { Text } from '~/components/main/text';
+import { useTheme } from '~/components/main/theme-provider';
+import { Transition } from '~/components/main/transition';
+import { useWindowSize } from '~/hooks';
 import { useHydrated } from '~/hooks/useHydrated';
+import { cssProps, media } from '~/utils/style';
 import katakana from './katakana.svg';
 import styles from './project-summary.module.css';
 
-const Model = lazy(() =>
-  import('~/components/model').then(module => ({ default: module.Model }))
-);
+const Model = lazy(() => import('~/components/main/model').then((module) => ({ default: module.Model })));
 
 export function ProjectSummary({
   id,
@@ -67,23 +65,12 @@ export function ProjectSummary({
     return (
       <div className={styles.details}>
         <div aria-hidden className={styles.index}>
-          <Divider
-            notchWidth="64px"
-            notchHeight="8px"
-            collapsed={!visible}
-            collapseDelay={1000}
-          />
+          <Divider notchWidth="64px" notchHeight="8px" collapsed={!visible} collapseDelay={1000} />
           <span className={styles.indexNumber} data-visible={visible}>
             {indexText}
           </span>
         </div>
-        <Heading
-          level={3}
-          as="h2"
-          className={styles.title}
-          data-visible={visible}
-          id={titleId}
-        >
+        <Heading level={3} as="h2" className={styles.title} data-visible={visible} id={titleId}>
           {title}
         </Heading>
         <Text className={styles.description} data-visible={visible} as="p">
@@ -105,9 +92,7 @@ export function ProjectSummary({
           <>
             {renderKatakana('laptop', visible)}
             <div className={styles.model} data-device="laptop">
-              {!modelLoaded && (
-                <Loader center className={styles.loader} data-visible={visible} />
-              )}
+              {!modelLoaded && <Loader center className={styles.loader} data-visible={visible} />}
               {isHydrated && visible && (
                 <Suspense>
                   <Model
@@ -135,9 +120,7 @@ export function ProjectSummary({
           <>
             {renderKatakana('phone', visible)}
             <div className={styles.model} data-device="phone">
-              {!modelLoaded && (
-                <Loader center className={styles.loader} data-visible={visible} />
-              )}
+              {!modelLoaded && <Loader center className={styles.loader} data-visible={visible} />}
               {isHydrated && visible && (
                 <Suspense>
                   <Model

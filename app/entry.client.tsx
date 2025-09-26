@@ -1,11 +1,11 @@
-import { I18nextProvider, initReactI18next } from 'react-i18next';
 import { StrictMode, startTransition } from 'react';
+import { I18nextProvider, initReactI18next } from 'react-i18next';
 
-import { HydratedRouter } from 'react-router/dom';
+import * as i18next from 'i18next';
 import { hydrateRoot } from 'react-dom/client';
-import i18n from '~/i18n/i18n';
-import i18next from 'i18next';
-import { resources } from './i18n/i18n.resources';
+import { HydratedRouter } from 'react-router/dom';
+import i18nConfig from '~/i18n/i18n';
+import { availableNamespaces, resources, returnLanguageIfSupportedOrDefault } from './i18n/i18n.resources';
 
 async function main() {
   // Add error handling and validation for resources
@@ -14,28 +14,19 @@ async function main() {
     return;
   }
 
-  // Get the language from the HTML lang attribute (set by server)
-  const serverLanguage = document.documentElement.lang || 'en';
+  // Get the language from the HTML lang attribute (set by server) and normalize it
+  const serverLanguage = returnLanguageIfSupportedOrDefault(document.documentElement.lang);
 
-  // Use fallback namespaces instead of getInitialNamespaces to avoid hydration issues
-  const namespaces = [
-    'common',
-    'navbar',
-    'home',
-    'articles',
-    'contact',
-    'projects',
-    'error',
-  ]; // All available namespaces
+  // Create a concrete i18n instance so it matches the i18n type expected by react-i18next
+  const i18nInstance = i18next.createInstance();
 
-  // eslint-disable-next-line import/no-named-as-default-member
-  await i18next
+  await i18nInstance
     .use(initReactI18next) // Tell i18next to use the react-i18next plugin
     .init({
-      ...i18n,
+      ...i18nConfig,
       lng: serverLanguage, // Explicitly use the server-detected language
       fallbackLng: serverLanguage, // Also set fallback to server language
-      ns: namespaces,
+      ns: availableNamespaces,
       // Disable language detection completely on client
       detection: {
         order: [],
@@ -49,9 +40,14 @@ async function main() {
     });
 
   startTransition(() => {
+    // Always hydrate the entire document. The server renders a full HTML document
+    // (including <html> and <body>), so hydrating a nested element (like a
+    // <div id="root">) can cause invalid nesting (e.g. <html> as a child of
+    // a div) and hydration mismatch errors. Use document to match server render.
+
     hydrateRoot(
       document,
-      <I18nextProvider i18n={i18next}>
+      <I18nextProvider i18n={i18nInstance}>
         <StrictMode>
           <HydratedRouter />
         </StrictMode>
@@ -60,4 +56,4 @@ async function main() {
   });
 }
 
-main().catch(error => console.error(error));
+main().catch((error) => console.error(error));

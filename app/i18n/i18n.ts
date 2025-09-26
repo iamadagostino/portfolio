@@ -1,13 +1,19 @@
-import { supportedLanguages } from './i18n.resources';
+import { availableNamespaces, defaultLanguage, supportedLanguages } from './i18n.resources';
+
+const defaultNamespace = availableNamespaces.includes('common')
+  ? 'common'
+  : availableNamespaces[0] ?? 'translation';
+
+const supportedLanguageList = [...supportedLanguages];
+const namespaceList = [...availableNamespaces];
 
 export default {
   // This is the list of languages your application supports
-  supportedLngs: supportedLanguages,
-  // This is the language you want to use in case
-  // if the user language is not in the supportedLngs
-  fallbackLng: 'en',
-  // The default namespace of i18next is "translation", but you can customize it here
-  defaultNS: 'common',
-  // Load all namespaces by default
-  ns: ['common', 'navbar', 'home', 'articles', 'contact', 'projects', 'error'],
+  supportedLngs: supportedLanguageList,
+  // The language to use when a requested language is not available
+  fallbackLng: defaultLanguage,
+  // The default namespace i18next uses when none is specified
+  defaultNS: defaultNamespace,
+  // Load all statically discovered namespaces by default
+  ns: namespaceList,
 };

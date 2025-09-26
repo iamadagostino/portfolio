@@ -22,10 +22,10 @@ import clsxLib from 'clsx';
 import { useChangeLanguage } from 'remix-i18next/react';
 import GothamBook from '~/assets/fonts/gotham-book.woff2';
 import GothamMedium from '~/assets/fonts/gotham-medium.woff2';
-import { NavbarProvider } from '~/components/navbar-provider';
-import { Progress } from '~/components/progress';
-import { ThemeProvider, themeStyles } from '~/components/theme-provider';
-import { VisuallyHidden } from '~/components/visually-hidden';
+import { NavbarProvider } from '~/components/main/navbar-provider';
+import { Progress } from '~/components/main/progress';
+import { ThemeProvider, themeStyles } from '~/components/main/theme-provider';
+import { VisuallyHidden } from '~/components/main/visually-hidden';
 import config from '~/config/app.json';
 import { Error } from '~/layouts/error';
 import { Navbar } from '~/layouts/navbar';
@@ -184,6 +184,15 @@ export default function App() {
     const handle = match.handle as { layout?: string } | undefined;
     return handle?.layout === 'admin';
   });
+
+  const is3dExperienceRoute = matches.some((match) => {
+    const handle = match.handle as { layout?: string } | undefined;
+    return handle?.layout === '3d-experience';
+  });
+
+  // Hide navigation and page container for admin and 3d-experience layouts
+  const hideNavPageContainer = isAdminRoute || is3dExperienceRoute;
+
   const hasLogged = useRef(false);
 
   let theme = initialTheme;
@@ -233,11 +242,11 @@ export default function App() {
             {t('skipToMain')}
           </VisuallyHidden>
           <NavbarProvider>
-            {!isAdminRoute && <Navbar locale={locale} />}
+            {!hideNavPageContainer && <Navbar locale={locale} />}
 
             <main
               id="main-content"
-              className={clsxLib(!isAdminRoute && styles.container)}
+              className={clsxLib(!hideNavPageContainer && styles.container)}
               tabIndex={-1}
               data-loading={state === 'loading'}
             >

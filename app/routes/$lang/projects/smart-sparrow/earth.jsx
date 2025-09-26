@@ -210,8 +210,7 @@ export const Earth = ({ position = [0, 0, 0], scale = 1, hideMeshes = [], labels
       cleanScene(scene.current);
       cleanRenderer(renderer.current);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [cameraXSpring, cameraYSpring, cameraZSpring]);
 
   useEffect(() => {
     const handleControlStart = () => {
@@ -649,8 +648,7 @@ export const EarthSection = memo(
       return () => {
         unregisterSection(section);
       };
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [stringifiedDeps, registerSection, unregisterSection]);
+    }, [stringifiedDeps, registerSection, unregisterSection, camera, animations, meshes, labels]);
 
     return (
       <div

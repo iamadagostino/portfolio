@@ -2,7 +2,7 @@ import { createContext, useContext, useRef, useState } from 'react';
 import { useScrollToHash, useWindowSize } from '~/hooks';
 
 import { media } from '~/utils/style';
-import { useLocation } from 'react-router';
+import { useLocation } from '@remix-run/react';
 import { useTheme } from '../theme-provider';
 
 // Create the context

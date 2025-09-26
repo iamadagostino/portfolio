@@ -1,5 +1,5 @@
-import 'colors';
 import { PrismaClient } from '@prisma/client';
+import 'colors';
 // (faker was previously imported but not used)
 
 const prisma = new PrismaClient();
@@ -110,20 +110,37 @@ Nel complesso sono molto soddisfatto di Remix e lo consiglierei. In futuro mi pi
 async function main() {
   console.log('🌱 Starting database seed...'.blue);
 
-  // Create admin user (you)
+  // Create admin user
   const adminUser = await prisma.user.upsert({
-    where: { email: 'admin@angelo-dagostino.com' },
+    where: { email: 'admin@myapp.com' },
     update: {},
     create: {
-      firstName: 'Angelo',
-      lastName: "D'Agostino",
-      username: 'iamadagostino',
-      email: 'admin@angelo-dagostino.com',
+      firstName: 'Admin',
+      lastName: 'Test',
+      passwordHash: '$2b$10$CwTycUXWue0Thq9StjUM0uJ8h6v3b7xD4o5r7vYgq5ER5Z1fKqQGa', // bcrypt for "password"
+      username: 'admin',
+      email: 'admin@myapp.com',
       role: 'ADMIN',
     },
   });
 
-  console.log('👤 Created admin user'.green);
+  console.log(`👤 Created Admin user [${adminUser.email}]`.green);
+
+  // Create user user
+  const user = await prisma.user.upsert({
+    where: { email: 'user@myapp.com' },
+    update: {},
+    create: {
+      firstName: 'User',
+      lastName: 'Test',
+      passwordHash: '$2b$10$CwTycUXWue0Thq9StjUM0uJ8h6v3b7xD4o5r7vYgq5ER5Z1fKqQGa', // bcrypt for "password"
+      username: 'user',
+      email: 'user@myapp.com',
+      role: 'USER',
+    },
+  });
+
+  console.log(`👤 Created user [${user.email}]`.green);
 
   // Create "Hello World" blog post
   await prisma.post.upsert({
@@ -176,7 +193,7 @@ async function main() {
       featured: false,
       banner: '/static/modern-styling-banner.jpg',
       readTime: 12,
-      authorId: adminUser.id,
+      authorId: user.id,
       publishedAt: new Date('2023-08-15'),
       translations: {
         create: [
@@ -187,8 +204,7 @@ async function main() {
               'A deep dive into modern CSS approaches for React applications, comparing CSS-in-JS solutions with CSS Modules and exploring the trade-offs of each approach.',
             content:
               '## The Evolution of CSS in React\n\nStyling React applications has evolved significantly since the early days...',
-            metaTitle:
-              "Modern styling in React: CSS-in-JS vs CSS Modules - Angelo D'Agostino",
+            metaTitle: "Modern styling in React: CSS-in-JS vs CSS Modules - Angelo D'Agostino",
             metaDescription:
               'Compare modern CSS approaches for React: CSS-in-JS vs CSS Modules. Learn about performance, maintainability, and developer experience.',
           },
@@ -199,8 +215,7 @@ async function main() {
               'Un approfondimento sugli approcci CSS moderni per le applicazioni React, confrontando le soluzioni CSS-in-JS con i CSS Modules ed esplorando i compromessi di ogni approccio.',
             content:
               "## L'evoluzione del CSS in React\n\nLo styling delle applicazioni React è evoluto significativamente dai primi giorni...",
-            metaTitle:
-              "Styling moderno in React: CSS-in-JS vs CSS Modules - Angelo D'Agostino",
+            metaTitle: "Styling moderno in React: CSS-in-JS vs CSS Modules - Angelo D'Agostino",
             metaDescription:
               'Confronta gli approcci CSS moderni per React: CSS-in-JS vs CSS Modules. Scopri performance, manutenibilità e esperienza dello sviluppatore.',
           },
@@ -219,7 +234,7 @@ main()
     console.info('Seed successful'.green);
     process.exit(0);
   })
-  .catch(e => {
+  .catch((e) => {
     console.error(e);
     console.error('Error: Seed failed'.red);
     process.exit(1);

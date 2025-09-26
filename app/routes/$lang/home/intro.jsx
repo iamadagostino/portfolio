@@ -2,12 +2,12 @@ import { Suspense, lazy, useEffect, useState } from 'react';
 import { useInterval, usePrevious, useScrollToHash, useWindowSize } from '~/hooks';
 
 import { Link as RouterLink } from 'react-router';
-import { DecoderText } from '~/components/decoder-text';
-import { Heading } from '~/components/heading';
-import { Section } from '~/components/section';
-import { useTheme } from '~/components/theme-provider';
-import { Transition } from '~/components/transition';
-import { VisuallyHidden } from '~/components/visually-hidden';
+import { DecoderText } from '~/components/main/decoder-text';
+import { Heading } from '~/components/main/heading';
+import { Section } from '~/components/main/section';
+import { useTheme } from '~/components/main/theme-provider';
+import { Transition } from '~/components/main/transition';
+import { VisuallyHidden } from '~/components/main/visually-hidden';
 import config from '~/config/app.json';
 import { tokens } from '~/config/theme.mjs';
 import { useHydrated } from '~/hooks/useHydrated';

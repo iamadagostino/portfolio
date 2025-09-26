@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useNavbar } from '~/components/navbar-provider';
+import { useNavbar } from '~/components/main/navbar-provider';
 
 import gamestackTexture2Large from '~/assets/images/projects/gamestack/gamestack-list-large.jpg';
 import gamestackTexture2Placeholder from '~/assets/images/projects/gamestack/gamestack-list-placeholder.jpg';
@@ -13,7 +13,7 @@ import sliceTexture from '~/assets/images/projects/slice/slice-app.jpg';
 import sprTextureLarge from '~/assets/images/projects/smart-sparrow/spr-lesson-builder-dark-large.jpg';
 import sprTexturePlaceholder from '~/assets/images/projects/smart-sparrow/spr-lesson-builder-dark-placeholder.jpg';
 import sprTexture from '~/assets/images/projects/smart-sparrow/spr-lesson-builder-dark.jpg';
-import { Footer } from '~/components/footer';
+import { Footer } from '~/components/main/footer';
 import config from '~/config/app.json';
 import { useCurrentLanguage, useHomeTranslation } from '~/i18n/i18n.hooks';
 import { baseMeta } from '~/utils/meta';

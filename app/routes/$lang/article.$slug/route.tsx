@@ -1,6 +1,6 @@
 import { LoaderFunctionArgs, redirect, useLoaderData } from 'react-router';
 
-import { MarkdownContent } from '~/components/markdown-content';
+import { MarkdownContent } from '~/components/main/markdown-content';
 import { Post } from '~/layouts/post';
 import { getBlogPostWithSlugValidation } from '~/services/blog.server';
 import { formatTimecode } from '~/utils/timecode';

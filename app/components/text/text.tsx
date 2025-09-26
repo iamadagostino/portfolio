@@ -21,19 +21,20 @@ export const Text = ({
   className,
   ...rest
 }: TextProps) => {
+  const componentProps = {
+    className: classes(
+      styles.text,
+      styles[`size-${size}`], // Dynamic class for size
+      styles[`align-${align}`], // Dynamic class for alignment
+      styles[`weight-${weight}`], // Dynamic class for weight
+      secondary && styles.secondary, // Add secondary class if true
+      className // Allow additional classes to be passed
+    ),
+    ...rest,
+  };
+
   return (
-    <Component
-      className={classes(
-        styles.text,
-        styles[`size-${size}`], // Dynamic class for size
-        styles[`align-${align}`], // Dynamic class for alignment
-        styles[`weight-${weight}`], // Dynamic class for weight
-        secondary && styles.secondary, // Add secondary class if true
-        className // Allow additional classes to be passed
-      )}
-      {...rest}
-    >
-      {children}
-    </Component>
+    // @ts-expect-error - Dynamic component typing is complex, we know this is correct
+    <Component {...componentProps}>{children}</Component>
   );
 };

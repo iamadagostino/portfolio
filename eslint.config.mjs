@@ -86,6 +86,7 @@ export default [...compat.extends("eslint:recommended", "plugin:storybook/recomm
     rules: {
         "react/prop-types": "off",
         "react/display-name": "off",
+        
     },
 }, ...fixupConfigRules(compat.extends(
     "plugin:@typescript-eslint/recommended",
@@ -95,6 +96,17 @@ export default [...compat.extends("eslint:recommended", "plugin:storybook/recomm
     ...config,
     files: ["**/*.{ts,tsx}"],
 })), {
+    // Disable react/no-unknown-property for files that use react-three-fiber / drei
+    // These files use lowercase three.js JSX intrinsics and many non-DOM props
+    // that ESLint's DOM prop checker will consider unknown. Keep the rule on
+    // elsewhere.
+    files: ["app/components/3d-experience/**", "app/routes/**/3d-experience/**"],
+
+    rules: {
+        "react/no-unknown-property": "off",
+    },
+
+}, {
     files: ["**/*.{ts,tsx}"],
 
     plugins: {
