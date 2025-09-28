@@ -41,6 +41,8 @@ module.exports = {
         'plugin:jsx-a11y/recommended',
       ],
       rules: {
+        'react-hooks/rules-of-hooks': 'error',
+        'react-hooks/exhaustive-deps': 'warn',
         'react/prop-types': 'off',
         'react/display-name': 'off',
       },
