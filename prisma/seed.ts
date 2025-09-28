@@ -177,9 +177,9 @@ async function main() {
     create: {
       firstName: 'Admin',
       lastName: 'Test',
-      passwordHash: '$2b$10$CwTycUXWue0Thq9StjUM0uJ8h6v3b7xD4o5r7vYgq5ER5Z1fKqQGa', // bcrypt for "password"
       username: 'admin',
       email: 'admin@myapp.com',
+      passwordHash: '$2b$10$CwTycUXWue0Thq9StjUM0uJ8h6v3b7xD4o5r7vYgq5ER5Z1fKqQGa', // bcrypt for "password"
       role: 'ADMIN',
     },
   });
@@ -193,9 +193,9 @@ async function main() {
     create: {
       firstName: 'User',
       lastName: 'Test',
-      passwordHash: '$2b$10$CwTycUXWue0Thq9StjUM0uJ8h6v3b7xD4o5r7vYgq5ER5Z1fKqQGa', // bcrypt for "password"
       username: 'user',
       email: 'user@myapp.com',
+      passwordHash: '$2b$10$CwTycUXWue0Thq9StjUM0uJ8h6v3b7xD4o5r7vYgq5ER5Z1fKqQGa', // bcrypt for "password"
       role: 'USER',
     },
   });

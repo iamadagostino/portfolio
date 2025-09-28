@@ -17,8 +17,8 @@ build
 .wrangler
 
 # Public and static assets
-public/draco
 public/dist
+public/static/vendor
 storybook-static
 
 # Template files

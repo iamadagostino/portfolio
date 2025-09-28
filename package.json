@@ -20,7 +20,9 @@
     "db:seed": "tsx prisma/seed.ts",
     "db:usage": "tsx prisma/verify-db-usage.ts",
     "key:generate-session-secret": "node scripts/generate-session-secret.mjs",
-    "postinstall": "patch-package",
+    "draco:copy": "node scripts/draco.cjs",
+    "update": "pnpm update --latest && pnpm postinstall",
+    "postinstall": "pnpm run draco:copy && patch-package",
     "prepare": "patch-package"
   },
   "dependencies": {
@@ -48,6 +50,7 @@
     "@types/multer": "^2.0.0",
     "@types/react-transition-group": "^4.4.12",
     "@uidotdev/usehooks": "^2.4.1",
+    "bcryptjs": "^3.0.2",
     "chart.js": "^4.5.0",
     "ckeditor5": "^46.1.1",
     "clsx": "^2.1.1",
@@ -123,7 +126,7 @@
     "@tailwindcss/postcss": "4.1.13",
     "@tailwindcss/vite": "4.1.13",
     "@types/node": "^24.5.2",
-    "@types/react": "^19.1.14",
+    "@types/react": "^19.1.15",
     "@types/react-dom": "^19.1.9",
     "@types/three": "^0.180.0",
     "@typescript-eslint/eslint-plugin": "^8.44.1",

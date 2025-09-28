@@ -1,6 +1,22 @@
+// Minimal local types to avoid requiring the 'mdast' package for typings.
+// Keep these narrow to satisfy TS and ESLint without adding deps.
+type ImageNode = {
+  type: 'image';
+  url?: string;
+  alt?: string | null;
+  title?: string | null;
+  [key: string]: unknown;
+};
+
+type RootNode = {
+  type: 'root';
+  children: unknown[];
+  [key: string]: unknown;
+};
+
 import { remark } from 'remark';
-import remarkHtml from 'remark-html';
 import remarkGfm from 'remark-gfm';
+import remarkHtml from 'remark-html';
 import { visit } from 'unist-util-visit';
 
 /**
@@ -8,10 +24,8 @@ import { visit } from 'unist-util-visit';
  * Converts "static/articles/..." to "/static/articles/..."
  */
 function remarkImagePathTransform() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return (tree: any) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    visit(tree, 'image', (node: any) => {
+  return (tree: RootNode) => {
+    visit(tree, 'image', (node: ImageNode) => {
       if (node.url && typeof node.url === 'string') {
         // Transform relative paths starting with "static/" to absolute paths
         if (node.url.startsWith('static/')) {

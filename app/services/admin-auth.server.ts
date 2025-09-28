@@ -1,3 +1,4 @@
+import bcrypt from 'bcryptjs';
 import { createCookieSessionStorage, redirect, Session } from 'react-router';
 import { prisma } from '~/.server/db';
 
@@ -108,12 +109,12 @@ export async function isAdmin(request: Request): Promise<boolean> {
   return adminUser !== null;
 }
 
-// Admin login utility (for development/testing)
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// Admin Section login utility (for development/testing)
 export async function adminLogin(email: string, password: string) {
-  // For development, allow login with just email for admin users
-  // In production, you would verify password hash here
-  // Note: _password parameter is kept for future implementation
+  // Admin login utility
+  // - In development (NODE_ENV === 'development') we bypass password verification so
+  //   dev helpers and seeded users can login by email only.
+  // - In production we verify the provided password against the stored bcrypt hash.
 
   try {
     const user = await prisma.user.findUnique({
@@ -125,6 +126,7 @@ export async function adminLogin(email: string, password: string) {
         firstName: true,
         lastName: true,
         role: true,
+        passwordHash: true,
       },
     });
 
@@ -132,7 +134,25 @@ export async function adminLogin(email: string, password: string) {
       throw new Error('Admin user not found or insufficient permissions');
     }
 
-    return user;
+    // Bypass password check in development for convenience
+    if (process.env.NODE_ENV !== 'development') {
+      const ok = await bcrypt.compare(password, user.passwordHash || '');
+      if (!ok) {
+        throw new Error('Invalid password');
+      }
+    }
+
+    // Remove passwordHash before returning user object
+    const safeUser = {
+      id: user.id,
+      email: user.email,
+      username: user.username,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      role: user.role,
+    };
+
+    return safeUser;
   } catch {
     return null;
   }
