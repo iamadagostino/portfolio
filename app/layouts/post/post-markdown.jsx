@@ -1,4 +1,4 @@
-import { Children } from 'react';
+import { Children, useCallback } from 'react';
 import { Link as RouterLink } from 'react-router';
 import { Code } from '~/components/main/code';
 import { Heading } from '~/components/main/heading';
@@ -9,8 +9,28 @@ import { Text } from '~/components/main/text';
 import styles from './post-markdown.module.css';
 
 const PostHeadingLink = ({ id }) => {
+  const handleClick = useCallback(
+    (event) => {
+      event.preventDefault();
+
+      // Simple scroll-to-hash implementation without hooks
+      if (typeof window !== 'undefined') {
+        const targetElement = document.getElementById(id);
+        if (targetElement) {
+          targetElement.scrollIntoView({ behavior: 'smooth' });
+
+          // Update URL after scrolling
+          setTimeout(() => {
+            window.history.replaceState(null, '', `#${id}`);
+          }, 100);
+        }
+      }
+    },
+    [id]
+  );
+
   return (
-    <RouterLink className={styles.headingLink} to={`#${id}`} aria-label="Link to heading">
+    <RouterLink className={styles.headingLink} to={`#${id}`} onClick={handleClick} aria-label="Link to heading">
       <Icon icon="link" />
     </RouterLink>
   );

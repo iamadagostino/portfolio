@@ -1,5 +1,5 @@
-import { useRef } from 'react';
-import { Link as RouterLink } from 'react-router';
+import { useEffect, useRef } from 'react';
+import { Link as RouterLink, useLocation } from 'react-router';
 import { Divider } from '~/components/main/divider';
 import { Footer } from '~/components/main/footer';
 import { Heading } from '~/components/main/heading';
@@ -14,12 +14,29 @@ import { formatDate } from '~/utils/date';
 import { cssProps, msToNum, numToMs } from '~/utils/style';
 import styles from './post.module.css';
 
-export const Post = ({ children, title, date, banner, timecode, language = 'en' }) => {
+export const Post = ({ children, title, date, banner, timecode, language = 'en-US' }) => {
   const scrollToHash = useScrollToHash();
   const imageRef = useRef();
+  const location = useLocation();
 
   // Calculate the formatted date directly during render
   const dateTime = date ? formatDate(date, language) : null;
+
+  // Handle initial hash navigation when page loads
+  useEffect(() => {
+    if (location.hash) {
+      // Wait for content to render, then scroll to hash
+      const timer = setTimeout(() => {
+        const id = location.hash.slice(1);
+        const targetElement = document.getElementById(id);
+        if (targetElement) {
+          targetElement.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+
+      return () => clearTimeout(timer);
+    }
+  }, [location.hash]);
 
   useParallax(0.004, (value) => {
     if (!imageRef.current) return;

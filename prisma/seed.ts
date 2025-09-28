@@ -5,107 +5,167 @@ import 'colors';
 const prisma = new PrismaClient();
 
 // Your existing "Hello World" blog post content
-const helloWorldContent = `## How it all started
+const helloWorldContentEN = `## How it all started
 
-Back in 2018 I needed to update my portfolio site (as designers are wont to do). I thought I'd steer away from current trends and build a site that tapped into the 80s and 90s Cyberpunk aesthetic. The genre contains some of my favorite movies like Ghost in the Shell (1995), The Matrix (1999), and Akira (1988). That's where I borrowed few visual motifs like the bold katakana lettering on the homepage and the text decoding effect as a homage to the Matrix's "Digital rain" effect, which was itself inspired by Ghost in the Shell's opening credits. There's even a nod to Ghost in the Shell on my [404 page](/404).
+In 2019 I decided to create my first personal website. I didn’t have anything particularly complex in mind: I simply wanted a place to showcase my CV online. It wasn’t yet the time to present projects or build a technical portfolio, but rather to have a space that represented me.  
 
-![A scene from Ghost in the Shell (1995) with the Major cloaking with thermoptic camouflage; the poster for Akira; The Matrix's digital rain effect](/static/inspiration.png)
+I’ve always had a strong attraction for Fantasy and Cyberpunk genres, and in general for everything that blends future and imagination. Movies like *Back to the Future*, *The Matrix*, and *Ready Player One* had a huge impact on my creative vision, as did the mangas *Alita* and *Ghost in the Shell*. Videogames that marked my growth — *Chrono Trigger*, *Final Fantasy VII*, and *World of Warcraft* — also contributed to shaping my imagination.  
+
+For that first version, however, I didn’t want to overdo it. The only aesthetic/technical detail that really captured me was the **Parallax Scrolling** effect. I was fascinated by the idea of giving movement and depth to a simple presentation site, and in a sense, that was the spark: everything else on the site would be built around that effect.  
+
+![Collage of inspirations: Ghost in the Shell, Alita, World of Warcraft, Back to the Future, Final Fantasy VII, with Matrix digital rain in the background](static/articles/hello-world/inspirations.webp)  
+
+*A collage of my inspirations: from the futuristic worlds of *Ghost in the Shell* and *Alita*, through the cyberpunk imagery of *The Matrix* and the DeLorean from *Back to the Future*, up to the epicness of *Final Fantasy VII* and *World of Warcraft*. These universes have fueled my creativity from the very beginning.*  
+
+---
 
 ## The first iteration
 
-I was learning React when I first built this website, and while overkill for a personal portfolio site, it was a great opportunity to learn and experiment with learning it. I've found the best way to learn is by actually making something that you intend to use and ship.
+The first version of my site was built with **[WordPress](https://wordpress.com/)**. It was the natural choice: I had already used it in other personal projects and, not having yet decided whether to turn the site into a real blog, it seemed like a sensible and above all future-proof solution. It gave me the flexibility to start simple, but also the possibility to expand easily in the future.  
 
-The no-brainer choice at the time was Create React App. It served me well in getting things up and running without having to fuss about with config. On top of that, I was using Styled Components, Tween.js, and React Transition Group. I was also playing with some early Three.js effects like the displacement sphere that still resides on the homepage.
+Beyond the basic structure, the part I enjoyed the most was building a small **internal API** that displayed fun facts about technology and computing, based on the timeline of pioneers in the field. Every time the site loaded, a random curiosity would appear in the intro, with a temporal detail calculated relative to today. One of these, for example, told the story of **[Tommy Flowers](https://en.wikipedia.org/wiki/Tommy_Flowers)** developing a system of redundant vacuum tubes, making early computers more reliable. It’s an idea that still intrigues me today: one day I’d love to build a public API and share it with all the curious minds out there.  
 
-Since then I've used this website as a playground for experimenting with new tech and techniques, so over time I've overhauled pretty much everything. A big change along the way was replacing images of my work in static mockups with real-time rendered interactive 3D devices using models I created for the [Clay Mockups 3D Figma plugin](https://www.figma.com/community/plugin/819335598581469537/Clay-Mockups-3D).
+On the aesthetic side, I was fascinated by the **[particles.js](https://vincentgarreau.com/particles.js/)** library, which I used on the homepage. Those moving particles gave visual breathing space and, at the same time, represented me: attracted by everything that can be deciphered into **0** and **1**, by the electronic and computing world that has always fascinated me.  
 
-![Thumbnail for my Clay Mockups 3D plugin](/static/clay-mockups.png)
+![Homepage of the first version of my site in WordPress with parallax scrolling and interactive particles](static/articles/hello-world/wordpress-parallax-it.webp)  
 
-## Migrating to Next.js
+*The first version of my website built with WordPress: simple, but enriched by effects like Parallax Scrolling and particles animated with **particles.js**.*  
 
-With Create React App I was using a somewhat janky and unmaintained package to prerender the site as static HTML in Puppeteer. This worked okay for the most part, but I wanted a more robust solution for posting articles (like this one you're reading) using MDX. I had a half baked version of this lying dormant in the repo, but it never felt good enough to publish. I looked at a few options like Gatsby, Vite, and Parcel, and Remix, but Next.js stood out as the most suited to my needs.
+---
 
-- The site is now based on Next.js. Is a much better fit than Create React App. For now I'm just using it to create a static export, but maybe I'll add some server rendered stuff in the future.
-- Styling is now vanilla CSS with postcss to add support for the future native CSS nesting and custom media queries features. I'm using CSS modules instead of BEM syntax to avoid style conflicts.
-- For generating pages from \`.mdx\` files, I'm using Kent C Dodds' [mdx-bundler](https://github.com/kentcdodds/mdx-bundler). In combination with Next.js it makes generating pages from \`.mdx\` files really quick and simple.
-- For animation I've moved from Tween.js and React Transition Group to just Framer Motion.
-- 3D effects are still all using Three.js, but I've added \`three-stdlib\` as a better maintained replacement for modules from Three's examples.
+## The leap to modern stacks
+
+Over time, I realized that my first WordPress version had become my personal monolith. Just like at work, where we are moving from a massive custom **PHP** platform to containerized microservices, in my personal space I also needed something more flexible and modern.  
+
+The spark came while browsing [GitHub](https://github.com), where I stumbled upon the portfolio of [Hamish Williams](https://github.com/HamishMW/portfolio), which inspired me a lot, and the site of [Wawa Sensei](https://wawasensei.dev), which opened up a world of possibilities. I couldn’t remain tied to a development concept that by then felt limiting, both personally and professionally.  
+
+![Schema of the technological evolution: WordPress → React → Remix](static/articles/hello-world/stack-evolution.webp)  
+
+*From my “comfort zone” with WordPress, to the leap towards React and Remix. A continuous journey of growth, inspired also by projects I found on GitHub.*  
+
+The first real migration was mental: **de-PHP-izing** myself. I started studying the principles of **[React](https://react.dev)**, understanding the logic of components, and from there moved to **[Remix](https://remix.run)**, the same framework Hamish’s project had evolved into.  
+
+I took the opportunity to learn new technologies:  
+
+* **[Tailwind CSS](https://tailwindcss.com)**, after years of pure CSS and **[Bootstrap](https://getbootstrap.com)**  
+* **[React](https://react.dev)** and Three.js for 3D  
+* **[Remix](https://remix.run)**, as a full-stack framework  
+* **[Storybook](https://storybook.js.org)**, for building and testing UI components  
+* **[Prisma](https://www.prisma.io/)**, as an ORM for the database  
+
+What makes me proud of this project is my ability to take inspiration from different sources and rework them into something unique and personal. A bit like **[Blizzard](https://www.blizzard.com)** with **[Warcraft: Orcs & Humans](https://eu.shop.battle.net/it-it/product/warcraft-orcs-and-humans)**, which started from the inspiration of **[Dune II](https://en.wikipedia.org/wiki/Dune_II)** but turned into something completely new. My approach is similar: I don’t invent from scratch, but I recombine, synthesize, and bring everything to a level that feels mine.  
+
+---
 
 ## Not all smooth sailing
 
-For the most part, the migration was pretty straight-forward. The way I has structured the site with React Router lent itself well to conforming with Next.js's file-based routing, and I was already using postcss for styling. I did, however, encounter a couple of problems:
+The most complicated part of this journey was undoubtedly managing the entire development process. Hamish’s original project was based on **React 18** and **Remix v2**, but in the meantime the framework evolved into **[React Router](https://reactrouter.com) v7** ([official post](https://remix.run/blog/react-router-v7)) and **React** itself moved to version **19**. Migrating was no trivial step: moving everything forward meant facing many bumps along the way, each requiring time and patience to resolve.  
 
-### 1. Route transitions
+There were moments of frustration, especially when I decided to push beyond the original implementation. Beyond Hamish’s already brilliant work, I wanted to take the site to another level by adding a true **3D Experience**. The ambitious project by Wawa Sensei, with his [animated avatar in React Three Fiber](https://www.youtube.com/watch?v=pGMKIyALcK0), intrigued me too much: I absolutely wanted to try to integrate something similar.  
 
-There was a bit of a conflict when it came to animated route transitions. Next.js will immediately yank out all of the styles for the previous page when navigating to a new one. This works great when you're not animating between pages because it cleans up any unused styles form hanging around. When you are animating the page transition though, all of a sudden the previous page becomes jarringly completely unstyled as it transitions out. This problem one of [the most commented and reacted to issues](https://github.com/vercel/next.js/issues/17464) on the Next.js repo, so hopefully there's a fix soon, but for now I've dropped in a [hack to fix things](https://github.com/vercel/next.js/issues/17464#issuecomment-796430107) from the issue's comments.
+Then there were the practical issues, like the **ScrollControls** component of the **[@react-three/drei](https://github.com/pmndrs/drei)** package. I ran into a bug that forced me to dive into the code and even propose a small contribution on the [package’s official page](https://github.com/pmndrs/drei/issues/2431). It wasn’t easy, but it was also an opportunity to give something back to the community.  
 
-### 2. Scroll restoration
+Another big challenge was moving from the **MDX** article system (as in the original project) to a **database ORM** approach, while also considering multilingual support (Italian and English). It’s a path I’d like to explore further in the future, maybe integrating an intelligent automatic translation system to help cover languages I don’t know.  
 
-Somewhat related to the route transitions, I had to opt out of both Next.js's and the native browser's scroll restoration in order to prevent the browser immediately scrolling to the top when the page started transitioning out. Next.js also doesn't appear to handle shifting focus when linking to the id of an element within the page, so I added that in for accessibility.
+---
 
 ## Looking back, and forward
 
-It's been pretty neat to see how popular the site's been on Github, with 500 stars (as of writing this post). It's also neat seeing how people adapt it to their own style and modify it, which is part of the reason I made it open source. I want others to be able to take it apart and see how it's made, learn from and improve upon it. That's what inspect element used to be like on the web, but with modern sites compiling and minifying and injecting garbled strings into css classes that's not as simple these days. The next best thing I could do was to open source it.
+Looking back, this experience taught me that **patience and perseverance always pay off** when you want to achieve concrete results. Every problem solved, every bug fixed, and every migration completed was a small victory that, over time, built my personal and professional growth.  
 
-I look forward to continuing to use this site as a playground, and it'll be interesting to compare the next iteration to where it is today.
+What I like most about the current version is the freedom: I can write and manage the entire blog workflow **directly from the site**, without relying on an external CMS. I built a tailor-made system, customized to my needs, and that makes it unique. With WordPress I was used to looking for plugins and ready-made solutions; here instead I had to learn new technologies to create something that was truly mine and told who I am to anyone meeting me through a screen.  
 
-## Update: Feb 2024
+For me, having a personal site is not just a business card: it’s a playground, a lab where I experiment with new technologies that, once mastered, I also bring into my daily work. It’s a space that grows along with me.  
 
-I recently migrated the site to Remix now that they've got good support for CSS modules meaning I didn't need to convert all of my styling. It was mostly a process of deleting all of the hacks mentioned above in this post, and things just work and feel more "web standard". I'm now using the [CSS view transitions API](https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API) to handle smoothly crossfading on route transitions, which is a feature baked into React Router (and as a result Remix). I don't need to do weird javascript hacks to try and set the correct theme (which still inevitably led to a flash of unthemed content) - I'm now storing the preferred theme in a session cookie which Remix makes really easy to do.
+Among the things I wanted to inherit from Hamish Williams’ project is also the idea of leaving a small **homage to *Ghost in the Shell*** in my **[404 page](/404)**. A subtle connection with a manga (and later anime film) that inspired us both.  
 
-Overall I'm really happy with Remix, would totally recommend it. I would like to eventually replace a lot of animations triggered by Javascript with the upcoming scroll driven animations CSS API, but browser support isn't there yet, so maybe some time later this year.`;
+![Cyberpunk-style artwork, inspired by The Matrix and Ready Player One](static/articles/hello-world/future-vision.webp)  
 
-const helloWorldContentIT = `## Come è iniziato tutto
+*A look to the future: a site that will continue to grow with me, among new technologies and ideas to experiment with.*  
 
-Nel 2018 dovevo aggiornare il mio sito portfolio (come è naturale per i designer). Ho pensato di allontanarmi dalle tendenze del momento e costruire un sito che attingesse all'estetica cyberpunk degli anni '80 e '90. Il genere include alcuni dei miei film preferiti, come Ghost in the Shell (1995), The Matrix (1999) e Akira (1988). Proprio da lì ho preso alcuni elementi visivi, come la tipografia katakana in grassetto nella homepage e l'effetto di decodifica del testo, un omaggio alla «pioggia digitale» di The Matrix, che a sua volta si ispirava ai titoli di testa di Ghost in the Shell. C'è anche un riferimento a Ghost in the Shell nella mia [pagina 404](/404).
+Looking forward, I’d like to integrate an **AI system** to improve blog management and simplify processes like automatic translation. The project is **[public on GitHub](https://github.com/iamadagostino/portfolio)**, just like the ones that inspired me, because I strongly believe in the value of sharing. At the same time, I’m also intrigued by the idea of connecting to **creative APIs**, like those of the **[Pokémon](https://publicapi.dev/graph-ql-pokemon-api)** or other sources available on **[PublicAPI](https://publicapi.dev/)**, and finding original ways to integrate them into the site. I haven’t yet decided how or why, but that’s the beauty of it: leaving space for imagination and experimentation.  
 
-![Una scena di Ghost in the Shell (1995) con la Major che si camuffa con la termocamuffatura; il poster di Akira; l'effetto della pioggia digitale di The Matrix](/static/inspiration.png)
+As **Morpheus** says in **The Matrix**:  
+> “All I’m offering is the truth. Nothing more.”  
 
-## La prima iterazione
+Today, my site is exactly that: a place where I can tell my truth through code, and where every new iteration is a step forward in my journey.`;
 
-> All'epoca stavo imparando React, e anche se era eccessivo per un sito portfolio personale, è stato un ottimo modo per imparare e sperimentare facendo davvero qualcosa che intendevo usare e pubblicare.
+const helloWorldContentIT = `## Come tutto è cominciato
 
-La scelta più ovvia a quel tempo era Create React App. Mi ha permesso di far partire il progetto senza dovermi preoccupare troppo della configurazione. Inoltre stavo usando Styled Components, Tween.js e React Transition Group. Sperimentavo anche con alcuni effetti Three.js, come la sfera con displacement che ancora oggi si trova nella homepage.
+Nel 2019 decisi di creare il mio primo sito personale. Non avevo in mente nulla di particolarmente complesso: volevo semplicemente avere un posto dove presentare il mio CV online. Non era ancora il momento di mostrare progetti o di costruire un portfolio tecnico, ma piuttosto di avere uno spazio che mi rappresentasse.
 
-Col tempo ho usato questo sito come campo di prova per nuove tecnologie e tecniche, quindi nel corso degli anni ho praticamente riscritto tutto. Un grande cambiamento è stato sostituire le immagini dei progetti in mockup statici con dispositivi 3D interattivi renderizzati in tempo reale, usando modelli che ho creato per il plugin Figma "Clay Mockups 3D" (https://www.figma.com/community/plugin/819335598581469537/Clay-Mockups-3D).
+Da sempre ho una forte attrazione per i generi Fantasy e Cyberpunk, e in generale per tutto ciò che mescola futuro e immaginazione. Film come *Ritorno al Futuro*, *The Matrix* e *Ready Player One* hanno avuto un impatto enorme sulla mia visione creativa, così come i manga *Alita* e *Ghost in the Shell*. Anche i videogiochi che hanno segnato la mia crescita — *Chrono Trigger*, *Final Fantasy VII* e *World of Warcraft* — hanno contribuito a formare il mio immaginario.
 
-![Thumbnail per il mio plugin Clay Mockups 3D](/static/clay-mockups.png)
+Per quella prima versione, però, non volevo strafare. L’unico dettaglio estetico/tecnico che mi aveva davvero preso era lo scrolling Parallax. Mi affascinava l’idea di dare movimento e profondità a un semplice sito di presentazione, e in un certo senso fu proprio quella la scintilla creativa: tutto il resto del sito sarebbe nato intorno a quell’effetto.
 
-## Migrazione a Next.js
+![Collage di ispirazioni: Ghost in the Shell, Alita, World of Warcraft, Ritorno al Futuro, Final Fantasy VII, con lo sfondo digitale di Matrix](static/articles/hello-world/inspirations.webp)
 
-Quando usavo Create React App, mi affidavo a un pacchetto non proprio mantenuto per prerenderizzare il sito come HTML statico in Puppeteer. Funzionava abbastanza bene nella maggior parte dei casi, ma volevo una soluzione più solida per pubblicare articoli (come questo che stai leggendo) usando MDX. Avevo una versione mezza pronta nel repo, ma non mi sembrava mai pronta per essere pubblicata. Ho valutato varie opzioni come Gatsby, Vite, Parcel e Remix, ma Next.js sembrava la soluzione più adatta alle mie esigenze.
+*Un collage delle mie ispirazioni: dai mondi futuristici di *Ghost in the Shell* e *Alita*, passando per l’immaginario cyberpunk di *The Matrix* e la DeLorean di *Ritorno al Futuro*, fino ad arrivare all’epicità di *Final Fantasy VII* e *World of Warcraft*. Questi universi hanno alimentato la mia creatività fin dall’inizio.*
 
-- Il sito ora si basa su Next.js. È una soluzione molto più adatta rispetto a Create React App. Per ora lo uso per creare un export statico, ma in futuro potrei aggiungere parti renderizzate sul server.
-- Lo styling ora è CSS vanilla con PostCSS per aggiungere supporto alle future feature native come il nesting e le custom media queries. Uso i CSS Modules invece della sintassi BEM per evitare conflitti di scope.
-- Per generare pagine da file \`.mdx\` uso \`mdx-bundler\` di Kent C. Dodds. In combinazione con Next.js rende la generazione di pagine da \`.mdx\` davvero semplice e veloce.
-- Per le animazioni sono passato da Tween.js e React Transition Group a Framer Motion.
-- Gli effetti 3D continuano a essere basati su Three.js, ma ho aggiunto \`three-stdlib\` come sostituto meglio mantenuto dei moduli d'esempio di Three.
+## La prima versione
 
-## Non è stato tutto semplice
+La prima versione del mio sito l’ho realizzata con **[WordPress](https://wordpress.com/)**. Era una scelta naturale: avevo già avuto modo di usarlo in altri progetti personali e, non avendo ancora deciso se trasformare il sito in un vero e proprio blog, mi sembrava una soluzione sensata e soprattutto future proof. Mi garantiva la flessibilità di partire semplice, ma anche la possibilità di espandere facilmente in futuro.
 
-Per la maggior parte il processo di migrazione è stato piuttosto lineare. La struttura che avevo costruito con React Router si adattava bene al routing basato su file di Next.js, e usavo già PostCSS per lo styling. Ho però incontrato un paio di problemi:
+Al di là della struttura base, la parte che più mi divertì fu costruire una piccola **API interna** che mostrava curiosità in ambito tecnologico e informatico, basata sulla timeline dei pionieri del settore. Ogni volta che si accedeva al sito compariva in intro una curiosità generata in modo randomico, con un dettaglio temporale calcolato rispetto ad oggi. Una di queste, ad esempio, raccontava di quando **[Tommy Flowers](https://en.wikipedia.org/wiki/Tommy_Flowers)** sviluppò un sistema di valvole termoioniche ridondanti, rendendo più affidabili i primi computer. È un’idea che ancora oggi mi stuzzica, tanto che un giorno mi piacerebbe realizzare un’API dedicata e renderla pubblica per chi, come me, è curioso di queste chicche tecnologiche.
 
-### 1. Transizioni di rotta
+Dal lato più estetico, rimasi affascinato dalla libreria **[particles.js](https://vincentgarreau.com/particles.js/)**, che usai nella homepage. Quelle particelle in movimento erano un modo per dare respiro visivo e, al tempo stesso, rappresentare me stesso: attratto da tutto ciò che può essere decifrato in **0** e **1**, dal mondo elettronico e informatico che mi ha sempre affascinato.
 
-Le transizioni animate tra pagine sono state un problema: Next.js rimuove immediatamente gli stili della pagina precedente quando si naviga altrove. Questo va bene quando non si animano le transizioni, perché evita che rimangano stili inutilizzati, ma quando si anima l'uscita della pagina precedente questa perde improvvisamente tutti gli stili e il risultato è visivamente brutale. Questo problema è stato uno dei più commentati e con più reaction nel repository di Next.js (https://github.com/vercel/next.js/issues/17464), quindi speravo ci fosse una soluzione ufficiale, ma nel frattempo ho applicato un "hack" suggerito nei commenti dell'issue per attenuare il problema.
+![Homepage della prima versione del mio sito in WordPress con effetto parallax e particelle interattive](static/articles/hello-world/wordpress-parallax-it.webp)
 
-### 2. Ripristino della posizione di scorrimento
+*La prima versione del mio sito realizzata con WordPress: semplice, ma arricchita da effetti come lo scrolling Parallax e le particelle animate con **particles.js**.*
 
-Legato al problema delle transizioni, ho dovuto disabilitare sia il restore dello scroll di Next.js che quello nativo del browser per evitare che il browser scorresse immediatamente verso l'alto mentre la pagina iniziava la transizione di uscita. Next.js inoltre non sembra gestire automaticamente lo shift del focus quando si linka a un id nella stessa pagina, quindi ho aggiunto una soluzione per l'accessibilità che lo gestisce correttamente.
+## Il salto verso nuovi stack
 
-## Guardando indietro e avanti
+Col tempo mi sono reso conto che la mia prima versione in **WordPress** era diventata il mio personale monolite. Proprio come nel lavoro, dove stiamo passando da una gigantesca piattaforma in **PHP** nativo a tanti microservizi containerizzati, anche nel mio spazio personale avevo bisogno di qualcosa di più flessibile e moderno.
 
-È stato interessante vedere quanto il progetto sia stato apprezzato su GitHub, con 500 stelle (al momento della scrittura). Mi piace anche vedere come le persone lo adattino al proprio stile e lo migliorino: è uno dei motivi per cui l'ho reso open source. Vorrei che gli altri potessero smontarlo, capire come è fatto e imparare o migliorare.
+La scintilla è arrivata girovagando su [GitHub](https://github.com), dove mi sono imbattuto nel portfolio di [Hamish Williams](https://github.com/HamishMW/portfolio), che mi ha ispirato moltissimo, e nel sito di [Wawa Sensei](https://wawasensei.dev), che mi ha aperto un mondo di possibilità. Non potevo restare ancorato a un concetto di sviluppo che ormai sentivo limitante, sia a livello personale che professionale.
 
-Non vedo l'ora di continuare a usare questo sito come playground e sarà interessante confrontare la prossima iterazione con quella attuale.
+![Schema dell'evoluzione tecnologica: WordPress → React → Remix](static/articles/hello-world/stack-evolution.webp)
 
-## Aggiornamento: Feb 2024
+*Dalla mia “comfort zone” con WordPress, al salto verso React e Remix. Un percorso di crescita continua ispirato anche da progetti trovati su GitHub.*
 
-Di recente ho migrato il sito a Remix, ora che fornisce un buon supporto per i CSS Modules, il che mi ha evitato di dover convertire tutto il mio styling. Gran parte del lavoro è stato rimuovere gli hack menzionati sopra: una volta fatto, le cose hanno iniziato a funzionare senza troppi stratagemmi.
+La prima vera migrazione è stata mentale: **de-PHPizzarmi**. Ho cominciato a studiare i principi di **[React](https://react.dev)**, capire la logica dei componenti e da lì approdare a **[Remix](https://remix.run)**, lo stesso framework verso cui si era evoluto anche il progetto di Hamish.
 
-Ora uso l'API delle view transitions del browser (https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API) per gestire il crossfade delle transizioni di rotta in modo più naturale — una funzionalità che è integrata in React Router (e quindi in Remix). Non devo più applicare strani workaround in JavaScript per cercare di impostare correttamente il tema, cosa che portava inevitabilmente a un flash di contenuto non tematizzato: ora con il tema memorizzato in un cookie di sessione (cosa che Remix rende semplice) il problema è risolto.
+Ho colto l’occasione per imparare tecnologie nuove:
 
-Nel complesso sono molto soddisfatto di Remix e lo consiglierei. In futuro mi piacerebbe sostituire molte animazioni basate su JavaScript con le nuove API CSS per le animazioni legate allo scroll, ma il supporto dei browser non è ancora sufficiente, quindi probabilmente ci vorrà ancora un po' di tempo.`;
+* **[Tailwind CSS](https://tailwindcss.com)**, dopo anni di CSS puro e **[Bootstrap](https://getbootstrap.com)**
+* **[React](https://react.dev)** e Three.js per il 3D
+* **[Remix](**https://remix.run**)**, come framework full-stack
+* **[Storybook](https://storybook.js.org)**, per costruire e testare componenti UI
+* **[Prisma](https://www.prisma.io/)**, come ORM per il database
+
+Ciò che mi rende orgoglioso di questo progetto è la mia capacità di prendere spunti da fonti diverse e rielaborarli in qualcosa di unico e personale. Un po’ come fece **[Blizzard](https://www.blizzard.com)** con **[Warcraft: Orcs & Himans](https://eu.shop.battle.net/it-it/product/warcraft-orcs-and-humans)**, partendo dall’ispirazione di **[Dune II](https://en.wikipedia.org/wiki/Dune_II)**, ma trasformandolo in qualcosa di completamente nuovo. Il mio approccio è simile: non invento dal nulla, ma ricompongo, sintetizzo e porto tutto a un livello che sento mio.
+
+## Non tutto rose e fiori
+
+La parte più complicata di questo percorso è stata senza dubbio la gestione dell’intero processo di sviluppo. Il progetto originale di Hamish si fermava a **React 18** e **Remix v2**, ma nel frattempo il framework è evoluto in **[React Router](https://reactrouter.com) v7** ([post ufficiale](https://remix.run/blog/react-router-v7)) e **React** stesso è passato alla versione **19**. Migrare non è stato un passaggio banale: portare tutto in avanti ha significato affrontare molti incidenti di percorso, e ognuno ha richiesto tempo e pazienza per essere risolto.
+
+Non sono mancati momenti di frustrazione, soprattutto quando ho deciso di spingermi oltre l’implementazione originale. Oltre al lavoro già splendido di Hamish, volevo portare il sito su un altro livello, aggiungendo una vera e propria **Esperienza 3D**. L’influenza del progetto ambizioso di Wawa Sensei, con il suo [avatar animato in React Three Fiber](https://www.youtube.com/watch?v=pGMKIyALcK0), mi stuzzicava troppo: volevo assolutamente provare a integrare qualcosa di simile.
+
+Poi ci sono stati i problemi pratici, come il componente **ScrollControls** del pacchetto **[@react-three/drei](https://github.com/pmndrs/drei)**. Lì mi sono scontrato con un bug che mi ha costretto a mettere mano al codice e a proporre persino un piccolo contributo sulla [pagina ufficiale del pacchetto](https://github.com/pmndrs/drei/issues/2431). Non è stata una passeggiata, ma è stata anche un’occasione per restituire qualcosa alla community.
+
+Un altro ostacolo grosso è stato il passaggio dal sistema di articoli in formato **MDX** (come nel progetto originale) a un approccio basato su **database ORM**, tenendo conto anche del fattore multilingua (italiano e inglese). È un terreno che mi piacerebbe esplorare ancora di più in futuro, magari integrando un sistema di traduzione automatica intelligente che mi aiuti a coprire anche le lingue che non conosco.
+
+## Uno sguardo indietro, e avanti
+
+Guardando indietro, questa esperienza mi ha insegnato che **pazienza e perseveranza sono sempre ben spese** quando si vogliono raggiungere dei risultati concreti. Ogni problema risolto, ogni bug sistemato e ogni migrazione portata a termine è stata una piccola vittoria che, nel tempo, ha costruito la mia crescita personale e professionale.
+
+Quello che mi piace di più della versione attuale è la libertà: posso scrivere e gestire l’intero flusso di articoli del blog **direttamente dal sito**, senza appoggiarmi a un CMS esterno. Ho costruito un sistema su misura, cucito sulle mie esigenze, e questo lo rende unico. Con WordPress ero abituato a cercare plugin e soluzioni già pronte; qui invece mi sono trovato a imparare tecnologie nuove per creare qualcosa che fosse davvero mio e che raccontasse chi sono a chi mi incontra attraverso uno schermo.
+
+Per me, avere un sito personale non è solo un biglietto da visita: è un playground, un laboratorio dove sperimento nuove tecnologie che, una volta padroneggiate, porto anche nel mio lavoro quotidiano. È uno spazio che cresce insieme a me.
+
+Tra le cose che ho voluto ereditare dal progetto di Hamish Williams, c’è anche l’idea di lasciare un piccolo omaggio a Ghost in the Shell nella mia pagina **[404](/404)**. Una sottile connessione con un manga che ha ispirato entrambi.
+
+![Artwork in stile cyberpunk, ispirato a Matrix e Ready Player One](static/articles/hello-world/future-vision.webp)
+
+*Uno sguardo al futuro: un sito che continuerà a crescere con me, tra nuove tecnologie e idee da sperimentare.*
+
+Guardando avanti, mi piacerebbe integrare un sistema di **AI** per migliorare la gestione del blog e semplificare processi come la traduzione automatica. Il progetto è **[pubblico su GitHub](https://github.com/iamadagostino/portfolio)**, così come lo erano quelli che mi hanno ispirato, perché credo molto nel valore della condivisione. Allo stesso tempo, mi intriga anche l’idea di collegarmi a **API creative**, come quelle dei **[Pokémon](https://publicapi.dev/graph-ql-pokemon-api)** o di altre fonti disponibili su **[PublicAPI](https://publicapi.dev/)**, e trovare modi originali per integrarle nel sito. Non ho ancora deciso come o perché, ma è proprio questo il bello: lasciare spazio all’immaginazione e alla sperimentazione.
+
+Come direbbe **Morpheus** in **The Matrix**:
+> “All I’m offering is the truth. Nothing more.”
+
+Il mio sito, oggi, è proprio questo: un luogo dove posso raccontare la mia verità attraverso il codice, e dove ogni nuova iterazione è un passo avanti nel mio viaggio.`;
 
 async function main() {
   console.log('🌱 Starting database seed...'.blue);
@@ -150,28 +210,30 @@ async function main() {
       slug: 'hello-world',
       status: 'PUBLISHED',
       featured: true,
-      banner: '/static/hello-world-banner.jpg',
+      banner: '/static/articles/hello-world/banner.jpg',
       readTime: 8,
       authorId: adminUser.id,
-      publishedAt: new Date('2022-04-21'),
+      publishedAt: new Date(), // Set to current date (To customize as needed, set a specific date like new Date('yyyy-mm-dd'))
       translations: {
         create: [
           {
-            language: 'EN',
+            locale: 'en-US',
             title: 'Hello world: how I built this site',
             abstract:
               "I originally built this portfolio site back in 2018, and since then it's evolved quite a bit. Recently I migrated from Create React App to Remix and made some major upgrades in the process.",
-            content: helloWorldContent,
+            content: helloWorldContentEN,
+            slug: 'hello-world', // English slug
             metaTitle: "Hello world: how I built this site - Angelo D'Agostino",
             metaDescription:
               'Learn how I built my portfolio site, from the initial React setup to migrating to Remix, including the challenges and solutions along the way.',
           },
           {
-            language: 'IT',
+            locale: 'it-IT',
             title: 'Ciao mondo: come ho costruito questo sito',
             abstract:
               'Avevo originariamente costruito questo sito portfolio nel 2018, e da allora si è evoluto parecchio. Recentemente ho migrato da Create React App a Remix e ho fatto alcuni aggiornamenti importanti nel processo.',
             content: helloWorldContentIT,
+            slug: 'ciao-mondo', // Italian slug
             metaTitle: "Ciao mondo: come ho costruito questo sito - Angelo D'Agostino",
             metaDescription:
               'Scopri come ho costruito il mio sito portfolio, dalla configurazione iniziale React alla migrazione a Remix, incluse le sfide e le soluzioni lungo il percorso.',
@@ -194,11 +256,11 @@ async function main() {
       banner: '/static/modern-styling-banner.jpg',
       readTime: 12,
       authorId: user.id,
-      publishedAt: new Date('2023-08-15'),
+      publishedAt: new Date(), // Set to current date (To customize as needed, set a specific date like new Date('yyyy-mm-dd'))
       translations: {
         create: [
           {
-            language: 'EN',
+            locale: 'en-US',
             title: 'Modern styling in React: CSS-in-JS vs CSS Modules',
             abstract:
               'A deep dive into modern CSS approaches for React applications, comparing CSS-in-JS solutions with CSS Modules and exploring the trade-offs of each approach.',
@@ -209,7 +271,7 @@ async function main() {
               'Compare modern CSS approaches for React: CSS-in-JS vs CSS Modules. Learn about performance, maintainability, and developer experience.',
           },
           {
-            language: 'IT',
+            locale: 'it-IT',
             title: 'Styling moderno in React: CSS-in-JS vs CSS Modules',
             abstract:
               'Un approfondimento sugli approcci CSS moderni per le applicazioni React, confrontando le soluzioni CSS-in-JS con i CSS Modules ed esplorando i compromessi di ogni approccio.',

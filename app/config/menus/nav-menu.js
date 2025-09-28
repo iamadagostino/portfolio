@@ -1,4 +1,5 @@
 import config from '~/config/app.json';
+import { getLocalizedPath } from '~/config/routes';
 
 // Navigation link keys for translation
 export const navLinkKeys = [
@@ -56,7 +57,8 @@ export const getNavLinks = (t, currentLanguage = 'en', currentPath = '/') => {
         details: 'details'
       };
       
-      const translatedSlug = t(`slugs.${link.slug}`, { defaultValue: link.slug });
+      // Use our domain-based route mapping system
+      const translatedSlug = getLocalizedPath('main', link.slug, currentLanguage) || t(`slugs.${link.slug}`, { defaultValue: link.slug });
       
       // If this section has an anchor and we're on the home page, use anchor for smooth scrolling
       if (sectionsWithAnchors[link.slug] && isOnHomePage) {

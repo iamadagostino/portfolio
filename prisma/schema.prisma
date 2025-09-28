@@ -15,10 +15,6 @@ enum Role {
   ADMIN
 }
 
-enum Language {
-  EN
-  IT
-}
 
 enum PostStatus {
   DRAFT
@@ -76,8 +72,8 @@ model Post {
 }
 
 model PostTranslation {
-  id       Int      @id @default(autoincrement())
-  language Language
+  id     Int    @id @default(autoincrement())
+  locale String // Full locale codes like 'en-US', 'it-IT', etc.
 
   // Content fields
   title    String
@@ -97,7 +93,7 @@ model PostTranslation {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // Unique constraint: one translation per language per post
-  @@unique([postId, language])
+  // Unique constraint: one translation per locale per post
+  @@unique([postId, locale])
   @@map("post_translations")
 }

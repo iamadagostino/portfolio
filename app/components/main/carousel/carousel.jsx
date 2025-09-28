@@ -346,12 +346,13 @@ export const Carousel = ({ width, height, images, placeholder, ...rest }) => {
   };
 
   return (
-    <div className={styles.carousel} onKeyDown={handleKeyDown} {...rest}>
+    <div className={styles.carousel} onKeyDown={handleKeyDown} role="button" tabIndex="0" {...rest}>
       <div className={styles.content}>
         <div
           className={styles.imageWrapper}
           data-dragging={dragging}
           onPointerDown={handlePointerDown}
+          role="presentation"
           style={cssProps({ aspectRatio: `${width} / ${height}` })}
         >
           <div aria-atomic className={styles.canvasWrapper} aria-live="polite" aria-label={currentImageAlt} role="img">

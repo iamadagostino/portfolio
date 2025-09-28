@@ -22,15 +22,15 @@ const readEnvValue = (key: string): string | undefined => {
   return undefined;
 };
 
-const AVAILABLE_LANGUAGES = readEnvValue('AVAILABLE_LANGUAGES') ?? readEnvValue('VITE_AVAILABLE_LANGUAGES') ?? 'en-US';
-const DEFAULT_LANGUAGE = readEnvValue('DEFAULT_LANGUAGE') ?? readEnvValue('VITE_DEFAULT_LANGUAGE');
+const AVAILABLE_LANGUAGES = readEnvValue('AVAILABLE_LANGUAGES') ?? readEnvValue('VITE_AVAILABLE_LANGUAGES') ?? 'en-US,it-IT';
+const DEFAULT_LANGUAGE = readEnvValue('DEFAULT_LANGUAGE') ?? readEnvValue('VITE_DEFAULT_LANGUAGE') ?? 'en-US';
 
 const languagesFromEnv = AVAILABLE_LANGUAGES.split(',')
   .map((lang) => lang.trim())
   .filter((lang) => lang.length > 0);
 
 if (languagesFromEnv.length === 0) {
-  languagesFromEnv.push('en');
+  languagesFromEnv.push('en-US');
 }
 
 export const supportedLanguages = Object.freeze([...new Set(languagesFromEnv)]);

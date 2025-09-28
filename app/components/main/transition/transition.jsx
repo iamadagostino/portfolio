@@ -68,7 +68,7 @@ const TransitionContent = ({
       setStatus('entered');
       onEntered?.();
     }, actualTimeout);
-  }, [onEnter, onEntered, timeout, status, show]);
+  }, [onEnter, onEntered, timeout, status, show, enterTimeout, exitTimeout, hasEntered, nodeRef, splitTimeout]);
 
   useEffect(() => {
     if (isPresent && show) return;
@@ -87,9 +87,8 @@ const TransitionContent = ({
     exitTimeout.current = setTimeout(() => {
       setStatus('exited');
       safeToRemove?.();
-      onExited?.();
     }, actualTimeout);
-  }, [isPresent, onExit, safeToRemove, timeout, onExited, show]);
+  }, [isPresent, onExit, safeToRemove, timeout, onExited, show, enterTimeout, exitTimeout, nodeRef, splitTimeout]);
 
   return children({ visible, status, nodeRef });
 };

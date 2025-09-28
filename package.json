@@ -14,7 +14,7 @@
     "typecheck": "react-router typegen && tsc",
     "db:migrate": "prisma migrate dev",
     "db:reset": "prisma migrate reset --force",
-    "db:push": "prisma db push",
+    "db:push": "prisma db push --force-reset",
     "db:generate": "prisma generate",
     "db:studio": "prisma studio",
     "db:seed": "tsx prisma/seed.ts",
@@ -42,7 +42,6 @@
     "@react-router/express": "^7.9.3",
     "@react-router/fs-routes": "^7.9.3",
     "@react-router/node": "^7.9.3",
-    "@react-router/remix-routes-option-adapter": "^7.9.3",
     "@react-router/serve": "^7.9.3",
     "@react-three/drei": "^10.7.6",
     "@react-three/fiber": "^9.3.0",
@@ -87,9 +86,6 @@
     "remark": "^15.0.1",
     "remark-gfm": "^4.0.1",
     "remark-html": "^16.0.1",
-    "remix-custom-routes": "^1.0.1",
-    "remix-i18next": "^7.4.0",
-    "remix-utils": "^9.0.0",
     "sharp": "^0.34.4",
     "simplebar": "^6.3.2",
     "tabulator-tables": "^6.3.1",
@@ -99,6 +95,7 @@
     "tippy.js": "^6.3.7",
     "toastify-js": "^1.12.0",
     "tom-select": "^2.4.3",
+    "unist-util-visit": "^5.0.0",
     "uuid": "^13.0.0",
     "yup": "^1.7.1",
     "zod": "^4.1.11",
@@ -106,7 +103,7 @@
   },
   "devDependencies": {
     "@aws-sdk/types": "^3.893.0",
-    "@cloudflare/workers-types": "^4.20250926.0",
+    "@cloudflare/workers-types": "^4.20250927.0",
     "@csstools/postcss-global-data": "^3.1.0",
     "@eslint/compat": "^1.4.0",
     "@eslint/eslintrc": "^3.3.1",
@@ -131,7 +128,7 @@
     "@types/three": "^0.180.0",
     "@typescript-eslint/eslint-plugin": "^8.44.1",
     "@typescript-eslint/parser": "^8.44.1",
-    "@vitejs/plugin-react": "^5.0.3",
+    "@vitejs/plugin-react": "^5.0.4",
     "@vitest/ui": "^3.2.4",
     "autoprefixer": "^10.4.21",
     "classnames": "^2.5.1",
@@ -179,7 +176,7 @@
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^3.2.4",
     "wrangler": "^4.40.2",
-    "zx": "^8.8.3"
+    "zx": "^8.8.4"
   },
   "pnpm": {
     "overrides": {

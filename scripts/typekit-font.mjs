@@ -12,7 +12,6 @@ const cssJson = require('cssjson');
 const FONTS_FOLDER = './assets/fonts';
 const FONTS_DEFINITIONS = `${FONTS_FOLDER}/definitions`;
 
-
 // Pass CLI arguments
 let FONT_KIT_URL = argv.url;
 
@@ -81,7 +80,6 @@ async function create_definition() {
             // a new file we will use later as our .css file
             response.on('end', () => {
                 const fontFamily = content.match(/font-family:\s*"([^"]+)"/)[1];
-                let empty_content = '';
 
                 // Create class name we want to add to the .css
                 let css_class_str = `.tk-${fontFamily} { font-family: "${fontFamily}", sans-serif; }`;
@@ -92,7 +90,7 @@ async function create_definition() {
                         // File exists so we should remove it
                         try {
                             fs.unlinkSync(`${FONTS_DEFINITIONS}/${fontFamily}.css`);
-                            createFile(`${FONTS_DEFINITIONS}/${fontFamily}.css`, empty_content);
+                            createFile(`${FONTS_DEFINITIONS}/${fontFamily}.css`, css_class_str);
                             //file removed
                             resolve();
                         } catch (err) {
@@ -100,7 +98,7 @@ async function create_definition() {
                         }
                     } else {
                         // File does not exists so no need to remove it
-                        createFile(`${FONTS_DEFINITIONS}/${fontFamily}.css`, empty_content);
+                        createFile(`${FONTS_DEFINITIONS}/${fontFamily}.css`, css_class_str);
                         resolve();
                     }
                 });
@@ -241,9 +239,17 @@ create_definition().then(() => {
                 // Override the font-family name in our JSON object
                 font.children['@font-face']['attributes']['font-family'] = `"${font_family_name}"`;
 
-                // We have to create a filename for the font entry
-                let font_filename = `url("${FONTS_FOLDER}/${fontFamily}/${fontWeight}_${fontStyle}.woff") format("woff"),url("${FONTS_FOLDER}/${fontFamily}_${fontWeight}_${fontStyle}.woff2") format("woff2"),url("${FONTS_FOLDER}/${fontFamily}_${fontWeight}_${fontStyle}.otf") format("opentype")`;
-                // Overide the src value in our JSON object
+                // Use actual font URLs from CSS if available, otherwise fallback to local paths
+                let font_filename;
+                if (fontUrlAndFormats && fontUrlAndFormats.length > 0) {
+                    // Use the actual URLs from the original font CSS
+                    font_filename = fontUrlAndFormats.join(',');
+                } else {
+                    // Fallback to local font paths if no URLs found in CSS
+                    font_filename = `url("${FONTS_FOLDER}/${fontFamily}/${fontWeight}_${fontStyle}.woff") format("woff"),url("${FONTS_FOLDER}/${fontFamily}_${fontWeight}_${fontStyle}.woff2") format("woff2"),url("${FONTS_FOLDER}/${fontFamily}_${fontWeight}_${fontStyle}.otf") format("opentype")`;
+                }
+                
+                // Override the src value in our JSON object
                 font.children['@font-face']['attributes']['src'] = font_filename;
 
                 // Parse our JSON Object to a string

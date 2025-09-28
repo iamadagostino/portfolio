@@ -8,14 +8,14 @@ export async function getClientLanguageSwitchUrl(
   currentLang: Language,
   targetLang: Language
 ): Promise<string> {
-  // Remove language prefix from current path
-  const pathWithoutLang = currentPath.replace(/^\/(en|it)/, '') || '/';
+  // Remove language prefix from current path (handle full locale codes)
+  const pathWithoutLang = currentPath.replace(/^\/(en-US|it-IT)/, '') || '/';
 
   // Check if we're on a specific article page (with slug)
-  const articleMatch = pathWithoutLang.match(/^\/article\/(.+)$/);
+  const articleMatch = pathWithoutLang.match(/^\/(article|articolo)\/(.+)$/);
 
   if (articleMatch) {
-    const [, currentSlug] = articleMatch;
+    const [, , currentSlug] = articleMatch;
 
     try {
       // Make a fetch request to the API endpoint that handles the language switching logic
@@ -50,22 +50,24 @@ export async function getClientLanguageSwitchUrl(
 function getSimpleLanguageSwitchUrl(currentPath: string, targetLang: Language): string {
   let newPath: string;
 
-  if (currentPath.startsWith('/en') || currentPath.startsWith('/it')) {
-    // Replace existing language prefix
-    newPath = currentPath.replace(/^\/(en|it)/, `/${targetLang}`);
+  if (currentPath.startsWith('/en-US') || currentPath.startsWith('/it-IT')) {
+    // Replace existing language prefix with full locale codes
+    newPath = currentPath.replace(/^\/(en-US|it-IT)/, `/${targetLang}`);
   } else {
     // Add language prefix to root or other paths
     newPath = `/${targetLang}${currentPath === '/' ? '' : currentPath}`;
   }
 
   // Handle section name translations for article and project pages
-  if (targetLang === 'it') {
-    // English to Italian: articles → articoli, projects → progetti
+  if (targetLang === 'it-IT') {
+    // English to Italian: articles → articoli, article → articolo, projects → progetti
     newPath = newPath.replace(/\/articles(\/|$)/, '/articoli$1');
+    newPath = newPath.replace(/\/article(\/|$)/, '/articolo$1');
     newPath = newPath.replace(/\/projects(\/|$)/, '/progetti$1');
-  } else if (targetLang === 'en') {
-    // Italian to English: articoli → articles, progetti → projects
+  } else if (targetLang === 'en-US') {
+    // Italian to English: articoli → articles, articolo → article, progetti → projects
     newPath = newPath.replace(/\/articoli(\/|$)/, '/articles$1');
+    newPath = newPath.replace(/\/articolo(\/|$)/, '/article$1');
     newPath = newPath.replace(/\/progetti(\/|$)/, '/projects$1');
   }
 

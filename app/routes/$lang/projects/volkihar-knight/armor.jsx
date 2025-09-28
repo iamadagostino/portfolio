@@ -51,6 +51,11 @@ export const Armor = ({ showDelay = 0, cameraPosition = { x: 0, y: 0, z: 6 }, cl
   const rotationX = useSpring(0, rotationSpringConfig);
   const rotationY = useSpring(0, rotationSpringConfig);
 
+  // Handle render passes for a single frame
+  const renderFrame = useCallback(() => {
+    renderer.current.render(scene.current, camera.current);
+  }, []);
+
   useEffect(() => {
     const { clientWidth, clientHeight } = container.current;
 
@@ -141,11 +146,6 @@ export const Armor = ({ showDelay = 0, cameraPosition = { x: 0, y: 0, z: 6 }, cl
       unsubscribeY();
     };
   }, [cameraPosition.x, cameraPosition.y, cameraPosition.z, renderFrame, rotationX, rotationY]);
-
-  // Handle render passes for a single frame
-  const renderFrame = useCallback(() => {
-    renderer.current.render(scene.current, camera.current);
-  }, []);
 
   // Handle mouse move animation
   useEffect(() => {

@@ -4,12 +4,14 @@ import { useLanguageChanger } from '~/i18n/i18n.hooks';
 import type { Language as LanguageCode } from '~/i18n/i18n.resources';
 import { supportedLanguages } from '~/i18n/i18n.resources';
 import { getClientLanguageSwitchUrl } from '~/services/language-switch.client';
+import { getRouteKeyFromPath, getLocalizedPath } from '~/utils/route-mapping';
 import styles from './language-dropdown.module.css';
 
 interface Language {
   key: string;
   name: string;
   nativeName: string;
+  countryCode: string;
 }
 
 interface FlagIconProps {
@@ -17,18 +19,14 @@ interface FlagIconProps {
 }
 
 function FlagIcon({ countryCode = '' }: FlagIconProps) {
-  let flagCode = countryCode;
-  if (countryCode === 'en') {
-    flagCode = 'us';
-  }
-
+  const flagCode = countryCode.toLowerCase();
   return <span className={`fi fis ${styles.flag} fi-${flagCode}`} />;
 }
 
-// Map language codes to their native names
-const LANGUAGE_MAP: Record<string, { name: string; nativeName: string }> = {
-  en: { name: 'English', nativeName: 'English' },
-  it: { name: 'Italian', nativeName: 'Italiano' },
+// Map language codes to their native names (now with full locale codes)
+const LANGUAGE_MAP: Record<string, { name: string; nativeName: string; countryCode: string }> = {
+  'en-US': { name: 'English', nativeName: 'English', countryCode: 'us' },
+  'it-IT': { name: 'Italian', nativeName: 'Italiano', countryCode: 'it' },
 };
 
 const LANGUAGE_SELECTOR_ID = 'language-selector';
@@ -65,15 +63,47 @@ export const LanguageDropdown = ({ isMobile, locale, ...rest }: LanguageDropdown
       const newUrl = await getClientLanguageSwitchUrl(currentPath, currentLang, newLang);
       window.location.href = newUrl + currentHash;
     } catch (error) {
-      console.warn('Error during intelligent language switching, falling back to simple switching:', error);
+      console.warn('Error during intelligent language switching, falling back to localized path mapping:', error);
 
-      // Fallback to simple replacement
-      let newUrl;
-      if (currentPath.startsWith('/en') || currentPath.startsWith('/it')) {
-        newUrl = currentPath.replace(/^\/(en|it)/, `/${newLang}`);
+      // Advanced fallback with route mapping
+      let newUrl = '/';
+      
+      // Extract the route parts after language
+      const pathParts = currentPath.split('/').filter(Boolean);
+      
+      if (pathParts.length > 0 && (pathParts[0] === 'en-US' || pathParts[0] === 'it-IT')) {
+        // Remove the language part
+        const routeParts = pathParts.slice(1);
+        
+        if (routeParts.length > 0) {
+          // Try to map the first route segment
+          const firstSegment = routeParts[0];
+          const routeKey = getRouteKeyFromPath(firstSegment, currentLang);
+          
+          // Special handling for article vs articles
+          let mappedRouteKey = routeKey;
+          if (routeParts.length > 1 && (routeKey === 'articles' || routeKey === 'articoli' || routeKey === 'articolo')) {
+            // If there's a slug after articles/articoli/articolo, it's a single article
+            mappedRouteKey = 'article';
+          }
+          
+          const localizedRoute = getLocalizedPath('main', mappedRouteKey, newLang);
+          
+          // Rebuild the URL with the new language and localized route
+          newUrl = `/${newLang}/${localizedRoute}`;
+          
+          // Add any additional path segments (like slug for articles)
+          if (routeParts.length > 1) {
+            newUrl += '/' + routeParts.slice(1).join('/');
+          }
+        } else {
+          newUrl = `/${newLang}`;
+        }
       } else {
+        // Simple case - just add the new language
         newUrl = `/${newLang}${currentPath === '/' ? '' : currentPath}`;
       }
+      
       window.location.href = newUrl + currentHash;
     }
 
@@ -86,6 +116,7 @@ export const LanguageDropdown = ({ isMobile, locale, ...rest }: LanguageDropdown
         key: lang,
         name: LANGUAGE_MAP[lang]?.name || lang,
         nativeName: LANGUAGE_MAP[lang]?.nativeName || lang,
+        countryCode: LANGUAGE_MAP[lang]?.countryCode || lang.toLowerCase().split('-')[1] || lang.toLowerCase(),
       }));
       setLanguages(appLanguages);
     };
@@ -122,7 +153,7 @@ export const LanguageDropdown = ({ isMobile, locale, ...rest }: LanguageDropdown
         {...(isOpen ? { 'aria-expanded': true } : { 'aria-expanded': false })}
         onClick={() => setIsOpen(!isOpen)}
       >
-        <FlagIcon countryCode={selectedLanguage.key} />
+        <FlagIcon countryCode={selectedLanguage.countryCode} />
         {selectedLanguage.nativeName}
         <svg
           className={styles.chevron}
@@ -160,7 +191,7 @@ export const LanguageDropdown = ({ isMobile, locale, ...rest }: LanguageDropdown
                   aria-label={`Switch to ${language.nativeName}`}
                   role="menuitem"
                 >
-                  <FlagIcon countryCode={language.key} />
+                  <FlagIcon countryCode={language.countryCode} />
                   <span className={styles.itemText}>{language.nativeName}</span>
                   {isSelected && (
                     <svg className={styles.checkmark} fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">

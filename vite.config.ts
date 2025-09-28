@@ -46,9 +46,7 @@ export default defineConfig({
     open: true, // Open the development server in the browser
     port: 7777, // Define the development server port
   },
-  ssr: {
-    noExternal: ['remix-i18next'],
-  },
+  ssr: {},
   optimizeDeps: {
     esbuildOptions: {
       target: 'es2022', // Ensure esbuild optimizations also use ES2022

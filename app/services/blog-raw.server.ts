@@ -5,7 +5,6 @@ import type { BlogPost } from './blog.server';
 
 // Get a blog post with raw markdown content (for MDXProvider)
 export async function getBlogPostWithRawMarkdown(slug: string, language: Language): Promise<BlogPost | null> {
-  const langEnum = language.toUpperCase() as 'EN' | 'IT';
 
   let post = await prisma.post.findFirst({
     where: {
@@ -22,7 +21,7 @@ export async function getBlogPostWithRawMarkdown(slug: string, language: Languag
       },
       translations: {
         where: {
-          language: langEnum,
+          locale: language,
         },
         select: {
           title: true,
@@ -43,7 +42,7 @@ export async function getBlogPostWithRawMarkdown(slug: string, language: Languag
         translations: {
           some: {
             slug,
-            language: langEnum,
+            locale: language,
           },
         },
         status: 'PUBLISHED',
@@ -58,7 +57,7 @@ export async function getBlogPostWithRawMarkdown(slug: string, language: Languag
         },
         translations: {
           where: {
-            language: langEnum,
+            locale: language,
           },
           select: {
             title: true,

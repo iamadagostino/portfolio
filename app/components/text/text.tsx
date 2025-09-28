@@ -1,5 +1,5 @@
 import { classes } from '~/utils/style';
-import styles from './text.module.css';
+import styles from '../main/text/text.module.css';
 
 interface TextProps {
   children: React.ReactNode;
@@ -22,14 +22,11 @@ export const Text = ({
   ...rest
 }: TextProps) => {
   const componentProps = {
-    className: classes(
-      styles.text,
-      styles[`size-${size}`], // Dynamic class for size
-      styles[`align-${align}`], // Dynamic class for alignment
-      styles[`weight-${weight}`], // Dynamic class for weight
-      secondary && styles.secondary, // Add secondary class if true
-      className // Allow additional classes to be passed
-    ),
+    className: classes(styles.text, className),
+    'data-size': size,
+    'data-align': align,
+    'data-weight': weight,
+    'data-secondary': secondary,
     ...rest,
   };
 

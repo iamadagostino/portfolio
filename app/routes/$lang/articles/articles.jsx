@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink, useLoaderData } from 'react-router';
 import { classes, cssProps } from '~/utils/style';
+import { getLocalizedPath } from '~/config/routes';
 
 import { useReducedMotion } from 'framer-motion';
 import { Button } from '~/components/main/button';
@@ -29,6 +30,9 @@ function ArticlesPost({ slug, translation, featured, banner, readTime, published
 
   // Use locale-specific slug if available, otherwise fall back to main slug
   const postSlug = translation?.slug || slug;
+  
+  // Get the localized article path (article -> articolo for Italian)
+  const articlePath = getLocalizedPath('main', 'article', lang);
 
   useEffect(() => {
     const date = publishedAt || new Date();
@@ -69,7 +73,7 @@ function ArticlesPost({ slug, translation, featured, banner, readTime, published
       <RouterLink
         viewTransition
         prefetch="intent"
-        to={`/${lang}/article/${postSlug}`}
+        to={`/${lang}/${articlePath}/${postSlug}`}
         className={styles.postLink}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}

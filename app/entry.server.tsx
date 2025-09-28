@@ -1,4 +1,3 @@
-import * as i18n from './i18n/i18n';
 
 import { createInstance } from 'i18next';
 import { I18nextProvider } from 'react-i18next';
@@ -9,7 +8,7 @@ import { isbot } from 'isbot';
 import { PassThrough } from 'node:stream';
 import { renderToPipeableStream } from 'react-dom/server.node';
 import { ServerRouter } from 'react-router';
-import { resources, returnLanguageIfSupported } from './i18n/i18n.resources';
+import { resources, returnLanguageIfSupported, availableNamespaces } from './i18n/i18n.resources';
 import i18nServer from './services/i18n.server';
 
 const ABORT_DELAY = 5_000;
@@ -31,10 +30,18 @@ export default async function handleRequest(
 
   // Create a properly configured i18next instance using the same resources as client
   const instance = createInstance({
-    ...i18n.default,
     lng,
     resources,
     fallbackLng: lng, // Ensure we don't fall back to English
+    defaultNS: 'common',
+    ns: availableNamespaces,
+    initImmediate: false,
+    interpolation: {
+      escapeValue: false, // React already escapes values
+    },
+    react: {
+      useSuspense: false,
+    },
   });
 
   // Initialize the instance

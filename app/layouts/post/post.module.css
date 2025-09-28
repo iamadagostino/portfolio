@@ -95,7 +95,8 @@
     transition: opacity var(--durationXL) ease;
 
     @media (--mediaUseMotion) {
-      transition: opacity var(--durationXL) ease,
+      transition:
+        opacity var(--durationXL) ease,
         transform var(--durationXL) var(--bezierFastoutSlowin);
     }
 
@@ -163,19 +164,10 @@
       transition: var(--durationM) ease;
       transition-property: --background1, --background2, --background3;
 
-      background: linear-gradient(
-        var(--background1),
-        var(--background2),
-        var(--background3)
-      );
+      background: linear-gradient(var(--background1), var(--background2), var(--background3));
 
       @supports (background: linear-gradient(in lab, red, red)) {
-        background: linear-gradient(
-          in lab,
-          var(--background1),
-          var(--background2),
-          var(--background3)
-        );
+        background: linear-gradient(in lab, var(--background1), var(--background2), var(--background3));
       }
     }
 
@@ -280,6 +272,27 @@
 
     & > * {
       grid-column: var(--mainColumn);
+    }
+
+    /* Override for elements that should span wider - target the generated class */
+    & img[class*='image'] {
+      grid-column: 2 / span 3;
+      position: relative;
+
+      /* Digital hexagon clip-path - very gentle angles, almost rectangular */
+      clip-path: polygon(2% 0, 98% 0, 100% 2%, 100% 98%, 98% 100%, 2% 100%, 0 98%, 0 2%);
+
+      @media (--mediaTablet) {
+        grid-column: 1;
+      }
+    }
+
+    & div[class*='embed'] {
+      grid-column: 2 / span 3;
+
+      @media (--mediaTablet) {
+        grid-column: 1;
+      }
     }
   }
 }

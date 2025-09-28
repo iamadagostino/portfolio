@@ -26,10 +26,10 @@ export const handle = {
 
 export const meta = ({ params }) => {
   // Determine the language from URL params (for localized routes) or default to English
-  const lang = params?.lang === 'it' ? 'it' : 'en';
+  const lang = params?.lang || 'en-US';
 
   // Access translations directly from resources
-  const contactTranslations = resources[lang].contact;
+  const contactTranslations = resources[lang]?.contact;
 
   return baseMeta({
     title: contactTranslations.title,
@@ -45,10 +45,10 @@ export async function action({ context, request }) {
   // Get the language from the URL path
   const url = new URL(request.url);
   const pathSegments = url.pathname.split('/').filter(Boolean);
-  const lang = pathSegments[0] === 'it' ? 'it' : 'en';
+  const lang = pathSegments[0] || 'en-US'; // Should be 'en-US' or 'it-IT'
 
   // Get translations for server-side validation and email
-  const contactTranslations = resources[lang].contact;
+  const contactTranslations = resources[lang]?.contact;
 
   const ses = new SESClient({
     region: 'us-east-1',

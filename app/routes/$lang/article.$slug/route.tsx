@@ -1,4 +1,5 @@
 import { LoaderFunctionArgs, redirect, useLoaderData } from 'react-router';
+import { getLocalizedPath } from '~/utils/route-mapping';
 
 import { MarkdownContent } from '~/components/main/markdown-content';
 import { Post } from '~/layouts/post';
@@ -30,7 +31,8 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
     // Redirect to correct slug if needed (prevents duplicate content)
     if (shouldRedirect && correctSlug) {
       console.log('🔄 Redirecting from', urlSlug, 'to', correctSlug);
-      throw redirect(`/${lang}/articles/${correctSlug}`, 301); // 301 permanent redirect
+      const localizedArticlePath = getLocalizedPath('main', 'article', lang); // Use 'article' for single article
+      throw redirect(`/${lang}/${localizedArticlePath}/${correctSlug}`, 301); // 301 permanent redirect
     }
 
     // Calculate timecode from reading time

@@ -46,11 +46,11 @@ export const localizedLoader = createLocalizedLoader();
  */
 export const createLocalizedMeta = (baseMeta: Array<Record<string, string>>) => {
   return ({ data }: { data: { lang?: string } }) => {
-    const lang = data?.lang || 'en';
+    const lang = data?.lang || 'en-US';
 
     return [
       ...baseMeta,
-      { property: 'og:locale', content: lang === 'it' ? 'it_IT' : 'en_US' },
+      { property: 'og:locale', content: lang === 'it-IT' ? 'it_IT' : 'en_US' },
       { name: 'language', content: lang },
     ];
   };

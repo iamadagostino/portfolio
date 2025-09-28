@@ -27,14 +27,11 @@ export const Text = ({
 
   return (
     <ComponentTag
-      className={classes(
-        styles.text,
-        styles[`size-${size}`], // Dynamic class for size
-        styles[`align-${align}`], // Dynamic class for alignment
-        styles[`weight-${weight}`], // Dynamic class for weight
-        secondary && styles.secondary, // Add secondary class if true
-        className // Allow additional classes to be passed
-      )}
+      className={classes(styles.text, className)}
+      data-size={size}
+      data-align={align}
+      data-weight={weight}
+      data-secondary={secondary}
       {...(rest as Record<string, unknown>)}
     >
       {children}

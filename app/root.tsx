@@ -19,7 +19,7 @@ import {
 
 // Components, Layouts, Services, and Utilities
 import clsxLib from 'clsx';
-import { useChangeLanguage } from 'remix-i18next/react';
+import '~/i18n/i18n'; // Initialize i18next
 import GothamBook from '~/assets/fonts/gotham-book.woff2';
 import GothamMedium from '~/assets/fonts/gotham-medium.woff2';
 import { NavbarProvider } from '~/components/main/navbar-provider';
@@ -81,12 +81,11 @@ export const loader = async ({ request, context, params }: LoaderFunctionArgs) =
   if (isRootPath && !language) {
     const supportedLocale = returnLanguageIfSupported(detectedLocale);
     if (supportedLocale) {
-      // Always redirect to the language-specific path
-      // For English: redirect to /en, for Italian: redirect to /it
+      // Always redirect to the language-specific path with full locale codes
       return new Response(null, {
         status: 302,
         headers: {
-          Location: supportedLocale === 'en' ? '/en' : `/${supportedLocale}`,
+          Location: `/${supportedLocale}`,
         },
       });
     } else {
@@ -94,7 +93,7 @@ export const loader = async ({ request, context, params }: LoaderFunctionArgs) =
       return new Response(null, {
         status: 302,
         headers: {
-          Location: '/en',
+          Location: '/en-US',
         },
       });
     }
@@ -218,8 +217,12 @@ export default function App() {
     }
   }, []);
 
-  // This is the hook that allows us to change the language
-  useChangeLanguage(locale);
+  // Change language when locale changes
+  useEffect(() => {
+    if (i18n.language !== locale) {
+      i18n.changeLanguage(locale);
+    }
+  }, [locale, i18n]);
 
   return (
     <html lang={locale} dir={i18n.dir()} className="antialiased">
