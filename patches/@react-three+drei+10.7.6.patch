@@ -1,8 +1,10 @@
-diff --git a/node_modules/.pnpm/@react-three+drei@10.7.6_@react-three+fiber@9.3.0_@types+react@19.1.13_react-dom@19.1.1_3c3f250ff267175f54d9885e70ed57d5/node_modules/@react-three/drei/web/ScrollControls.js b/node_modules/.pnpm/@react-three+drei@10.7.6_@react-three+fiber@9.3.0_@types+react@19.1.13_react-dom@19.1.1_3c3f250ff267175f54d9885e70ed57d5/node_modules/@react-three/drei/web/ScrollControls.js
+diff --git a/node_modules/@react-three/drei/web/ScrollControls.js b/node_modules/@react-three/drei/web/ScrollControls.js
 index 1234567..abcdefg 100644
---- a/node_modules/.pnpm/@react-three+drei@10.7.6_@react-three+fiber@9.3.0_@types+react@19.1.13_react-dom@19.1.1_3c3f250ff267175f54d9885e70ed57d5/node_modules/@react-three/drei/web/ScrollControls.js
-+++ b/node_modules/.pnpm/@react-three+drei@10.7.6_@react-three+fiber@9.3.0_@types+react@19.1.13_react-dom@19.1.1_3c3f250ff267175f54d9885e70ed57d5/node_modules/@react-three/drei/web/ScrollControls.js
-@@ -1,2 +1,27 @@
+--- a/node_modules/@react-three/drei/web/ScrollControls.js
++++ b/node_modules/@react-three/drei/web/ScrollControls.js
+@@ -203,7 +203,32 @@
+     height
+   } = useThree(state => state.size);
    const fiberState = React.useContext(context$1);
 -  const root = React.useMemo(() => ReactDOM.createRoot(state.fixed), [state.fixed]);
 +  // Cache a root instance on the fixed DOM element to avoid calling
@@ -31,3 +33,6 @@ index 1234567..abcdefg 100644
 +      throw e;
 +    }
 +  }, [state.fixed]);
+   useFrame(() => {
+     if (state.delta > state.eps) {
+       group.current.style.transform = `translate3d(${state.horizontal ? -width * (state.pages - 1) * state.offset : 0}px,${state.horizontal ? 0 : height * (state.pages - 1) * -state.offset}px,0)`;
