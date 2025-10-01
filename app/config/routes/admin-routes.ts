@@ -40,7 +40,19 @@ export function generateAdminRoutes() {
           id: 'admin-settings-layout',
           path: DOMAIN_ROUTE_MAPPINGS['en-US'].admin.settings, // 'settings'
           file: './routes/$lang/admin/settings/route.tsx',
+          // Admin settings sub-routes
           children: [
+            // Settings index (default view)
+            {
+              index: true,
+              file: './routes/$lang/admin/settings/index.tsx',
+            },
+            // Account
+            {
+              path: 'account',
+              file: './routes/$lang/admin/settings/account/route.tsx',
+            },
+            // Address
             {
               path: 'address',
               file: './routes/$lang/admin/settings/address.tsx',
