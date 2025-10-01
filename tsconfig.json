@@ -49,5 +49,12 @@
     "removeComments": true
   },
   // Vite takes care of building everything, not tsc.
-  "noEmit": true
+  "noEmit": true,
+  // Exclude noisy vendored modules that should not be typechecked
+  "exclude": [
+    "node_modules",
+    "node_modules/**",
+    "node_modules.nosync",
+    "node_modules.nosync/**"
+  ]
 }

@@ -1,22 +1,32 @@
 import type { LoaderFunctionArgs } from 'react-router';
 import { redirect } from 'react-router';
-import { ROUTE_SLUG_MAP } from './config';
 import { returnLanguageIfSupported } from '~/i18n/i18n.resources';
+import { ROUTE_SLUG_MAP } from './config';
 
 /**
  * Development-time catch-all for localized URLs
  * Redirects /it/contatti to /it/contact but preserves language context
  */
 
-export const loader = async ({ params }: LoaderFunctionArgs) => {
+export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const lang = params.lang;
   const splat = params['*'];
 
   const language = returnLanguageIfSupported(lang);
 
-  // If language is not supported, redirect to root
+  // If language is not supported, only redirect when the user requested the
+  // bare language root (e.g. '/fr'). Otherwise return 404 so unknown URLs
+  // don't fallback to the homepage.
   if (!language) {
-    throw redirect('/');
+    const pathname = new URL(request.url).pathname;
+    const langRoot = `/${lang}`;
+    const isLangRoot = pathname === langRoot || pathname === `${langRoot}/`;
+
+    if (isLangRoot) {
+      throw redirect('/');
+    }
+
+    throw new Response('Not Found', { status: 404 });
   }
 
   if (!splat) {
@@ -32,9 +42,7 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
       // Found the mapping! Redirect to canonical route
       const canonicalSlug = translations.en || canonical;
       const remainingPath = pathSegments.slice(1).join('/');
-      const redirectPath = `/${language}/${canonicalSlug}${
-        remainingPath ? `/${remainingPath}` : ''
-      }`;
+      const redirectPath = `/${language}/${canonicalSlug}${remainingPath ? `/${remainingPath}` : ''}`;
 
       throw redirect(redirectPath);
     }

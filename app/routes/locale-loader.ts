@@ -4,9 +4,7 @@ import { returnLanguageIfSupported } from '~/i18n/i18n.resources';
 
 type LocalizedLoaderArgs = LoaderFunctionArgs & { language: string };
 type LoaderReturn = Record<string, unknown> | Response;
-type AdditionalLoader = (
-  args: LocalizedLoaderArgs
-) => Promise<LoaderReturn> | LoaderReturn;
+type AdditionalLoader = (args: LocalizedLoaderArgs) => Promise<LoaderReturn> | LoaderReturn;
 
 /**
  * Standard loader for localized routes
@@ -15,12 +13,27 @@ type AdditionalLoader = (
  */
 export const createLocalizedLoader = (additionalLoader?: AdditionalLoader) => {
   return async (args: LoaderFunctionArgs): Promise<LoaderReturn> => {
-    const { params } = args;
+    const { params, request } = args;
     const language = returnLanguageIfSupported(params.lang);
 
-    // If language is not supported, redirect to root and let it auto-detect
+    // If language is not supported, only redirect to root when the user is
+    // visiting the language root itself (e.g. '/fr' -> '/'). For any other
+    // path that begins with an unsupported lang (e.g. '/fr/anything') return
+    // a 404 so unknown URLs don't fall back to the homepage.
     if (!language) {
-      throw redirect('/');
+      try {
+        const pathname = new URL(request.url).pathname;
+        const langRoot = `/${params.lang}`;
+        const isLangRoot = pathname === langRoot || pathname === `${langRoot}/`;
+
+        if (isLangRoot) {
+          throw redirect('/');
+        }
+      } catch {
+        // If constructing URL fails for any reason, fall back to returning 404
+      }
+
+      throw new Response('Not Found', { status: 404 });
     }
 
     // No URL correction redirects - the routing system handles the mapping

@@ -12,7 +12,10 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
   const lang = returnLanguageIfSupported(params.lang);
 
   if (!lang) {
-    throw redirect('/');
+    // If language param is invalid, return 404 (article routes are not the
+    // place to redirect to the root). This prevents unknown article URLs from
+    // being sent to the homepage.
+    throw new Response('Not Found', { status: 404 });
   }
 
   const urlSlug = params.slug;
