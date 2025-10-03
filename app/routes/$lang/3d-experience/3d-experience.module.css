@@ -70,13 +70,14 @@
   }
 }
 
-#main-content {
+html,
+body,
+#main-content,
+canvas {
   width: 100vw;
   height: 100vh;
-}
-
-body {
   margin: 0;
+  overflow: hidden;
 }
 
 /* Hide scrollbar for Chrome, Safari, and Opera */
@@ -88,10 +89,4 @@ body {
 .no-scrollbar {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
-}
-
-/* Expose class used by route styles.experience */
-.experience {
-  width: 100vw;
-  height: 100vh;
 }

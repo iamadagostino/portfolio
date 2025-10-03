@@ -1,5 +1,24 @@
-declare module '*.glb';
-declare module '*.gltf';
-declare module '*.png';
-declare module '*.svg';
-declare module '*.woff2';
+declare module '*.glb' {
+  const src: string;
+  export default src;
+}
+
+declare module '*.gltf' {
+  const src: string;
+  export default src;
+}
+
+declare module '*.png' {
+  const src: string;
+  export default src;
+}
+
+declare module '*.svg' {
+  const src: string;
+  export default src;
+}
+
+declare module '*.woff2' {
+  const src: string;
+  export default src;
+}
