@@ -1,11 +1,11 @@
 import { Children, useCallback } from 'react';
 import { Link as RouterLink } from 'react-router';
-import { Code } from '~/components/main/code';
-import { Heading } from '~/components/main/heading';
-import { Icon } from '~/components/main/icon';
-import { Link } from '~/components/main/link';
-import { List, ListItem } from '~/components/main/list';
-import { Text } from '~/components/main/text';
+import { Code } from '@/components/main/code';
+import { Heading } from '@/components/main/heading';
+import { Icon } from '@/components/main/icon';
+import { Link } from '@/components/main/link';
+import { List, ListItem } from '@/components/main/list';
+import { Text } from '@/components/main/text';
 import styles from './post-markdown.module.css';
 
 const PostHeadingLink = ({ id }) => {

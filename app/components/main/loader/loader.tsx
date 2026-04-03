@@ -1,8 +1,8 @@
 import { HTMLAttributes, forwardRef, useEffect } from 'react';
-import { classes } from '~/utils/style';
+import { classes } from '@/utils/style';
 
 import { useReducedMotion } from 'framer-motion';
-import { Text } from '~/components/main/text';
+import { Text } from '@/components/main/text';
 import styles from './loader.module.css';
 
 interface LoaderProps extends HTMLAttributes<HTMLDivElement> {

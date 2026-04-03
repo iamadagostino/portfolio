@@ -1,5 +1,5 @@
 import * as dotenv from 'dotenv';
-import { existsSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import { defineConfig } from 'prisma/config';
 
 // Environment file precedence (lowest -> highest):
@@ -26,7 +26,23 @@ for (const file of envFilesInOrder) {
   }
 }
 
+// Fallback: parse DATABASE_URL directly from .env files if process.env didn't pick it up
+// (Prisma CLI may evaluate the config in an isolated context)
+function getDatabaseUrl(): string {
+  if (process.env.DATABASE_URL) return process.env.DATABASE_URL;
+  for (const file of ['.env.local', '.env']) {
+    if (!existsSync(file)) continue;
+    const match = readFileSync(file, 'utf-8').match(/^DATABASE_URL\s*=\s*["']?(.+?)["']?\s*$/m);
+    if (match) return match[1];
+  }
+  throw new Error('DATABASE_URL is not set in environment or .env files');
+}
+
 export default defineConfig({
+  // Database URL for migrations (moved from schema.prisma per Prisma 7 requirements)
+  datasource: {
+    url: getDatabaseUrl(),
+  },
   migrations: {
     // Use the package script that runs the TypeScript seed via `tsx` (defined in package.json as "db:seed").
     // This avoids using the experimental --loader flag and keeps the seed invocation simple and cross-platform.

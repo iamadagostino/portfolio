@@ -1,15 +1,21 @@
-import { cssProps, msToNum, numToMs } from '~/utils/style';
-import { getNavLinks, socialLinks } from '../../config/menus/nav-menu';
+import { cssProps, msToNum, numToMs } from '@/utils/style';
+import {
+  getAnchorAliasMap,
+  getAnchorHashes,
+  getCanonicalSectionAnchor,
+  getNavLinks,
+  socialLinks,
+} from '../../config/menus/nav-menu';
 
-import { useEffect, useState } from 'react';
+import { Icon } from '@/components/main/icon';
+import { Monogram } from '@/components/main/monogram';
+import { useNavbar } from '@/components/main/navbar-provider';
+import { Transition } from '@/components/main/transition';
+import config from '@/config/app.json';
+import { tokens } from '@/config/theme.mjs';
+import { useCurrentLanguage, useNavbarTranslation } from '@/i18n/i18n.hooks';
+import { useCallback, useEffect, useMemo } from 'react';
 import { Link as RouterLink } from 'react-router';
-import { Icon } from '~/components/main/icon';
-import { Monogram } from '~/components/main/monogram';
-import { useNavbar } from '~/components/main/navbar-provider';
-import { Transition } from '~/components/main/transition';
-import config from '~/config/app.json';
-import { tokens } from '~/config/theme.mjs';
-import { useCurrentLanguage, useNavbarTranslation } from '~/i18n/i18n.hooks';
 import { ExperienceToggle } from './3d-experience-toggle';
 import { LanguageDropdown } from './language-dropdown';
 import NavbarHeader from './navbar-header';
@@ -17,11 +23,7 @@ import styles from './navbar.module.css';
 import { ThemeToggle } from './theme-toggle';
 
 export const Navbar = ({ locale: serverLocale }) => {
-  const [isHydrated, setIsHydrated] = useState(false);
-
-  useEffect(() => {
-    setIsHydrated(true);
-  }, []);
+  const isHydrated = true;
   const {
     theme,
     target,
@@ -34,6 +36,7 @@ export const Navbar = ({ locale: serverLocale }) => {
     setCurrent,
     windowSize,
     setMenuOpen,
+    isHeroHidden,
   } = useNavbar();
 
   // i18n - move this up before useEffects
@@ -45,6 +48,33 @@ export const Navbar = ({ locale: serverLocale }) => {
   const localePrefix = `/${currentLanguage}`;
   const homeLink = localePrefix;
   const navLinks = getNavLinks(t, currentLanguage, location.pathname);
+  const anchorAliasMap = useMemo(() => getAnchorAliasMap(currentLanguage), [currentLanguage]);
+  const anchorHashes = useMemo(() => getAnchorHashes(currentLanguage), [currentLanguage]);
+  const canonicalHomeAnchor = getCanonicalSectionAnchor('home') || 'home';
+  const canonicalProjectAnchor = getCanonicalSectionAnchor('projects') || 'projects';
+  const canonicalDetailsAnchor = getCanonicalSectionAnchor('details') || 'details';
+  const toCanonicalAnchor = useCallback(
+    (hash) => {
+      if (!hash) return '';
+      const keyWithHash = hash.startsWith('#') ? hash : `#${hash}`;
+      const keyWithoutHash = keyWithHash.slice(1);
+
+      if (keyWithoutHash === 'home' && canonicalHomeAnchor) {
+        return canonicalHomeAnchor;
+      }
+
+      if (keyWithoutHash.startsWith('project-') && canonicalProjectAnchor) {
+        return canonicalProjectAnchor;
+      }
+
+      if (keyWithoutHash.startsWith('progetto-') && canonicalProjectAnchor) {
+        return canonicalProjectAnchor;
+      }
+
+      return anchorAliasMap[keyWithHash] ?? anchorAliasMap[keyWithoutHash] ?? keyWithoutHash;
+    },
+    [anchorAliasMap, canonicalHomeAnchor, canonicalProjectAnchor]
+  );
 
   useEffect(() => {
     // Update current state for proper navigation tracking
@@ -60,16 +90,36 @@ export const Navbar = ({ locale: serverLocale }) => {
     if (!isOnHomePage) return;
 
     // Scroll to the target hash when navigating from other pages
-    const targetElement = document.getElementById(target.replace('#', ''));
-    if (targetElement) {
-      targetElement.scrollIntoView({
+    const canonicalTarget = toCanonicalAnchor(target);
+
+    // Special case: if target is #home, scroll to end of hero animation sequence
+    if (target === '#home' || canonicalTarget === 'home') {
+      console.log('[Navbar] Target is #home, scrolling to end of animation sequence');
+
+      // Hero animation is pinned for 4 viewport heights
+      // Scroll to that position to show the final frame with everything visible
+      const SCROLL_DURATION_MULTIPLIER = 4;
+      const scrollTarget = window.innerHeight * SCROLL_DURATION_MULTIPLIER;
+
+      window.scrollTo({
+        top: scrollTarget,
         behavior: 'smooth',
-        block: 'start',
       });
       setCurrent(`${location.pathname}${target}`);
+    } else {
+      // For other targets, use normal scrollIntoView
+      const targetElement = canonicalTarget ? document.getElementById(canonicalTarget) : null;
+      if (targetElement) {
+        targetElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
+        setCurrent(`${location.pathname}${target}`);
+      }
     }
+
     setTarget(null);
-  }, [location.pathname, setCurrent, setTarget, target, homeLink]);
+  }, [anchorAliasMap, location.pathname, setCurrent, setTarget, target, homeLink, toCanonicalAnchor]);
 
   // Handle swapping the theme when intersecting with inverse themed elements
   useEffect(() => {
@@ -152,6 +202,10 @@ export const Navbar = ({ locale: serverLocale }) => {
     const nonTrailing = current?.endsWith('/') ? current?.slice(0, -1) : current;
     const currentPath = location.pathname;
     const currentHash = current?.includes('#') ? current.split('#')[1] : '';
+    const currentBase = current ? current.split('#')[0] : '';
+    const canonicalCurrentHash = toCanonicalAnchor(currentHash);
+    const urlHash = url.includes('#') ? url.split('#')[1] : '';
+    const canonicalUrlHash = toCanonicalAnchor(urlHash);
 
     // Smart highlighting system for localized routes
     if (type === 'page') {
@@ -159,8 +213,8 @@ export const Navbar = ({ locale: serverLocale }) => {
       const routeMatches = {
         articles: ['/articles', '/articoli', '/article', '/articolo'],
         contact: ['/contact', '/contatti'],
-        projects: ['/projects', '/progetti'],
-        details: ['/details', '/dettagli'],
+        projects: ['/projects', '/progetti', ...(anchorHashes.projects || [])],
+        details: ['/details', '/dettagli', ...(anchorHashes.details || [])],
       };
 
       // Check if URL contains any route segment and current path matches
@@ -174,27 +228,27 @@ export const Navbar = ({ locale: serverLocale }) => {
       }
 
       // Additional smart detection: if on home with anchor, check if navbar link corresponds to that anchor
-      if (currentHash) {
-        // Map URL segments to their corresponding anchors
-        const urlToAnchorMapping = {
-          '/projects': 'project-1',
-          '/progetti': 'project-1',
-          '/details': 'details',
-          '/dettagli': 'details',
-        };
+      if (canonicalCurrentHash) {
+        const anchorRoutePairs = [
+          {
+            canonicalAnchor: canonicalProjectAnchor,
+            routes: ['/projects', '/progetti'],
+            hashes: anchorHashes.projects || [],
+          },
+          {
+            canonicalAnchor: canonicalDetailsAnchor,
+            routes: ['/details', '/dettagli'],
+            hashes: anchorHashes.details || [],
+          },
+        ];
 
-        // If the current hash is any project (project-1, project-2, ...),
-        // and this navbar URL corresponds to the projects route or is an
-        // anchor for projects, mark it active.
-        if (currentHash.startsWith('project-')) {
-          if (url.includes('/projects') || url.includes('/progetti') || url.startsWith('#project-')) {
-            return 'page';
-          }
-        }
+        for (const { canonicalAnchor, routes, hashes } of anchorRoutePairs) {
+          if (!canonicalAnchor) continue;
 
-        // Check if this navbar URL corresponds to the current anchor (exact matches)
-        for (const [urlSegment, anchorId] of Object.entries(urlToAnchorMapping)) {
-          if (url.includes(urlSegment) && currentHash === anchorId) {
+          const matchesRoute =
+            routes.some((route) => url.includes(route)) || hashes.some((hashValue) => url.includes(hashValue));
+
+          if (matchesRoute && canonicalCurrentHash === canonicalAnchor) {
             return 'page';
           }
         }
@@ -203,16 +257,27 @@ export const Navbar = ({ locale: serverLocale }) => {
     // Enhanced highlighting for anchor sections
     if (type === 'anchor' || url.startsWith('#')) {
       // If we have a current hash, check if it matches this URL
-      if (currentHash && url === `#${currentHash}`) {
+      if (canonicalCurrentHash && canonicalUrlHash && canonicalCurrentHash === canonicalUrlHash) {
         return 'page';
       }
 
       // Also check if we're on a localized route that corresponds to this anchor
-      const anchorId = url.replace('#', '');
-      const anchorToRouteMapping = {
-        'project-1': ['/projects', '/progetti'],
-        details: ['/details', '/dettagli'],
-      };
+      const anchorId = canonicalUrlHash || url.replace('#', '');
+      if (
+        canonicalHomeAnchor &&
+        anchorId === canonicalHomeAnchor &&
+        (currentPath === homeLink || currentBase === homeLink) &&
+        canonicalCurrentHash === canonicalHomeAnchor
+      ) {
+        return 'page';
+      }
+      const anchorToRouteMapping = {};
+      if (canonicalProjectAnchor) {
+        anchorToRouteMapping[canonicalProjectAnchor] = ['/projects', '/progetti'];
+      }
+      if (canonicalDetailsAnchor) {
+        anchorToRouteMapping[canonicalDetailsAnchor] = ['/details', '/dettagli'];
+      }
 
       if (anchorToRouteMapping[anchorId]) {
         const routeVariations = anchorToRouteMapping[anchorId];
@@ -225,16 +290,20 @@ export const Navbar = ({ locale: serverLocale }) => {
     }
 
     // Home link handling: mark Home active when on the locale home path
-    // Only match exact home path or a home path with a hash (e.g. '/en' or '/en#project-1').
+    // Only match exact home path or a home path with a hash (e.g. '/en' or '/en#projects').
     if (type === 'home') {
-      const homeUrl = url;
-      const currentBase = current ? current.split('#')[0] : '';
-      // Only mark the Home link active when there is no hash (pure home)
-      // or when the hash is the intro section. This prevents Home from
-      // claiming active state when the user is on a section like
-      // '#details' or '#project-1'.
-      if ((currentPath === homeUrl || currentBase === homeUrl) && (!currentHash || currentHash === 'intro')) {
-        return 'page';
+      const onHomePath = currentPath === homeLink || currentBase === homeLink;
+      const hashMatchesHome = !canonicalCurrentHash || canonicalCurrentHash === canonicalHomeAnchor;
+      const isHashLink = url.startsWith('#');
+
+      if (isHashLink) {
+        if (onHomePath && hashMatchesHome) {
+          return 'page';
+        }
+      } else {
+        if ((currentPath === url || currentBase === url) && hashMatchesHome) {
+          return 'page';
+        }
       }
     }
 
@@ -257,12 +326,22 @@ export const Navbar = ({ locale: serverLocale }) => {
       // Check if we're dealing with a hash link on the same page
       const isOnHomePage = location.pathname === homeLink || location.pathname === `${homeLink}/`;
 
+      // Special handling for Home link when hero is hidden
+      if (hash === 'home' && isHeroHidden && isOnHomePage) {
+        // Hero is hidden, do a full page reload to show animation
+        event.preventDefault();
+        console.log('[Navbar] Home clicked with hidden hero - reloading page');
+        window.location.href = homeLink;
+        return;
+      }
+
       if (hash && isOnHomePage) {
         // Prevent default browser behavior to avoid conflicts
         event.preventDefault();
 
         // Use our custom scroll logic for smooth scrolling
-        const targetElement = document.getElementById(hash);
+        const canonicalHash = toCanonicalAnchor(hash);
+        const targetElement = canonicalHash ? document.getElementById(canonicalHash) : null;
         if (targetElement) {
           targetElement.scrollIntoView({
             behavior: 'smooth',
@@ -293,7 +372,7 @@ export const Navbar = ({ locale: serverLocale }) => {
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="z-40 flex flex-col" data-hero-nav="container">
       {/* Header */}
       <NavbarHeader locale={currentLanguage} />
 
@@ -317,7 +396,7 @@ export const Navbar = ({ locale: serverLocale }) => {
           <div className={styles.navList}>
             {navLinks.map(({ label, pathname, key, type }) => {
               // Render a native anchor when the pathname is an in-page hash.
-              // Note: getNavLinks may return '#project-1' even for items with
+              // Note: getNavLinks may return '#projects' even for items with
               // type === 'page' when on the home page, so rely on pathname
               // content rather than the declared type.
               if (pathname && pathname.startsWith('#')) {

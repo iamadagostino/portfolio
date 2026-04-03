@@ -1,5 +1,5 @@
-import type { Language } from '~/i18n/i18n.resources';
-import { getLocalizedPath } from '~/config/routes';
+import type { Language } from '@/i18n/i18n.resources';
+import { getLocalizedPath } from '@/config/routes';
 
 /**
  * Generate locale-aware article URLs

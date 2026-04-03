@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useLoaderData } from 'react-router';
-import type { BlogPost } from '~/services/blog.server';
-import { formatDate } from '~/utils/date';
+import type { BlogPost } from '@/services/blog.server';
+import { formatDate } from '@/utils/date';
 
 interface BlogPostPageData {
   post: BlogPost;

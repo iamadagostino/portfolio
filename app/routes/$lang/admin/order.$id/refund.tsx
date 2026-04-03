@@ -1,16 +1,15 @@
-'use client';
-
+import { Button } from '@/components/admin/button';
+import { Checkbox, CheckboxField } from '@/components/admin/checkbox';
+import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from '@/components/admin/dialog';
+import { Description, Field, FieldGroup, Label } from '@/components/admin/fieldset';
+import { Input } from '@/components/admin/input';
+import { Select } from '@/components/admin/select';
 import { useEffect, useId, useRef, useState } from 'react';
-import { Button } from '~/components/admin/button';
-import { Checkbox, CheckboxField } from '~/components/admin/checkbox';
-import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from '~/components/admin/dialog';
-import { Description, Field, FieldGroup, Label } from '~/components/admin/fieldset';
-import { Input } from '~/components/admin/input';
-import { Select } from '~/components/admin/select';
 
 export function RefundOrder({ amount, ...props }: { amount: string } & React.ComponentPropsWithoutRef<typeof Button>) {
   const [isOpen, setIsOpen] = useState(false);
   const amountInputRef = useRef<HTMLInputElement>(null);
+  const reasonLabelId = useId();
   const reasonSelectId = useId();
 
   useEffect(() => {
@@ -34,8 +33,10 @@ export function RefundOrder({ amount, ...props }: { amount: string } & React.Com
               <Input name="amount" defaultValue={amount} placeholder="$0.00" ref={amountInputRef} />
             </Field>
             <Field>
-              <Label htmlFor={reasonSelectId}>Reason</Label>
-              <Select id={reasonSelectId} aria-label="Reason" name="reason" defaultValue="">
+              <Label id={reasonLabelId} htmlFor={reasonSelectId}>
+                Reason
+              </Label>
+              <Select id={reasonSelectId} aria-labelledby={reasonLabelId} title="Reason" name="reason" defaultValue="">
                 <option value="" disabled>
                   Select a reason&hellip;
                 </option>

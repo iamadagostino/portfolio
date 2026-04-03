@@ -1,17 +1,17 @@
 import { useEffect, useRef } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router';
-import { Divider } from '~/components/main/divider';
-import { Footer } from '~/components/main/footer';
-import { Heading } from '~/components/main/heading';
-import { Image } from '~/components/main/image';
-import { Section } from '~/components/main/section';
-import { Text } from '~/components/main/text';
-import { tokens } from '~/components/main/theme-provider/theme';
-import { Transition } from '~/components/main/transition';
-import { useParallax, useScrollToHash } from '~/hooks';
-import { clamp } from '~/utils/clamp';
-import { formatDate } from '~/utils/date';
-import { cssProps, msToNum, numToMs } from '~/utils/style';
+import { Divider } from '@/components/main/divider';
+import { Footer } from '@/components/main/footer';
+import { Heading } from '@/components/main/heading';
+import { Image } from '@/components/main/image';
+import { Section } from '@/components/main/section';
+import { Text } from '@/components/main/text';
+import { tokens } from '@/components/main/theme-provider/theme';
+import { Transition } from '@/components/main/transition';
+import { useParallax, useScrollToHash } from '@/hooks';
+import { clamp } from '@/utils/clamp';
+import { formatDate } from '@/utils/date';
+import { cssProps, msToNum, numToMs } from '@/utils/style';
 import styles from './post.module.css';
 
 export const Post = ({ children, title, date, banner, timecode, language = 'en-US' }) => {

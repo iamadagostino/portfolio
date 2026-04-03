@@ -1,8 +1,8 @@
 import { useRef, useState } from 'react';
-import { Button } from '~/components/main/button';
-import { Icon } from '~/components/main/icon';
-import { Text } from '~/components/main/text';
-import { Transition } from '~/components/main/transition';
+import { Button } from '@/components/main/button';
+import { Icon } from '@/components/main/icon';
+import { Text } from '@/components/main/text';
+import { Transition } from '@/components/main/transition';
 import styles from './code.module.css';
 
 export const Code = (props) => {

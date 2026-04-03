@@ -1,11 +1,14 @@
+import experienceHoverPinchAnimation from '@/assets/images/anim/json/3d-hover-pinch.json';
+import experienceHoverRollAnimation from '@/assets/images/anim/json/3d-hover-roll.json';
+import experienceRevealAnimation from '@/assets/images/anim/json/3d-reveal.json';
+import { Button } from '@/components/main/button';
+import { useTheme } from '@/components/main/theme-provider/theme-provider';
+import { getLocalizedPath } from '@/config/routes';
+import { themes, tokens } from '@/config/theme.mjs';
+import { useCurrentLanguage } from '@/i18n/i18n.hooks';
 import { Player } from '@lordicon/react/dist/player.js';
 import { createRef, useEffect, useMemo, useRef, useState } from 'react';
-import experienceHoverPinchAnimation from '~/assets/images/anim/json/3d-hover-pinch.json';
-import experienceHoverRollAnimation from '~/assets/images/anim/json/3d-hover-roll.json';
-import experienceRevealAnimation from '~/assets/images/anim/json/3d-reveal.json';
-import { Button } from '~/components/main/button';
-import { useTheme } from '~/components/main/theme-provider/theme-provider';
-import { themes, tokens } from '~/config/theme.mjs';
+import { useNavigate } from 'react-router';
 import styles from './3d-experience-toggle.module.css';
 
 const CROSSFADE_DURATION_MS = 300;
@@ -51,7 +54,13 @@ const iconColorsByTheme = {
 };
 
 export const ExperienceToggle = ({ isMobile, ...rest }) => {
+  const navigate = useNavigate();
   const { theme } = useTheme();
+  const language = useCurrentLanguage();
+  const experiencePath = useMemo(
+    () => `/${language}/${getLocalizedPath('3d-experience', '3d-experience', language)}`,
+    [language]
+  );
   const iconColors = iconColorsByTheme[theme] ?? iconColorsByTheme.dark;
   const playerRefs = useMemo(
     () => ({
@@ -143,6 +152,8 @@ export const ExperienceToggle = ({ isMobile, ...rest }) => {
       crossFadeTo(isHoveredRef.current ? 'roll' : 'reveal');
       clickResetRef.current = null;
     }, resetDelay);
+
+    navigate(experiencePath, { replace: false });
   };
 
   useEffect(

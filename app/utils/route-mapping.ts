@@ -1,18 +1,19 @@
-import type { Language } from '~/i18n/i18n.resources';
-import { 
-  getLocalizedPath as getLocalizedPathFromConfig,
-  DOMAIN_ROUTE_MAPPINGS
-} from '~/config/routes';
+import { DOMAIN_ROUTE_MAPPINGS, getLocalizedPath as getLocalizedPathFromConfig } from '@/config/routes';
+import type { Language } from '@/i18n/i18n.resources';
 
 // Get a localized path for a given domain, route key, and language
-export function getLocalizedPath(domain: keyof typeof DOMAIN_ROUTE_MAPPINGS['en-US'], routeKey: string, language: Language): string {
+export function getLocalizedPath(
+  domain: keyof (typeof DOMAIN_ROUTE_MAPPINGS)['en-US'],
+  routeKey: string,
+  language: Language
+): string {
   return getLocalizedPathFromConfig(domain, routeKey, language);
 }
 
 // Get the route key from a localized path (reverse lookup)
 export function getRouteKeyFromPath(localizedPath: string, language: Language): string {
   const languageMappings = DOMAIN_ROUTE_MAPPINGS[language];
-  
+
   for (const [, routes] of Object.entries(languageMappings)) {
     for (const [routeKey, path] of Object.entries(routes)) {
       if (path === localizedPath) {
@@ -20,17 +21,21 @@ export function getRouteKeyFromPath(localizedPath: string, language: Language): 
       }
     }
   }
-  
+
   // If not found in the specified language, fallback to English
   if (language !== 'en-US') {
     return getRouteKeyFromPath(localizedPath, 'en-US');
   }
-  
+
   return localizedPath; // Return as-is if no mapping found
 }
 
 // Generate all possible route variants for React Router configuration
-export function generateRouteVariants(domain: keyof typeof DOMAIN_ROUTE_MAPPINGS['en-US'], routeKey: string, filePath: string): Array<{
+export function generateRouteVariants(
+  domain: keyof (typeof DOMAIN_ROUTE_MAPPINGS)['en-US'],
+  routeKey: string,
+  filePath: string
+): Array<{
   path: string;
   file: string;
   handle: { routeKey: string; language: string; domain: string };
@@ -40,11 +45,11 @@ export function generateRouteVariants(domain: keyof typeof DOMAIN_ROUTE_MAPPINGS
     file: string;
     handle: { routeKey: string; language: string; domain: string };
   }> = [];
-  
+
   Object.entries(DOMAIN_ROUTE_MAPPINGS).forEach(([lang, domains]) => {
     const domainMappings = domains[domain];
     const localizedPath = domainMappings?.[routeKey];
-    
+
     if (localizedPath) {
       variants.push({
         path: localizedPath,
@@ -54,6 +59,6 @@ export function generateRouteVariants(domain: keyof typeof DOMAIN_ROUTE_MAPPINGS
       });
     }
   });
-  
+
   return variants;
 }

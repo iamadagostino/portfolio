@@ -6,6 +6,9 @@ import { availableNamespaces, defaultLanguage, resources, supportedLanguages } f
 
 const defaultNamespace = availableNamespaces.includes('common') ? 'common' : (availableNamespaces[0] ?? 'translation');
 
+// Check if we're in a browser environment
+const isBrowser = typeof window !== 'undefined';
+
 // Initialize i18next for client-side use
 const i18n = i18next;
 
@@ -30,10 +33,10 @@ i18n
     backend: {
       loadPath: '/locales/{{lng}}/{{ns}}.json', // Fallback for any missing resources
     },
-    // Language detection configuration
+    // Language detection configuration - only use localStorage in browser environment
     detection: {
-      order: ['cookie', 'localStorage', 'navigator', 'htmlTag'],
-      caches: ['localStorage', 'cookie'],
+      order: isBrowser ? ['cookie', 'localStorage', 'navigator', 'htmlTag'] : ['cookie', 'htmlTag'],
+      caches: isBrowser ? ['localStorage', 'cookie'] : ['cookie'],
       lookupCookie: 'i18n',
       lookupLocalStorage: 'i18nextLng',
       cookieMinutes: 10080, // 7 days

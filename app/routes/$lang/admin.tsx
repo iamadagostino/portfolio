@@ -21,9 +21,9 @@ import {
   Square2StackIcon,
   TicketIcon,
 } from '@heroicons/react/20/solid';
-import ericaAvatar from '~/assets/images/admin/users/erica.jpg';
-import adLogoMark from '~/assets/images/logos/logo-mark.svg';
-import { Avatar } from '~/components/admin/avatar';
+import ericaAvatar from '@/assets/images/admin/users/erica.jpg';
+import adLogoMark from '@/assets/images/logos/logo-mark.svg';
+import { Avatar } from '@/components/admin/avatar';
 import {
   Dropdown,
   DropdownButton,
@@ -31,8 +31,8 @@ import {
   DropdownItem,
   DropdownLabel,
   DropdownMenu,
-} from '~/components/admin/dropdown';
-import { Navbar, NavbarItem, NavbarSection, NavbarSpacer } from '~/components/admin/navbar';
+} from '@/components/admin/dropdown';
+import { Navbar, NavbarItem, NavbarSection, NavbarSpacer } from '@/components/admin/navbar';
 import {
   Sidebar,
   SidebarBody,
@@ -43,10 +43,10 @@ import {
   SidebarLabel,
   SidebarSection,
   SidebarSpacer,
-} from '~/components/admin/sidebar';
-import { getAdminSideMenu } from '~/config/menus/admin-menu';
-import { getEvents } from '~/data/fake';
-import { SidebarLayout } from '~/layouts/admin/sidebar-layout';
+} from '@/components/admin/sidebar';
+import { getAdminSideMenu } from '@/config/menus/admin-menu';
+import { getEvents } from '@/data/fake';
+import { SidebarLayout } from '@/layouts/admin/sidebar-layout';
 
 import { createLocalizedLoader } from '../locale-loader';
 

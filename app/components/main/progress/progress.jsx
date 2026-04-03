@@ -1,5 +1,5 @@
+import { useEffect, useRef, useState } from 'react';
 import { useNavigation } from 'react-router';
-import { useRef, useEffect, useState } from 'react';
 import styles from './progress.module.css';
 
 export function Progress() {
@@ -26,20 +26,22 @@ export function Progress() {
   useEffect(() => {
     if (!progressRef.current) return;
 
-    const controller = new AbortController();
-
     if (state !== 'idle') {
-      return setAnimationComplete(false);
+      // Reset animation state when loading starts
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setAnimationComplete(false);
+      return;
     }
 
-    Promise.all(
-      progressRef.current
-        .getAnimations({ subtree: true })
-        .map(animation => animation.finished)
-    ).then(() => {
-      if (controller.signal.aborted) return;
-      setAnimationComplete(true);
-    });
+    const controller = new AbortController();
+
+    Promise.all(progressRef.current.getAnimations({ subtree: true }).map((animation) => animation.finished)).then(
+      () => {
+        if (controller.signal.aborted) return;
+
+        setAnimationComplete(true);
+      }
+    );
 
     return () => {
       controller.abort();

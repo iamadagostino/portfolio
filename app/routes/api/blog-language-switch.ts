@@ -1,6 +1,6 @@
 import type { ActionFunctionArgs } from 'react-router';
-import { getBlogPostByAnySlugWithCache } from '~/services/blog.server';
-import type { Language } from '~/i18n/i18n.resources';
+import { getBlogPostByAnySlugWithCache } from '@/services/blog.server';
+import type { Language } from '@/i18n/i18n.resources';
 
 interface LanguageSwitchRequest {
   currentSlug: string;

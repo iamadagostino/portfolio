@@ -1,4 +1,4 @@
-import { getLocalizedSlug } from '~/routes/config';
+import { getLocalizedSlug } from '@/routes/config';
 
 const RAW_ADMIN_MENU = [
   {

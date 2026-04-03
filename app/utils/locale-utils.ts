@@ -1,4 +1,4 @@
-import type { Language } from '~/i18n/i18n.resources';
+import type { Language } from '@/i18n/i18n.resources';
 
 /**
  * Convert full locale code to short language code

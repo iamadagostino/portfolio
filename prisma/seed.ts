@@ -1,8 +1,12 @@
+import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from '@prisma/client';
 import 'colors';
+import pg from 'pg';
 // (faker was previously imported but not used)
 
-const prisma = new PrismaClient();
+const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL });
+const adapter = new PrismaPg(pool);
+const prisma = new PrismaClient({ adapter });
 
 // Your existing "Hello World" blog post content
 const helloWorldContentEN = `## How it all started

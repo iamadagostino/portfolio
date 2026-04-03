@@ -1,5 +1,5 @@
 import { Link, type LinkProps } from 'react-router';
-import { useLocalizedNavigation } from '~/utils/navigation';
+import { useLocalizedNavigation } from '@/utils/navigation';
 
 interface LocalizedLinkProps extends Omit<LinkProps, 'to'> {
   routeKey: string;

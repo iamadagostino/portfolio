@@ -6,10 +6,9 @@
     "Contact": "Contatti",
     "slugs": {
         "home": "",
-        "project-1": "progetto-1",
+        "projects": "progetti",
         "details": "dettagli",
         "articles": "articoli",
-        "contact": "contatti",
-        "projects": "progetti"
+        "contact": "contatti"
     }
 }

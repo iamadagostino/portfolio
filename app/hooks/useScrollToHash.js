@@ -1,12 +1,17 @@
 import { useReducedMotion } from 'framer-motion';
 import { useLocation, useNavigate } from 'react-router';
-import { useCallback, useRef } from 'react';
+import { useCallback, useMemo, useRef } from 'react';
+import { getAnchorAliasMap, getCanonicalSectionAnchor } from '@/config/menus/nav-menu';
+import { useCurrentLanguage } from '@/i18n/i18n.hooks';
 
 export function useScrollToHash() {
   const scrollTimeout = useRef();
   const location = useLocation();
   const navigate = useNavigate();
   const reduceMotion = useReducedMotion();
+  const language = useCurrentLanguage();
+  const anchorAliasMap = useMemo(() => getAnchorAliasMap(language), [language]);
+  const canonicalProjectAnchor = getCanonicalSectionAnchor('projects') || 'projects';
 
   const scrollToHash = useCallback(
     (hash, onDone) => {
@@ -15,7 +20,13 @@ export function useScrollToHash() {
       const id = hash.split('#')[1];
       if (!id) return;
       
-      const targetElement = document.getElementById(id);
+      const canonicalIdLookup = anchorAliasMap[id] ?? anchorAliasMap[`#${id}`];
+      const canonicalId =
+        canonicalIdLookup ||
+        ((id.startsWith('project-') || id.startsWith('progetto-')) && canonicalProjectAnchor
+          ? canonicalProjectAnchor
+          : id);
+      const targetElement = document.getElementById(canonicalId);
       if (!targetElement) return;
 
       targetElement.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
@@ -40,7 +51,7 @@ export function useScrollToHash() {
         clearTimeout(scrollTimeout.current);
       };
     },
-    [navigate, reduceMotion, location.pathname]
+    [anchorAliasMap, canonicalProjectAnchor, navigate, reduceMotion, location.pathname]
   );
 
   return scrollToHash;

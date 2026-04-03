@@ -20,11 +20,11 @@ import {
   WebGLRenderer,
 } from 'three';
 import { HorizontalBlurShader, VerticalBlurShader } from 'three-stdlib';
-import { useInViewport } from '~/hooks';
-import { resolveSrcFromSrcSet } from '~/utils/image';
-import { classes, cssProps, numToMs } from '~/utils/style';
-import { cleanRenderer, cleanScene, modelLoader, removeLights, textureLoader } from '~/utils/three';
-import { throttle } from '~/utils/throttle';
+import { useInViewport } from '@/hooks';
+import { resolveSrcFromSrcSet } from '@/utils/image';
+import { classes, cssProps, numToMs } from '@/utils/style';
+import { cleanRenderer, cleanScene, modelLoader, removeLights, textureLoader } from '@/utils/three';
+import { throttle } from '@/utils/throttle';
 import { ModelAnimationType } from './device-models';
 import styles from './model.module.css';
 

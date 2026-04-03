@@ -1,23 +1,24 @@
 import { Suspense, lazy, useState } from 'react';
-import { Button } from '~/components/main/button';
-import { Divider } from '~/components/main/divider';
-import { Heading } from '~/components/main/heading';
-import { Loader } from '~/components/main/loader';
-import { deviceModels } from '~/components/main/model/device-models';
-import { Section } from '~/components/main/section';
-import { Text } from '~/components/main/text';
-import { useTheme } from '~/components/main/theme-provider';
-import { Transition } from '~/components/main/transition';
-import { useWindowSize } from '~/hooks';
-import { useHydrated } from '~/hooks/useHydrated';
-import { cssProps, media } from '~/utils/style';
+import { Button } from '@/components/main/button';
+import { Divider } from '@/components/main/divider';
+import { Heading } from '@/components/main/heading';
+import { Loader } from '@/components/main/loader';
+import { deviceModels } from '@/components/main/model/device-models';
+import { Section } from '@/components/main/section';
+import { Text } from '@/components/main/text';
+import { useTheme } from '@/components/main/theme-provider';
+import { Transition } from '@/components/main/transition';
+import { useWindowSize } from '@/hooks';
+import { useHydrated } from '@/hooks/useHydrated';
+import { cssProps, media } from '@/utils/style';
 import katakana from './katakana.svg';
 import styles from './project-summary.module.css';
 
-const Model = lazy(() => import('~/components/main/model').then((module) => ({ default: module.Model })));
+const Model = lazy(() => import('@/components/main/model').then((module) => ({ default: module.Model })));
 
 export function ProjectSummary({
   id,
+  anchorAliases = [],
   visible: sectionVisible,
   sectionRef,
   index,
@@ -171,6 +172,16 @@ export function ProjectSummary({
       tabIndex={-1}
       {...rest}
     >
+      {anchorAliases
+        .filter((alias) => Boolean(alias) && alias !== id)
+        .map((alias) => (
+          <span
+            key={alias}
+            id={alias}
+            aria-hidden="true"
+            style={{ display: 'block', height: 0, width: 0, margin: 0, padding: 0, overflow: 'hidden' }}
+          />
+        ))}
       <div className={styles.content}>
         <Transition in={sectionVisible || focused}>
           {({ visible }) => (

@@ -1,6 +1,6 @@
-import { Button } from '~/components/main/button';
-import { Icon } from '~/components/main/icon';
-import { useNavbar } from '~/components/main/navbar-provider';
+import { Button } from '@/components/main/button';
+import { Icon } from '@/components/main/icon';
+import { useNavbar } from '@/components/main/navbar-provider';
 import styles from './nav-toggle.module.css';
 
 export const NavToggle = ({ ...rest }) => {

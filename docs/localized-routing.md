@@ -25,7 +25,7 @@ Routes are mapped based on language in `app/utils/route-mapping.ts`:
 Use the `LocalizedLink` component for navigation:
 
 ```tsx
-import { LocalizedLink } from '~/components/LocalizedLink';
+import { LocalizedLink } from '@/components/LocalizedLink';
 
 // Will generate /en-US/articles or /it-IT/articoli based on current language
 <LocalizedLink routeKey="articles">Articles</LocalizedLink>
@@ -39,7 +39,7 @@ import { LocalizedLink } from '~/components/LocalizedLink';
 Use the `useLocalizedNavigation` hook:
 
 ```tsx
-import { useLocalizedNavigation } from '~/utils/navigation';
+import { useLocalizedNavigation } from '@/utils/navigation';
 
 function MyComponent() {
   const { getPath, currentLanguage } = useLocalizedNavigation();

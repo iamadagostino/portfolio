@@ -1,30 +1,34 @@
-import { Suspense, lazy, useEffect, useState } from 'react';
-import { useInterval, usePrevious, useScrollToHash, useWindowSize } from '~/hooks';
+import { useInterval, useWindowSize } from '@/hooks';
+import { Suspense, lazy, useState } from 'react';
 
-import { Link as RouterLink } from 'react-router';
-import { DecoderText } from '~/components/main/decoder-text';
-import { Heading } from '~/components/main/heading';
-import { Section } from '~/components/main/section';
-import { useTheme } from '~/components/main/theme-provider';
-import { Transition } from '~/components/main/transition';
-import { VisuallyHidden } from '~/components/main/visually-hidden';
-import config from '~/config/app.json';
-import { tokens } from '~/config/theme.mjs';
-import { useHydrated } from '~/hooks/useHydrated';
-import { useCurrentLanguage, useHomeTranslation, useNavbarTranslation } from '~/i18n/i18n.hooks';
-import { cssProps, media } from '~/utils/style';
+import { DecoderText } from '@/components/main/decoder-text';
+import { Heading } from '@/components/main/heading';
+import { useNavbar } from '@/components/main/navbar-provider';
+import { Section } from '@/components/main/section';
+import { useTheme } from '@/components/main/theme-provider';
+import { Transition } from '@/components/main/transition';
+import { VisuallyHidden } from '@/components/main/visually-hidden';
+import config from '@/config/app.json';
+import { getCanonicalSectionAnchor, getLocalizedSectionAnchor } from '@/config/menus/nav-menu';
+import { tokens } from '@/config/theme.mjs';
+import { useHydrated } from '@/hooks/useHydrated';
+import { useCurrentLanguage, useHomeTranslation } from '@/i18n/i18n.hooks';
+import { cssProps, media } from '@/utils/style';
+import { useLocation } from 'react-router';
 import styles from './intro.module.css';
 
 const DisplacementSphere = lazy(() =>
   import('./displacement-sphere').then((module) => ({ default: module.DisplacementSphere }))
 );
 
-export function Intro({ id, sectionRef, scrollIndicatorHidden, ...rest }) {
+export function Intro({ id, sectionRef, ...rest }) {
   const { theme } = useTheme();
   const { width } = useWindowSize();
   const { t } = useHomeTranslation();
-  const { t: tNav } = useNavbarTranslation();
   const currentLanguage = useCurrentLanguage();
+  const { setCurrent } = useNavbar();
+  const location = useLocation();
+  const aliasId = id === 'home' ? 'intro' : null;
 
   // Use translated disciplines with fallback to config
   const translatedDisciplines = t('hero.disciplines', { returnObjects: true });
@@ -32,20 +36,20 @@ export function Intro({ id, sectionRef, scrollIndicatorHidden, ...rest }) {
   const translatedRole = t('hero.role', { defaultValue: config.role });
 
   const [disciplineIndex, setDisciplineIndex] = useState(0);
-  const prevTheme = usePrevious(theme);
   const conjunction = t('hero.disciplineConjunction', { defaultValue: ', and ' });
 
-  // Generate locale-aware project link
-  const localePrefix = `/${currentLanguage}`;
-  const projectsSlug = tNav('slugs.project-1', { defaultValue: 'project-1' });
-  const projectsLink = `${localePrefix}/#${projectsSlug}`;
+  // Reset discipline index when theme changes (using key on Transition instead)
+  // Theme changes are handled via the Transition component's key prop below
 
   const introLabel = [disciplines.slice(0, -1).join(', '), disciplines.slice(-1)[0]].join(conjunction);
   const currentDiscipline = disciplines.find((item, index) => index === disciplineIndex);
   const titleId = `${id}-title`;
-  const scrollToHash = useScrollToHash();
   const isHydrated = useHydrated();
   const isMobile = width <= media.mobile;
+
+  // Get localized anchor for projects section
+  const projectsAnchor = getLocalizedSectionAnchor('projects', currentLanguage);
+  const projectsLink = `/${currentLanguage}#${projectsAnchor}`;
 
   useInterval(
     () => {
@@ -55,16 +59,23 @@ export function Intro({ id, sectionRef, scrollIndicatorHidden, ...rest }) {
     5000,
     theme
   );
+  const handleScrollClick = (e) => {
+    e.preventDefault();
 
-  useEffect(() => {
-    if (prevTheme && prevTheme !== theme) {
-      setDisciplineIndex(0);
+    // Get the canonical anchor for finding the DOM element (e.g., 'projects')
+    const canonicalHash = getCanonicalSectionAnchor('projects') || 'projects';
+    const targetElement = document.getElementById(canonicalHash);
+
+    if (targetElement) {
+      targetElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+
+      // Update URL and state with localized hash (e.g., 'progetti' for Italian)
+      window.history.replaceState(null, '', `${location.pathname}#${projectsAnchor}`);
+      setCurrent(`${location.pathname}#${projectsAnchor}`);
     }
-  }, [theme, prevTheme]);
-
-  const handleScrollClick = (event) => {
-    event.preventDefault();
-    scrollToHash(event.currentTarget.href);
   };
 
   return (
@@ -77,11 +88,19 @@ export function Intro({ id, sectionRef, scrollIndicatorHidden, ...rest }) {
       tabIndex={-1}
       {...rest}
     >
+      {aliasId ? (
+        <span
+          id={aliasId}
+          aria-hidden="true"
+          style={{ display: 'block', height: 0, width: 0, margin: 0, padding: 0, overflow: 'hidden' }}
+        />
+      ) : null}
       <Transition in key={theme} timeout={3000}>
         {({ visible, status }) => (
           <>
             {isHydrated && (
               <Suspense>
+                {/* Replace with better visual */}
                 <DisplacementSphere />
               </Suspense>
             )}
@@ -127,27 +146,27 @@ export function Intro({ id, sectionRef, scrollIndicatorHidden, ...rest }) {
                 </div>
               </Heading>
             </header>
-            <RouterLink
-              to={projectsLink}
+            <a
+              href={projectsLink}
               className={styles.scrollIndicator}
-              data-status={status}
-              data-hidden={scrollIndicatorHidden}
+              data-status="entered"
+              data-hidden="false"
               onClick={handleScrollClick}
             >
               <VisuallyHidden>{t('hero.scrollToProjects')}</VisuallyHidden>
-            </RouterLink>
-            <RouterLink
-              to={projectsLink}
+            </a>
+            <a
+              href={projectsLink}
               className={styles.mobileScrollIndicator}
-              data-status={status}
-              data-hidden={scrollIndicatorHidden}
+              data-status="entered"
+              data-hidden="false"
               onClick={handleScrollClick}
             >
               <VisuallyHidden>{t('hero.scrollToProjects')}</VisuallyHidden>
               <svg aria-hidden stroke="currentColor" width="43" height="15" viewBox="0 0 43 15">
                 <path d="M1 1l20.5 12L42 1" strokeWidth="2" fill="none" />
               </svg>
-            </RouterLink>
+            </a>
           </>
         )}
       </Transition>

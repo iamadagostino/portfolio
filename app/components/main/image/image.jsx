@@ -1,10 +1,10 @@
+import { Button } from '@/components/main/button';
+import { Icon } from '@/components/main/icon';
+import { useHasMounted, useInViewport } from '@/hooks';
+import { resolveSrcFromSrcSet } from '@/utils/image';
+import { classes, cssProps, numToMs } from '@/utils/style';
 import { useReducedMotion } from 'framer-motion';
 import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
-import { Button } from '~/components/main/button';
-import { Icon } from '~/components/main/icon';
-import { useHasMounted, useInViewport } from '~/hooks';
-import { resolveSrcFromSrcSet } from '~/utils/image';
-import { classes, cssProps, numToMs } from '~/utils/style';
 import styles from './image.module.css';
 
 export const Image = ({ className, style, reveal, delay = 0, raised, src: baseSrc, srcSet, placeholder, ...rest }) => {
@@ -74,12 +74,14 @@ const ImageElements = ({
   useEffect(() => {
     const resolveVideoSrc = async () => {
       const resolvedVideoSrc = await resolveSrcFromSrcSet({ srcSet, sizes });
+
       setVideoSrc(resolvedVideoSrc);
     };
 
     if (isVideo && srcSet) {
       resolveVideoSrc();
     } else if (isVideo) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setVideoSrc(src);
     }
   }, [isVideo, sizes, src, srcSet]);

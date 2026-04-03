@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const CURSOR_SPEED = 0.08;
 
@@ -13,22 +13,22 @@ export const Cursor = () => {
   const [hoverMenuButton, setHoverMenuButton] = useState(false);
   const [hoverMenuSectionButton, setHoverMenuSectionButton] = useState(false);
 
-  const animate = useCallback(() => {
-    let distX = mouseX - outlineX;
-    let distY = mouseY - outlineY;
-
-    outlineX = outlineX + distX * CURSOR_SPEED;
-    outlineY = outlineY + distY * CURSOR_SPEED;
-
-    if (cursorOutline.current) {
-      cursorOutline.current.style.left = `${outlineX}px`;
-      cursorOutline.current.style.top = `${outlineY}px`;
-    }
-
-    requestAnimationFrame(animate);
-  }, []);
-
   useEffect(() => {
+    const animate = () => {
+      let distX = mouseX - outlineX;
+      let distY = mouseY - outlineY;
+
+      outlineX = outlineX + distX * CURSOR_SPEED;
+      outlineY = outlineY + distY * CURSOR_SPEED;
+
+      if (cursorOutline.current) {
+        cursorOutline.current.style.left = `${outlineX}px`;
+        cursorOutline.current.style.top = `${outlineY}px`;
+      }
+
+      requestAnimationFrame(animate);
+    };
+
     const handleMouseMove = (event) => {
       mouseX = event.pageX;
       mouseY = event.pageY;
@@ -40,7 +40,7 @@ export const Cursor = () => {
       document.removeEventListener('mousemove', handleMouseMove);
       cancelAnimationFrame(animationFrame);
     };
-  }, [animate]);
+  }, []);
 
   useEffect(() => {
     const handleMouseOver = (e) => {
@@ -53,8 +53,7 @@ export const Cursor = () => {
       }
       // Check if the cursor is hovering over a button, input or textarea
       const closestButton = target.closest('button');
-      const isMenuSectionButton =
-        closestButton && closestButton.hasAttribute('data-menu-section-button');
+      const isMenuSectionButton = closestButton && closestButton.hasAttribute('data-menu-section-button');
 
       if (
         (closestButton && !isMenuSectionButton) ||

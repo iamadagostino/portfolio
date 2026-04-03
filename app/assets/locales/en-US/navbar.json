@@ -6,10 +6,9 @@
     "Contact": "Contact",
     "slugs": {
         "home": "",
-        "project-1": "project-1",
+        "projects": "projects",
         "details": "details",
         "articles": "articles",
-        "contact": "contact",
-        "projects": "projects"
+        "contact": "contact"
     }
 }

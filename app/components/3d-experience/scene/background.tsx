@@ -13,6 +13,17 @@ type ScrollState = ReturnType<typeof useScroll> & {
   scroll: { current: number };
 };
 
+// Capitalized wrapper to avoid react/no-unknown-property ESLint errors.
+// ESLint treats lowercase JSX tags as DOM elements and validates their props;
+// wrapping the intrinsic `meshBasicMaterial` with a capitalized component
+// lets us pass three.js-specific props like `side` and `toneMapped` without
+// triggering the rule while still rendering the same intrinsic element.
+// Use a permissive but typed props shape to avoid referencing the global JSX namespace in this module
+const MeshBasicMaterial = forwardRef<THREE.MeshBasicMaterial, Record<string, unknown>>((props, ref) => {
+  // Forward the ref to the actual three.js material element
+  return <meshBasicMaterial ref={ref} {...props} />;
+});
+
 export const Background = ({ darkMode }: BackgroundProps) => {
   const material = useRef<THREE.MeshBasicMaterial | null>(null);
   const color = useRef<{ color: string }>({
@@ -21,17 +32,6 @@ export const Background = ({ darkMode }: BackgroundProps) => {
   const data = useScroll() as ScrollState;
 
   const timeline = useRef<gsap.core.Timeline | null>(null);
-
-  // Capitalized wrapper to avoid react/no-unknown-property ESLint errors.
-  // ESLint treats lowercase JSX tags as DOM elements and validates their props;
-  // wrapping the intrinsic `meshBasicMaterial` with a capitalized component
-  // lets us pass three.js-specific props like `side` and `toneMapped` without
-  // triggering the rule while still rendering the same intrinsic element.
-  // Use a permissive but typed props shape to avoid referencing the global JSX namespace in this module
-  const MeshBasicMaterial = forwardRef<THREE.MeshBasicMaterial, Record<string, unknown>>((props, ref) => {
-    // Forward the ref to the actual three.js material element
-    return <meshBasicMaterial ref={ref} {...props} />;
-  });
 
   useFrame(() => {
     // Check if the timeline and the material are initialized before proceeding

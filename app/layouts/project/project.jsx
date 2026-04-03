@@ -1,14 +1,14 @@
 import { forwardRef, useRef } from 'react';
-import { classes, cssProps, msToNum, numToMs } from '~/utils/style';
+import { classes, cssProps, msToNum, numToMs } from '@/utils/style';
 
-import { Button } from '~/components/main/button';
-import { Heading } from '~/components/main/heading';
-import { Image } from '~/components/main/image';
-import { Section } from '~/components/main/section';
-import { Text } from '~/components/main/text';
-import { Transition } from '~/components/main/transition';
-import { tokens } from '~/config/theme.mjs';
-import { useParallax } from '~/hooks';
+import { Button } from '@/components/main/button';
+import { Heading } from '@/components/main/heading';
+import { Image } from '@/components/main/image';
+import { Section } from '@/components/main/section';
+import { Text } from '@/components/main/text';
+import { Transition } from '@/components/main/transition';
+import { tokens } from '@/config/theme.mjs';
+import { useParallax } from '@/hooks';
 import styles from './project.module.css';
 
 const initDelay = 300;

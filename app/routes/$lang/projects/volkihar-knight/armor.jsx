@@ -1,3 +1,5 @@
+import { classes, cssProps, msToNum, numToMs } from '@/utils/style';
+import { cleanRenderer, cleanScene, modelLoader, removeLights } from '@/utils/three';
 import { useReducedMotion, useSpring } from 'framer-motion';
 import { startTransition, useCallback, useEffect, useRef, useState } from 'react';
 import {
@@ -12,21 +14,19 @@ import {
   Scene,
   WebGLRenderer,
 } from 'three';
-import { classes, cssProps, msToNum, numToMs } from '~/utils/style';
-import { cleanRenderer, cleanScene, modelLoader, removeLights } from '~/utils/three';
 
-import vknx from '~/assets/volkihar-cube-nx.jpg';
-import vkny from '~/assets/volkihar-cube-ny.jpg';
-import vknz from '~/assets/volkihar-cube-nz.jpg';
-import vkpx from '~/assets/volkihar-cube-px.jpg';
-import vkpy from '~/assets/volkihar-cube-py.jpg';
-import vkpz from '~/assets/volkihar-cube-pz.jpg';
-import armor from '~/assets/volkihar-knight.glb';
-import { Loader } from '~/components/main/loader';
-import { Transition } from '~/components/main/transition';
-import { tokens } from '~/config/theme.mjs';
-import { useInViewport } from '~/hooks';
-import { throttle } from '~/utils/throttle';
+import vknx from '@/assets/images/projects/volkihar-knight/volkihar-cube-nx.jpg';
+import vkny from '@/assets/images/projects/volkihar-knight/volkihar-cube-ny.jpg';
+import vknz from '@/assets/images/projects/volkihar-knight/volkihar-cube-nz.jpg';
+import vkpx from '@/assets/images/projects/volkihar-knight/volkihar-cube-px.jpg';
+import vkpy from '@/assets/images/projects/volkihar-knight/volkihar-cube-py.jpg';
+import vkpz from '@/assets/images/projects/volkihar-knight/volkihar-cube-pz.jpg';
+import armor from '@/assets/models/projects/volkihar-knight.glb';
+import { Loader } from '@/components/main/loader';
+import { Transition } from '@/components/main/transition';
+import { tokens } from '@/config/theme.mjs';
+import { useInViewport } from '@/hooks';
+import { throttle } from '@/utils/throttle';
 import styles from './armor.module.css';
 
 const rotationSpringConfig = {
@@ -162,6 +162,7 @@ export const Armor = ({ showDelay = 0, cameraPosition = { x: 0, y: 0, z: 6 }, cl
     }, 100);
 
     if (isInViewport) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setVisible(true);
     }
 

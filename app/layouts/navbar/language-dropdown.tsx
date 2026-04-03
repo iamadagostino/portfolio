@@ -1,10 +1,10 @@
+import { useLanguageChanger } from '@/i18n/i18n.hooks';
+import type { Language as LanguageCode } from '@/i18n/i18n.resources';
+import { supportedLanguages } from '@/i18n/i18n.resources';
+import { getClientLanguageSwitchUrl } from '@/services/language-switch.client';
+import { getLocalizedPath, getRouteKeyFromPath } from '@/utils/route-mapping';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
-import { useLanguageChanger } from '~/i18n/i18n.hooks';
-import type { Language as LanguageCode } from '~/i18n/i18n.resources';
-import { supportedLanguages } from '~/i18n/i18n.resources';
-import { getClientLanguageSwitchUrl } from '~/services/language-switch.client';
-import { getRouteKeyFromPath, getLocalizedPath } from '~/utils/route-mapping';
 import styles from './language-dropdown.module.css';
 
 interface Language {
@@ -38,6 +38,22 @@ interface LanguageDropdownProps {
   'data-navbar-item'?: boolean;
 }
 
+/**
+ * Sets the language cookie for persistence
+ * This is handled separately from the component to avoid modifying DOM directly
+ */
+function setLanguageCookie(language: LanguageCode): void {
+  document.cookie = `i18n=${language}; max-age=31536000; path=/; samesite=lax`;
+}
+
+/**
+ * Navigates to a new language URL
+ * This is extracted to handle window.location mutations separately
+ */
+function navigateToLanguage(url: string): void {
+  window.location.href = url;
+}
+
 export const LanguageDropdown = ({ isMobile, locale, ...rest }: LanguageDropdownProps) => {
   const { currentLanguage: clientLanguage } = useLanguageChanger();
   const currentLanguage = locale || clientLanguage; // Use server locale first
@@ -52,7 +68,7 @@ export const LanguageDropdown = ({ isMobile, locale, ...rest }: LanguageDropdown
     const newLang = language.key as LanguageCode;
 
     // Set language cookie for persistence
-    document.cookie = `i18n=${newLang}; max-age=31536000; path=/; samesite=lax`;
+    setLanguageCookie(newLang);
 
     // Get intelligent language switch URL
     const currentPath = window.location.pathname;
@@ -61,37 +77,40 @@ export const LanguageDropdown = ({ isMobile, locale, ...rest }: LanguageDropdown
 
     try {
       const newUrl = await getClientLanguageSwitchUrl(currentPath, currentLang, newLang);
-      window.location.href = newUrl + currentHash;
+      navigateToLanguage(newUrl + currentHash);
     } catch (error) {
       console.warn('Error during intelligent language switching, falling back to localized path mapping:', error);
 
       // Advanced fallback with route mapping
       let newUrl = '/';
-      
+
       // Extract the route parts after language
       const pathParts = currentPath.split('/').filter(Boolean);
-      
+
       if (pathParts.length > 0 && (pathParts[0] === 'en-US' || pathParts[0] === 'it-IT')) {
         // Remove the language part
         const routeParts = pathParts.slice(1);
-        
+
         if (routeParts.length > 0) {
           // Try to map the first route segment
           const firstSegment = routeParts[0];
           const routeKey = getRouteKeyFromPath(firstSegment, currentLang);
-          
+
           // Special handling for article vs articles
           let mappedRouteKey = routeKey;
-          if (routeParts.length > 1 && (routeKey === 'articles' || routeKey === 'articoli' || routeKey === 'articolo')) {
+          if (
+            routeParts.length > 1 &&
+            (routeKey === 'articles' || routeKey === 'articoli' || routeKey === 'articolo')
+          ) {
             // If there's a slug after articles/articoli/articolo, it's a single article
             mappedRouteKey = 'article';
           }
-          
+
           const localizedRoute = getLocalizedPath('main', mappedRouteKey, newLang);
-          
+
           // Rebuild the URL with the new language and localized route
           newUrl = `/${newLang}/${localizedRoute}`;
-          
+
           // Add any additional path segments (like slug for articles)
           if (routeParts.length > 1) {
             newUrl += '/' + routeParts.slice(1).join('/');
@@ -103,8 +122,8 @@ export const LanguageDropdown = ({ isMobile, locale, ...rest }: LanguageDropdown
         // Simple case - just add the new language
         newUrl = `/${newLang}${currentPath === '/' ? '' : currentPath}`;
       }
-      
-      window.location.href = newUrl + currentHash;
+
+      navigateToLanguage(newUrl + currentHash);
     }
 
     setIsOpen(false);
@@ -153,22 +172,27 @@ export const LanguageDropdown = ({ isMobile, locale, ...rest }: LanguageDropdown
         {...(isOpen ? { 'aria-expanded': true } : { 'aria-expanded': false })}
         onClick={() => setIsOpen(!isOpen)}
       >
-        <FlagIcon countryCode={selectedLanguage.countryCode} />
-        {selectedLanguage.nativeName}
-        <svg
-          className={styles.chevron}
-          data-open={isOpen}
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 16 16"
-          fill="currentColor"
-          aria-hidden="true"
-        >
-          <path
-            fillRule="evenodd"
-            d="M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z"
-            clipRule="evenodd"
-          />
-        </svg>
+        <span className={styles.buttonLg}>
+          <span className={styles.buttonSl} />
+          <span className={styles.buttonText}>
+            <FlagIcon countryCode={selectedLanguage.countryCode} />
+            {selectedLanguage.nativeName}
+            <svg
+              className={styles.chevron}
+              data-open={isOpen}
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 16 16"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                fillRule="evenodd"
+                d="M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </span>
+        </span>
       </button>
 
       {isOpen && (

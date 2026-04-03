@@ -4,4 +4,6 @@ import { createLocalizedLoader } from '../../locale-loader';
 export const loader = createLocalizedLoader();
 
 // Re-export everything from home
-export { Home as default, meta, links, handle } from './home.jsx';
+// export { Home as default, handle, links, meta } from './home.jsx';
+
+export { Hero as default, handle, meta } from './hero';

@@ -1,9 +1,9 @@
+import { Avatar } from '@/components/admin/avatar';
+import { Button } from '@/components/admin/button';
+import { Heading } from '@/components/admin/heading';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/admin/table';
+import { getOrders } from '@/data/fake';
 import { useLoaderData, useParams } from 'react-router';
-import { Avatar } from '~/components/admin/avatar';
-import { Button } from '~/components/admin/button';
-import { Heading } from '~/components/admin/heading';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/components/admin/table';
-import { getOrders } from '~/data/fake';
 
 export const meta = () => [{ title: 'Orders · Admin' }];
 
@@ -15,7 +15,7 @@ export const loader = async () => {
 export default function Orders() {
   const { orders } = useLoaderData<typeof loader>();
   const { lang } = useParams();
-  
+
   const getOrderAdminUrl = (orderId: number) => `/${lang}/admin/order/${orderId}`;
 
   return (

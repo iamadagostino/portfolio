@@ -1,18 +1,19 @@
 import { Fragment, useState } from 'react';
-import profileImgLarge from '~/assets/images/misc/profile-large.jpg';
-import profileImgPlaceholder from '~/assets/images/misc/profile-placeholder.jpg';
-import profileImg from '~/assets/images/misc/profile.jpg';
-import { Button } from '~/components/main/button';
-import { DecoderText } from '~/components/main/decoder-text';
-import { Divider } from '~/components/main/divider';
-import { Heading } from '~/components/main/heading';
-import { Image } from '~/components/main/image';
-import { Section } from '~/components/main/section';
-import { Text } from '~/components/main/text';
-import { useTheme } from '~/components/main/theme-provider';
-import { Transition } from '~/components/main/transition';
-import { useCurrentLanguage, useHomeTranslation, useNavbarTranslation } from '~/i18n/i18n.hooks';
-import { cssProps, media } from '~/utils/style';
+import profileImgLarge from '@/assets/images/misc/profile-large.jpg';
+import profileImgPlaceholder from '@/assets/images/misc/profile-placeholder.jpg';
+import profileImg from '@/assets/images/misc/profile.jpg';
+import { Button } from '@/components/main/button';
+import { DecoderText } from '@/components/main/decoder-text';
+import { Divider } from '@/components/main/divider';
+import { Heading } from '@/components/main/heading';
+import { Image } from '@/components/main/image';
+import { Section } from '@/components/main/section';
+import { Text } from '@/components/main/text';
+import { useTheme } from '@/components/main/theme-provider';
+import { Transition } from '@/components/main/transition';
+import { getLocalizedSectionAnchor } from '@/config/menus/nav-menu';
+import { useCurrentLanguage, useHomeTranslation, useNavbarTranslation } from '@/i18n/i18n.hooks';
+import { cssProps, media } from '@/utils/style';
 import katakana from './katakana.svg';
 import styles from './profile.module.css';
 
@@ -42,6 +43,8 @@ export const Profile = ({ id, visible, sectionRef }) => {
   const titleId = `${id}-title`;
   const { theme } = useTheme();
   const svgOpacity = theme === 'light' ? 0.7 : 1;
+  const localizedAnchorId = getLocalizedSectionAnchor('details', currentLanguage);
+  const shouldRenderAlias = localizedAnchorId && localizedAnchorId !== id;
 
   return (
     <Section
@@ -54,6 +57,13 @@ export const Profile = ({ id, visible, sectionRef }) => {
       aria-labelledby={titleId}
       tabIndex={-1}
     >
+      {shouldRenderAlias ? (
+        <span
+          id={localizedAnchorId}
+          aria-hidden="true"
+          style={{ display: 'block', height: 0, width: 0, margin: 0, padding: 0, overflow: 'hidden' }}
+        />
+      ) : null}
       <Transition in={visible || focused} timeout={0}>
         {({ visible, nodeRef }) => (
           <div className={styles.content} ref={nodeRef}>

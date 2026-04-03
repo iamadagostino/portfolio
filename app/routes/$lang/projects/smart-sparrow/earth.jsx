@@ -1,3 +1,6 @@
+import { useInViewport, useWindowSize } from '@/hooks';
+import { classes, media, msToNum, numToPx } from '@/utils/style';
+import { cleanRenderer, cleanScene, getChild, modelLoader, removeLights, textureLoader } from '@/utils/three';
 import { useReducedMotion, useSpring } from 'framer-motion';
 import { createContext, memo, startTransition, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import {
@@ -18,25 +21,22 @@ import {
   WebGLRenderer,
 } from 'three';
 import { HDRCubeTextureLoader, OrbitControls } from 'three-stdlib';
-import { useInViewport, useWindowSize } from '~/hooks';
-import { classes, media, msToNum, numToPx } from '~/utils/style';
-import { cleanRenderer, cleanScene, getChild, modelLoader, removeLights, textureLoader } from '~/utils/three';
 
+import mwnx from '@/assets/images/projects/milkyway/milkyway-nx.hdr';
+import mwny from '@/assets/images/projects/milkyway/milkyway-ny.hdr';
+import mwnz from '@/assets/images/projects/milkyway/milkyway-nz.hdr';
+import mwpx from '@/assets/images/projects/milkyway/milkyway-px.hdr';
+import mwpy from '@/assets/images/projects/milkyway/milkyway-py.hdr';
+import mwpz from '@/assets/images/projects/milkyway/milkyway-pz.hdr';
+import milkywayBg from '@/assets/images/projects/milkyway/milkyway.jpg';
+import earthModel from '@/assets/models/projects/earth.glb';
+import { Loader } from '@/components/main/loader';
+import { Section } from '@/components/main/section';
+import { Transition } from '@/components/main/transition';
+import { tokens } from '@/config/theme.mjs';
+import { clamp } from '@/utils/clamp';
+import { throttle } from '@/utils/throttle';
 import { EquirectangularReflectionMapping, LinearFilter } from 'three';
-import mwnx from '~/assets/images/projects/milkyway/milkyway-nx.hdr';
-import mwny from '~/assets/images/projects/milkyway/milkyway-ny.hdr';
-import mwnz from '~/assets/images/projects/milkyway/milkyway-nz.hdr';
-import mwpx from '~/assets/images/projects/milkyway/milkyway-px.hdr';
-import mwpy from '~/assets/images/projects/milkyway/milkyway-py.hdr';
-import mwpz from '~/assets/images/projects/milkyway/milkyway-pz.hdr';
-import milkywayBg from '~/assets/images/projects/milkyway/milkyway.jpg';
-import earthModel from '~/assets/models/projects/earth.glb';
-import { Loader } from '~/components/main/loader';
-import { Section } from '~/components/main/section';
-import { Transition } from '~/components/main/transition';
-import { tokens } from '~/config/theme.mjs';
-import { clamp } from '~/utils/clamp';
-import { throttle } from '~/utils/throttle';
 import styles from './earth.module.css';
 
 const nullTarget = { x: 0, y: 0, z: 2 };
@@ -111,7 +111,7 @@ export const Earth = ({ position = [0, 0, 0], scale = 1, hideMeshes = [], labels
   const mixer = useRef();
   const inViewport = useInViewport(canvas);
   const animationFrame = useRef();
-  const initCameraPosition = useRef(getPositionValues(sectionRefs.current[0]));
+  const initCameraPosition = useRef({ x: 0, y: 0, z: 0 });
   const labelElements = useRef([]);
   const controls = useRef();
   const envMap = useRef();
@@ -126,6 +126,14 @@ export const Earth = ({ position = [0, 0, 0], scale = 1, hideMeshes = [], labels
   const chunkYSpring = useSpring(0, chunkSpringConfig);
   const chunkZSpring = useSpring(0, chunkSpringConfig);
   const opacitySpring = useSpring(0, opacitySpringConfig);
+  const renderFrameRef = useRef(null);
+
+  // Initialize camera position from first section ref
+  useEffect(() => {
+    if (sectionRefs.current?.[0]) {
+      initCameraPosition.current = getPositionValues(sectionRefs.current[0]);
+    }
+  }, []);
 
   const renderFrame = useCallback(() => {
     if (!inViewport) {
@@ -133,7 +141,8 @@ export const Earth = ({ position = [0, 0, 0], scale = 1, hideMeshes = [], labels
       return;
     }
 
-    animationFrame.current = requestAnimationFrame(renderFrame);
+    // Store renderFrame in ref so it can call itself recursively
+    animationFrame.current = requestAnimationFrame(renderFrameRef.current);
     const delta = clock.current.getDelta();
     mixer.current.update(delta);
     controls.current.update();
@@ -160,6 +169,21 @@ export const Earth = ({ position = [0, 0, 0], scale = 1, hideMeshes = [], labels
       }
     });
   }, [inViewport]);
+
+  // Store renderFrame in ref so it can call itself
+  useEffect(() => {
+    renderFrameRef.current = renderFrame;
+  }, [renderFrame]);
+
+  // Start animation loop after renderFrame is defined
+  useEffect(() => {
+    if (inViewport && loaded) {
+      animationFrame.current = requestAnimationFrame(renderFrameRef.current);
+      return () => {
+        cancelAnimationFrame(animationFrame.current);
+      };
+    }
+  }, [inViewport, loaded]);
 
   useEffect(() => {
     mounted.current = true;
@@ -365,6 +389,7 @@ export const Earth = ({ position = [0, 0, 0], scale = 1, hideMeshes = [], labels
 
     // Only animate while visible
     if (loaded && inViewport) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setVisible(true);
       renderFrame();
     }

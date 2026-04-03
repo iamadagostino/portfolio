@@ -1,4 +1,46 @@
 {
+  "compilerOptions": {
+    "allowJs": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "importHelpers": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ES2022"
+    ],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "outDir": "./public/dist",
+    "paths": {
+      "@/*": [
+        "./app/*"
+      ]
+    },
+    "removeComments": true,
+    "resolveJsonModule": true,
+    "rootDirs": [
+      ".",
+      "./.react-router/types"
+    ],
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "ES2022",
+    "types": [
+      "@react-router/node",
+      "vite/client"
+    ]
+  },
+  // Exclude noisy vendored modules that should not be typechecked
+  "exclude": [
+    "dist",
+    "node_modules",
+    "node_modules/**",
+    "node_modules.nosync",
+    "node_modules.nosync/**"
+  ],
   "include": [
     ".react-router/types/**/*",
     "env.d.ts",
@@ -8,52 +50,8 @@
     "**/.server/**/*.tsx",
     "**/.client/**/*.ts",
     "**/.client/**/*.tsx",
-    "postcss.config.mjs",
-    "app/routes/$lang/article.slug/article.tss",
-    "app/routes/$lang/articles/route.ts",
-    "app/routes/$lang/admin/dashboard/dashboard.jsx"
+    "postcss.config.mjs"
   ],
-  "compilerOptions": {
-    "types": [
-      "@react-router/node",
-      "vite/client"
-    ],
-    "lib": [
-      "DOM",
-      "DOM.Iterable",
-      "ES2022"
-    ],
-    "isolatedModules": true,
-    "esModuleInterop": true,
-    "jsx": "react-jsx",
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "resolveJsonModule": true,
-    "target": "ES2022",
-    "strict": true,
-    "allowJs": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "outDir": "./public/dist",
-    "paths": {
-      "~/*": [
-        "./app/*"
-      ]
-    },
-    "rootDirs": [
-      ".",
-      "./.react-router/types"
-    ],
-    "importHelpers": true,
-    "removeComments": true
-  },
   // Vite takes care of building everything, not tsc.
-  "noEmit": true,
-  // Exclude noisy vendored modules that should not be typechecked
-  "exclude": [
-    "node_modules",
-    "node_modules/**",
-    "node_modules.nosync",
-    "node_modules.nosync/**"
-  ]
+  "noEmit": true
 }

@@ -1,15 +1,15 @@
+import dvaExpressUSAImage from '@/assets/images/projects/sites/dva-express-usa.jpg';
+import dvaExpressImage from '@/assets/images/projects/sites/dva-express.jpg';
+import oldPortfolioImage from '@/assets/images/projects/sites/old-portfolio.jpg';
+import portfolioImage from '@/assets/images/projects/sites/portfolio.jpg';
+import tdaGoImage from '@/assets/images/projects/sites/tda-go.jpg';
 import { Image, Text } from '@react-three/drei';
 import type { ThreeElements } from '@react-three/fiber';
 import { useFrame, useThree } from '@react-three/fiber';
 import { animate, useMotionValue } from 'framer-motion';
 import { atom, useAtom } from 'jotai';
-import { forwardRef, useEffect, useRef } from 'react';
+import { forwardRef, useEffect, useRef, useState } from 'react';
 import type { Group, Mesh } from 'three';
-import dvaExpressUSAImage from '~/assets/images/projects/sites/dva-express-usa.jpg';
-import dvaExpressImage from '~/assets/images/projects/sites/dva-express.jpg';
-import oldPortfolioImage from '~/assets/images/projects/sites/old-portfolio.jpg';
-import portfolioImage from '~/assets/images/projects/sites/portfolio.jpg';
-import tdaGoImage from '~/assets/images/projects/sites/tda-go.jpg';
 
 export const projects = [
   {
@@ -56,47 +56,24 @@ type ProjectInfo = (typeof projects)[number];
 type SetAvatarAnimation = (animation: string) => void;
 
 interface ProjectProps extends Omit<GroupElementProps, 'ref'> {
-  previousProjectIndex: number;
   project: ProjectInfo;
   highlighted: boolean;
-  setAvatarAnimation: SetAvatarAnimation;
-  currentProject: number;
 }
 
 const Project = forwardRef<Group, ProjectProps>((props, ref) => {
-  const { previousProjectIndex, project, highlighted, setAvatarAnimation, currentProject, ...rest } = props;
+  const { project, highlighted, ...rest } = props;
 
   const background = useRef<Mesh | null>(null);
   const backgroundOpacity = useMotionValue(0.4);
-  const animationTimeout = useRef<number | null>(null);
-  const mounted = useRef(false);
 
   useEffect(() => {
     // Animate the background opacity.
     const controls = animate(backgroundOpacity, highlighted ? 0.75 : 0.25);
 
-    // Change animation based on the highlighted project.
-    // Don't trigger walking animations on initial mount; only respond to updates.
-    if (mounted.current) {
-      animationTimeout.current = window.setTimeout(() => {
-        if (currentProject < previousProjectIndex) {
-          setAvatarAnimation('WalkingBackwards');
-        } else {
-          setAvatarAnimation('WalkingForward');
-        }
-      }, 250);
-    } else {
-      mounted.current = true;
-    }
-
     return () => {
       controls.stop();
-      if (animationTimeout.current) {
-        clearTimeout(animationTimeout.current);
-        animationTimeout.current = null;
-      }
     };
-  }, [highlighted, currentProject, previousProjectIndex, setAvatarAnimation, backgroundOpacity]);
+  }, [highlighted, backgroundOpacity]);
 
   useFrame(() => {
     if (!background.current) return;
@@ -152,11 +129,10 @@ interface AnimatedProjectGroupProps extends Omit<GroupElementProps, 'ref'> {
   index: number;
   currentProject: number;
   project: ProjectInfo;
-  setAvatarAnimation: SetAvatarAnimation;
 }
 
 const AnimatedProjectGroup = (props: AnimatedProjectGroupProps) => {
-  const { index, currentProject, project, setAvatarAnimation, ...rest } = props;
+  const { index, currentProject, project, ...rest } = props;
   const groupRef = useRef<Group | null>(null);
 
   const initialTransform = projectTransform(index, currentProject);
@@ -192,20 +168,13 @@ const AnimatedProjectGroup = (props: AnimatedProjectGroupProps) => {
     groupRef.current.rotation.set(rotateX.get(), 0, rotateZ.get());
   });
 
-  return (
-    <Project
-      ref={groupRef}
-      currentProject={currentProject}
-      project={project}
-      highlighted={currentProject === index}
-      previousProjectIndex={index}
-      setAvatarAnimation={setAvatarAnimation}
-      {...rest}
-    />
-  );
+  return <Project ref={groupRef} project={project} highlighted={currentProject === index} {...rest} />;
 };
 
 export const currentProjectAtom = atom(Math.floor(projects.length / 2));
+
+// Delay before cards start moving (avatar walks first)
+const CARD_MOVE_DELAY = 1200;
 
 interface ProjectsProps extends Omit<GroupElementProps, 'ref'> {
   setAvatarAnimation: SetAvatarAnimation;
@@ -214,7 +183,56 @@ interface ProjectsProps extends Omit<GroupElementProps, 'ref'> {
 export const Projects = (props: ProjectsProps) => {
   const { setAvatarAnimation, ...rest } = props;
   const { viewport } = useThree();
-  const [currentProject] = useAtom(currentProjectAtom);
+  const [targetProject] = useAtom(currentProjectAtom);
+
+  // Visual project controls the card positions - delayed from target
+  const [visualProject, setVisualProject] = useState(targetProject);
+  const previousTargetRef = useRef(targetProject);
+  const cardMoveTimeoutRef = useRef<number | null>(null);
+
+  // Handle avatar animation and delayed card movement
+  useEffect(() => {
+    const prevProject = previousTargetRef.current;
+
+    // Skip on initial mount
+    if (prevProject === targetProject) return;
+
+    // Clear any pending card move timeout
+    if (cardMoveTimeoutRef.current) {
+      clearTimeout(cardMoveTimeoutRef.current);
+    }
+
+    // Determine direction considering loop wrapping
+    const total = projects.length;
+    const diff = targetProject - prevProject;
+
+    // Handle looping: if we went from last to first, that's forward
+    // If we went from first to last, that's backward
+    let isForward: boolean;
+    if (diff === 1 || diff === -(total - 1)) {
+      isForward = true;
+    } else if (diff === -1 || diff === total - 1) {
+      isForward = false;
+    } else {
+      isForward = diff > 0;
+    }
+
+    // Start walking animation immediately
+    setAvatarAnimation(isForward ? 'WalkingForward' : 'WalkingBackwards');
+
+    // Delay card movement so avatar walks first
+    cardMoveTimeoutRef.current = window.setTimeout(() => {
+      setVisualProject(targetProject);
+    }, CARD_MOVE_DELAY);
+
+    previousTargetRef.current = targetProject;
+
+    return () => {
+      if (cardMoveTimeoutRef.current) {
+        clearTimeout(cardMoveTimeoutRef.current);
+      }
+    };
+  }, [targetProject, setAvatarAnimation]);
 
   return (
     <group
@@ -224,13 +242,7 @@ export const Projects = (props: ProjectsProps) => {
       {...rest}
     >
       {projects.map((project, index) => (
-        <AnimatedProjectGroup
-          key={'project_' + index}
-          index={index}
-          currentProject={currentProject}
-          project={project}
-          setAvatarAnimation={setAvatarAnimation}
-        />
+        <AnimatedProjectGroup key={'project_' + index} index={index} currentProject={visualProject} project={project} />
       ))}
     </group>
   );

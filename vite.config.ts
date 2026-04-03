@@ -4,6 +4,7 @@ import mdx from '@mdx-js/rollup';
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import { IncomingMessage, ServerResponse } from 'http';
+import path from 'path';
 import rehypeImgSize from 'rehype-img-size';
 import rehypeSlug from 'rehype-slug';
 import remarkFrontmatter from 'remark-frontmatter';
@@ -80,4 +81,9 @@ export default defineConfig({
     envOnlyMacros(), // Enable environment-only macros
     tsconfigPaths(), // Resolve paths from jsconfig.json
   ],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './app'),
+    },
+  },
 });

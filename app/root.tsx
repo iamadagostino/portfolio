@@ -1,6 +1,7 @@
 // Core
 import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+
 import {
   createCookieSessionStorage,
   Links,
@@ -12,26 +13,27 @@ import {
   ScrollRestoration,
   useFetcher,
   useLoaderData,
+  useLocation,
   useMatches,
   useNavigation,
   useRouteError,
 } from 'react-router';
 
 // Components, Layouts, Services, and Utilities
+import GothamBook from '@/assets/fonts/gotham-book.woff2';
+import GothamMedium from '@/assets/fonts/gotham-medium.woff2';
+import { NavbarProvider } from '@/components/main/navbar-provider';
+import { Progress } from '@/components/main/progress';
+import { ThemeProvider, themeStyles } from '@/components/main/theme-provider';
+import { VisuallyHidden } from '@/components/main/visually-hidden';
+import config from '@/config/app.json';
+import clientI18n from '@/i18n/i18n';
+import { Error } from '@/layouts/error';
+import { Navbar } from '@/layouts/navbar';
 import clsxLib from 'clsx';
-import '~/i18n/i18n'; // Initialize i18next
-import GothamBook from '~/assets/fonts/gotham-book.woff2';
-import GothamMedium from '~/assets/fonts/gotham-medium.woff2';
-import { NavbarProvider } from '~/components/main/navbar-provider';
-import { Progress } from '~/components/main/progress';
-import { ThemeProvider, themeStyles } from '~/components/main/theme-provider';
-import { VisuallyHidden } from '~/components/main/visually-hidden';
-import config from '~/config/app.json';
-import { Error } from '~/layouts/error';
-import { Navbar } from '~/layouts/navbar';
 
 // Styles and Assets
-import { returnLanguageIfSupported } from './i18n/i18n.resources';
+import { defaultLanguage, returnLanguageIfSupported } from './i18n/i18n.resources';
 import styles from './root.module.css';
 import i18next from './services/i18n.server';
 
@@ -177,7 +179,6 @@ export default function App() {
   }>();
   const fetcher = useFetcher();
   const { state } = useNavigation();
-  const { i18n, t } = useTranslation('common');
   const matches = useMatches();
   const isAdminRoute = matches.some((match) => {
     const handle = match.handle as { layout?: string } | undefined;
@@ -210,6 +211,16 @@ export default function App() {
     );
   }
 
+  if (typeof window === 'undefined' && clientI18n.language !== locale) {
+    try {
+      clientI18n.changeLanguage(locale);
+    } catch {
+      // ignore server-side language change errors
+    }
+  }
+
+  const { i18n: i18nInstance, t } = useTranslation('common');
+
   useEffect(() => {
     if (!hasLogged.current) {
       console.info(`${config.ascii}\n`, `\nFeeling inspired?\nExplore the source code here:\n\n${config.repo}\n`);
@@ -218,14 +229,22 @@ export default function App() {
   }, []);
 
   // Change language when locale changes
-  useEffect(() => {
-    if (i18n.language !== locale) {
-      i18n.changeLanguage(locale);
+  if (typeof window === 'undefined' && clientI18n.language !== locale) {
+    try {
+      clientI18n.changeLanguage(locale);
+    } catch {
+      // ignore server-side language change errors
     }
-  }, [locale, i18n]);
+  }
+
+  useEffect(() => {
+    if (i18nInstance.language !== locale) {
+      i18nInstance.changeLanguage(locale);
+    }
+  }, [locale, i18nInstance]);
 
   return (
-    <html lang={locale} dir={i18n.dir()} className="antialiased">
+    <html lang={locale} dir={i18nInstance.dir()} className="antialiased">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -246,7 +265,6 @@ export default function App() {
           </VisuallyHidden>
           <NavbarProvider>
             {!hideNavPageContainer && <Navbar locale={locale} />}
-
             <main
               id="main-content"
               className={clsxLib(!hideNavPageContainer && styles.container)}
@@ -267,9 +285,19 @@ export default function App() {
 export function ErrorBoundary() {
   // Get the error thrown by the nearest route error boundary
   const error = useRouteError();
+  const location = useLocation();
+  const pathname = location?.pathname ?? (typeof window !== 'undefined' ? window.location.pathname : '/');
+  const [, maybeLanguage] = pathname.split('/');
+  const detectedLocale = returnLanguageIfSupported(maybeLanguage);
+  const locale = detectedLocale ?? (typeof document !== 'undefined' ? document.documentElement.lang : defaultLanguage);
 
-  // Get locale from document lang attribute since we can't use useLoaderData in error boundary
-  const locale = typeof document !== 'undefined' ? document.documentElement.lang : 'en';
+  if (clientI18n.language !== locale) {
+    try {
+      clientI18n.changeLanguage(locale);
+    } catch {
+      // ignore errors when changing language during error rendering
+    }
+  }
 
   return (
     <html lang={locale || 'en'}>

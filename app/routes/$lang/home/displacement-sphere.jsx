@@ -1,3 +1,9 @@
+import { useTheme } from '@/components/main/theme-provider';
+import { Transition } from '@/components/main/transition';
+import { useInViewport, useWindowSize } from '@/hooks';
+import { media } from '@/utils/style';
+import { cleanRenderer, cleanScene, removeLights } from '@/utils/three';
+import { throttle } from '@/utils/throttle';
 import { useReducedMotion, useSpring } from 'framer-motion';
 import { startTransition, useEffect, useRef } from 'react';
 import {
@@ -13,12 +19,6 @@ import {
   Vector2,
   WebGLRenderer,
 } from 'three';
-import { useTheme } from '~/components/main/theme-provider';
-import { Transition } from '~/components/main/transition';
-import { useInViewport, useWindowSize } from '~/hooks';
-import { media } from '~/utils/style';
-import { cleanRenderer, cleanScene, removeLights } from '~/utils/three';
-import { throttle } from '~/utils/throttle';
 import fragmentShader from './displacement-sphere-fragment.glsl?raw';
 import vertexShader from './displacement-sphere-vertex.glsl?raw';
 import styles from './displacement-sphere.module.css';
@@ -31,7 +31,7 @@ const springConfig = {
 
 export const DisplacementSphere = (props) => {
   const { theme } = useTheme();
-  const start = useRef(Date.now());
+  const startRef = useRef(null);
   const canvasRef = useRef();
   const mouse = useRef();
   const renderer = useRef();
@@ -49,6 +49,9 @@ export const DisplacementSphere = (props) => {
   const rotationY = useSpring(0, springConfig);
 
   useEffect(() => {
+    if (startRef.current === null) {
+      startRef.current = Date.now();
+    }
     const { innerWidth, innerHeight } = window;
     mouse.current = new Vector2(0.8, 0.5);
     renderer.current = new WebGLRenderer({
@@ -158,7 +161,7 @@ export const DisplacementSphere = (props) => {
       animation = requestAnimationFrame(animate);
 
       if (uniforms.current !== undefined) {
-        uniforms.current.time.value = 0.00005 * (Date.now() - start.current);
+        uniforms.current.time.value = 0.00005 * (Date.now() - startRef.current);
       }
 
       sphere.current.rotation.z += 0.001;

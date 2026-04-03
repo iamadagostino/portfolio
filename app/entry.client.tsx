@@ -4,8 +4,32 @@ import { I18nextProvider, initReactI18next } from 'react-i18next';
 import * as i18next from 'i18next';
 import { hydrateRoot } from 'react-dom/client';
 import { HydratedRouter } from 'react-router/dom';
-import i18nConfig from '~/i18n/i18n';
+import i18nConfig from '@/i18n/i18n';
 import { availableNamespaces, resources, returnLanguageIfSupportedOrDefault } from './i18n/i18n.resources';
+
+// Suppress TensorFlow.js semver validation errors that occur during WebGL context initialization
+// When @react-three/fiber creates a Canvas and WebGL context, TensorFlow.js automatically
+// detects it and attempts to register as a backend. During this process, it validates the
+// WebGL renderer version, but receives an empty string, causing a semver validation error.
+// This error is benign and does not affect application functionality.
+const originalError = console.error;
+console.error = (...args) => {
+  const errorMessage = String(args[0]);
+  // Suppress only the specific TensorFlow.js semver validation error
+  if (errorMessage.includes('Invalid argument not valid semver') && errorMessage.includes("'' received")) {
+    return;
+  }
+  originalError(...args);
+};
+
+// Also handle uncaught errors from TensorFlow.js backend detection
+window.addEventListener('error', (event) => {
+  const errorMessage = String(event.error?.message || '');
+  if (errorMessage.includes('Invalid argument not valid semver') && errorMessage.includes("'' received")) {
+    // Suppress this benign TensorFlow.js error - it doesn't affect functionality
+    event.preventDefault();
+  }
+});
 
 async function main() {
   // Add error handling and validation for resources

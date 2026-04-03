@@ -1,6 +1,6 @@
 import type { LoaderFunctionArgs } from 'react-router';
 import { redirect } from 'react-router';
-import { returnLanguageIfSupported } from '~/i18n/i18n.resources';
+import { returnLanguageIfSupported } from '@/i18n/i18n.resources';
 
 type LocalizedLoaderArgs = LoaderFunctionArgs & { language: string };
 type LoaderReturn = Record<string, unknown> | Response;

@@ -930,17 +930,17 @@ export function getCountries() {
     },
   ];
 }
-import bearHugThumb from '~/assets/images/admin/events/bear-hug-thumb.jpg';
-import bearHugImg from '~/assets/images/admin/events/bear-hug.jpg';
-import sixFingersThumb from '~/assets/images/admin/events/six-fingers-thumb.jpg';
-import sixFingersImg from '~/assets/images/admin/events/six-fingers.jpg';
-import vikingPeopleThumb from '~/assets/images/admin/events/viking-people-thumb.jpg';
-import vikingPeopleImg from '~/assets/images/admin/events/viking-people.jpg';
-import weAllLookThumb from '~/assets/images/admin/events/we-all-look-the-same-thumb.jpg';
-import weAllLookImg from '~/assets/images/admin/events/we-all-look-the-same.jpg';
-import flagCA from '~/assets/images/admin/flags/ca.svg';
-import flagMX from '~/assets/images/admin/flags/mx.svg';
-import flagUS from '~/assets/images/admin/flags/us.svg';
+import bearHugThumb from '@/assets/images/admin/events/bear-hug-thumb.jpg';
+import bearHugImg from '@/assets/images/admin/events/bear-hug.jpg';
+import sixFingersThumb from '@/assets/images/admin/events/six-fingers-thumb.jpg';
+import sixFingersImg from '@/assets/images/admin/events/six-fingers.jpg';
+import vikingPeopleThumb from '@/assets/images/admin/events/viking-people-thumb.jpg';
+import vikingPeopleImg from '@/assets/images/admin/events/viking-people.jpg';
+import weAllLookThumb from '@/assets/images/admin/events/we-all-look-the-same-thumb.jpg';
+import weAllLookImg from '@/assets/images/admin/events/we-all-look-the-same.jpg';
+import flagCA from '@/assets/images/admin/flags/ca.svg';
+import flagMX from '@/assets/images/admin/flags/mx.svg';
+import flagUS from '@/assets/images/admin/flags/us.svg';
 
 const FLAG_URLS = {
   CA: flagCA,

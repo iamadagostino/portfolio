@@ -110,8 +110,16 @@ export function generateMainRoutes(): RouteConfig[] {
       file: './routes/$lang/uses/route.ts',
     },
     {
+      path: DOMAIN_ROUTE_MAPPINGS['it-IT'].main.uses, // 'utilizzi'
+      file: './routes/$lang/utilizzi/route.ts',
+    },
+    {
       path: 'details',
       file: './routes/$lang/details/route.tsx',
+    },
+    {
+      path: DOMAIN_ROUTE_MAPPINGS['it-IT'].main.details, // 'dettagli'
+      file: './routes/$lang/dettagli/route.tsx',
     }
   );
 

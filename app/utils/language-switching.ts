@@ -1,4 +1,4 @@
-import type { Language } from '~/i18n/i18n.resources';
+import type { Language } from '@/i18n/i18n.resources';
 
 /**
  * Client-side version that makes a fetch request to get the intelligent URL

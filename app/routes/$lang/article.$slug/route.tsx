@@ -1,10 +1,10 @@
 import { LoaderFunctionArgs, redirect, useLoaderData } from 'react-router';
-import { getLocalizedPath } from '~/utils/route-mapping';
+import { getLocalizedPath } from '@/utils/route-mapping';
 
-import { MarkdownContent } from '~/components/main/markdown-content';
-import { Post } from '~/layouts/post';
-import { getBlogPostWithSlugValidation } from '~/services/blog.server';
-import { formatTimecode } from '~/utils/timecode';
+import { MarkdownContent } from '@/components/main/markdown-content';
+import { Post } from '@/layouts/post';
+import { getBlogPostWithSlugValidation } from '@/services/blog.server';
+import { formatTimecode } from '@/utils/timecode';
 
 import { returnLanguageIfSupported } from '../../../i18n/i18n.resources';
 

@@ -7,12 +7,6 @@ type BoxesProps = {
 };
 
 function Box({ color }: BoxesProps) {
-  const box = useRef<Mesh | null>(null);
-  const [xRotationSpeed] = useState(() => Math.random());
-  const [yRotationSpeed] = useState(() => Math.random());
-  const [scale] = useState(() => Math.pow(Math.random(), 2.0) * 0.5 + 0.05);
-  const [position] = useState<Vector3>(() => resetPosition());
-
   function resetPosition(): Vector3 {
     const v = new Vector3((Math.random() * 2 - 1) * 3, Math.random() * 2.5 + 0.1, (Math.random() * 2 - 1) * 15);
 
@@ -21,6 +15,12 @@ function Box({ color }: BoxesProps) {
 
     return v;
   }
+
+  const box = useRef<Mesh | null>(null);
+  const [xRotationSpeed] = useState(() => Math.random());
+  const [yRotationSpeed] = useState(() => Math.random());
+  const [scale] = useState(() => Math.pow(Math.random(), 2.0) * 0.5 + 0.05);
+  const [position] = useState<Vector3>(() => resetPosition());
 
   useFrame((state, delta) => {
     if (box.current) {

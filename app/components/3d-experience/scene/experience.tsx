@@ -113,6 +113,11 @@ export const Experience = ({ darkMode, menuOpened }: ExperienceProps) => {
   // Avatar animation states
   const [avatarAnimation, setAvatarAnimation] = useState('FallingIdle');
 
+  // Callback when walking animation completes - return to idle
+  const handleAvatarAnimationComplete = useCallback(() => {
+    setAvatarAnimation('StandingIdle');
+  }, []);
+
   // Set the Avatar Container
   const avatarContainerRef = useRef<Group | null>(null);
 
@@ -128,35 +133,46 @@ export const Experience = ({ darkMode, menuOpened }: ExperienceProps) => {
   const cameraLookAtZ = useMotionValue(0);
   const cameraFOV = useMotionValue(0);
 
-  const initialAvatarTransform = useRef(getAvatarTransform(0, viewport.height, menuOpened));
-  const avatarScale = useMotionValue(initialAvatarTransform.current.scale);
-  const avatarX = useMotionValue(initialAvatarTransform.current.position[0]);
-  const avatarY = useMotionValue(initialAvatarTransform.current.position[1]);
-  const avatarZ = useMotionValue(initialAvatarTransform.current.position[2]);
-  const avatarRotateX = useMotionValue(initialAvatarTransform.current.rotation[0]);
-  const avatarRotateY = useMotionValue(initialAvatarTransform.current.rotation[1]);
-  const avatarRotateZ = useMotionValue(initialAvatarTransform.current.rotation[2]);
+  const avatarScale = useMotionValue(1.8);
+  const avatarX = useMotionValue(-2);
+  const avatarY = useMotionValue(0);
+  const avatarZ = useMotionValue(-0.25);
+  const avatarRotateX = useMotionValue(0);
+  const avatarRotateY = useMotionValue(-1.65);
+  const avatarRotateZ = useMotionValue(0);
 
-  const initialRoomTransform = useRef(getRoomTransform(0));
-  const roomScale = useMotionValue(initialRoomTransform.current.scale);
-  const roomRotateY = useMotionValue(initialRoomTransform.current.rotation[1]);
+  const roomScale = useMotionValue(1);
+  const roomRotateY = useMotionValue(0);
 
-  const initialAboutPosition = useRef(getAboutPosition(0, viewport.height));
-  const aboutY = useMotionValue(initialAboutPosition.current.y);
-  const aboutZ = useMotionValue(initialAboutPosition.current.z);
+  const aboutY = useMotionValue(-10);
+  const aboutZ = useMotionValue(-20);
 
   const aboutGroupRef = useRef<Group | null>(null);
 
-  // Function to switch avatar animation if necessary
-  const triggerAvatarAnimation = useCallback(
-    (newAnimation: string) => {
-      if (lastAnimation !== newAnimation) {
-        setAvatarAnimation(newAnimation);
-        setLastAnimation(newAnimation); // Update the last animation
+  // Derive avatar animation from state
+  useEffect(() => {
+    let newAnimation: string;
+    if (menuOpened && section === 0) {
+      newAnimation = 'Sitting';
+    } else if (!menuOpened) {
+      if (section === 0) {
+        newAnimation = 'SittingTyping';
+      } else if (section === 1) {
+        newAnimation = 'SittingIdle';
+      } else {
+        newAnimation = 'StandingIdle';
       }
-    },
-    [lastAnimation]
-  );
+    } else {
+      newAnimation = avatarAnimation;
+    }
+
+    if (newAnimation && lastAnimation !== newAnimation) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setAvatarAnimation(newAnimation);
+
+      setLastAnimation(newAnimation);
+    }
+  }, [section, menuOpened, avatarAnimation, lastAnimation]);
 
   useEffect(() => {
     const target = getAvatarTransform(section, viewport.height, menuOpened);
@@ -222,84 +238,46 @@ export const Experience = ({ darkMode, menuOpened }: ExperienceProps) => {
     };
   }, [section, viewport.height, aboutY, aboutZ]);
 
-  // Handle section changes (excluding menu interactions)
+  // Animate camera based on section and menu state
   useEffect(() => {
     if (!menuOpened) {
       if (section === 0) {
-        triggerAvatarAnimation('SittingTyping');
+        // Camera Settings for home section
+        animate(cameraFOV, 24, { duration: 2 });
+        animate(cameraPositionX, 7.75, { duration: 1.5 });
+        animate(cameraPositionY, 4.5, { duration: 1.5 });
+        animate(cameraPositionZ, 1.25, { duration: 2 });
+        animate(cameraLookAtX, -12, { duration: 1.5 });
+        animate(cameraLookAtY, -0.25, { duration: 1.5 });
+        animate(cameraLookAtZ, 1.75, { duration: 2 });
       } else if (section === 1) {
-        triggerAvatarAnimation('StandToSit');
-      } else {
-        triggerAvatarAnimation('StandingIdle');
+        // Camera Settings for about section
+        animate(cameraFOV, 24, { duration: 2 });
+        animate(cameraPositionX, 8, { duration: 1.5 });
+        animate(cameraPositionY, 4, { duration: 1.5 });
+        animate(cameraPositionZ, 1.25, { duration: 2 });
+        animate(cameraLookAtX, -12, { duration: 1.5 });
+        animate(cameraLookAtY, 0.25, { duration: 1.5 });
+        animate(cameraLookAtZ, 2, { duration: 2 });
+      } else if (section === 2) {
+        // Camera Settings for projects section
+        animate(cameraFOV, 24, { duration: 2 });
+        animate(cameraPositionX, 8, { duration: 1.5 });
+        animate(cameraPositionY, 4, { duration: 1.5 });
+        animate(cameraPositionZ, 1.25, { duration: 2 });
+        animate(cameraLookAtX, -12, { duration: 1.5 });
+        animate(cameraLookAtY, 0.25, { duration: 1.5 });
+        animate(cameraLookAtZ, 2, { duration: 2 });
       }
-
-      const timeoutId = window.setTimeout(() => {
-        if (section === 0) {
-          // Set Avatar to SittingTyping
-          triggerAvatarAnimation('SittingTyping');
-          // Camera Settings
-          animate(cameraFOV, 24, { duration: 2 });
-          animate(cameraPositionX, 7.75, { duration: 1.5 });
-          animate(cameraPositionY, 4.5, { duration: 1.5 });
-          animate(cameraPositionZ, 1.25, { duration: 2 });
-          animate(cameraLookAtX, -12, { duration: 1.5 });
-          animate(cameraLookAtY, -0.25, { duration: 1.5 });
-          animate(cameraLookAtZ, 1.75, { duration: 2 });
-        } else if (section === 1) {
-          // Set Avatar to SittingIdle
-          triggerAvatarAnimation('SittingIdle');
-          // Camera Settings
-          animate(cameraFOV, 24, { duration: 2 });
-          animate(cameraPositionX, 8, { duration: 1.5 });
-          animate(cameraPositionY, 4, { duration: 1.5 });
-          animate(cameraPositionZ, 1.25, { duration: 2 });
-          animate(cameraLookAtX, -12, { duration: 1.5 });
-          animate(cameraLookAtY, 0.25, { duration: 1.5 });
-          animate(cameraLookAtZ, 2, { duration: 2 });
-        } else if (section === 2) {
-          // Set Avatar to StandingIdle
-          triggerAvatarAnimation('StandingIdle');
-          // Camera Settings
-          animate(cameraFOV, 24, { duration: 2 });
-          animate(cameraPositionX, 8, { duration: 1.5 });
-          animate(cameraPositionY, 4, { duration: 1.5 });
-          animate(cameraPositionZ, 1.25, { duration: 2 });
-          animate(cameraLookAtX, -12, { duration: 1.5 });
-          animate(cameraLookAtY, 0.25, { duration: 1.5 });
-          animate(cameraLookAtZ, 2, { duration: 2 });
-        }
-      }, 250);
-
-      return () => {
-        window.clearTimeout(timeoutId);
-      };
-    }
-  }, [
-    section,
-    menuOpened,
-    cameraFOV,
-    cameraPositionX,
-    cameraPositionY,
-    cameraPositionZ,
-    cameraLookAtX,
-    cameraLookAtY,
-    cameraLookAtZ,
-    triggerAvatarAnimation,
-  ]);
-
-  // Animate for Menu Opened (no intermediate animations)
-  useEffect(() => {
-    if (section === 0) {
-      if (menuOpened) triggerAvatarAnimation('Sitting');
-
-      // Camera Zoom and Position
-      animate(cameraFOV, menuOpened ? 10 : 24, { duration: 2 });
-      animate(cameraPositionX, menuOpened ? 6 : 7.75, { duration: 1.5 });
-      animate(cameraPositionY, menuOpened ? 6 : 4.5, { duration: 1.5 });
-      animate(cameraPositionZ, menuOpened ? -16 : 1.25, { duration: 2 });
-      animate(cameraLookAtX, menuOpened ? -8 : -12, { duration: 1.5 });
-      animate(cameraLookAtY, menuOpened ? -1.25 : -0.25, { duration: 1.5 });
-      animate(cameraLookAtZ, menuOpened ? 9 : 1.75, { duration: 2 });
+    } else if (section === 0) {
+      // Camera zoom when menu is open
+      animate(cameraFOV, 10, { duration: 2 });
+      animate(cameraPositionX, 6, { duration: 1.5 });
+      animate(cameraPositionY, 6, { duration: 1.5 });
+      animate(cameraPositionZ, -16, { duration: 2 });
+      animate(cameraLookAtX, -8, { duration: 1.5 });
+      animate(cameraLookAtY, -1.25, { duration: 1.5 });
+      animate(cameraLookAtZ, 9, { duration: 2 });
     }
   }, [
     menuOpened,
@@ -311,7 +289,6 @@ export const Experience = ({ darkMode, menuOpened }: ExperienceProps) => {
     cameraLookAtX,
     cameraLookAtY,
     cameraLookAtZ,
-    triggerAvatarAnimation,
   ]);
 
   // Update the Camera
@@ -360,7 +337,7 @@ export const Experience = ({ darkMode, menuOpened }: ExperienceProps) => {
       {/* Avatar */}
       <group ref={avatarContainerRef}>
         <ContactShadows opacity={0.45} scale={10} blur={1} far={10} resolution={256} color="#000000" />
-        <Avatar animation={avatarAnimation} />
+        <Avatar animation={avatarAnimation} onAnimationComplete={handleAvatarAnimationComplete} />
       </group>
 
       {/* Room */}

@@ -3,6 +3,7 @@ import { Bloom, ChromaticAberration, DepthOfField, EffectComposer } from '@react
 import { BlendFunction } from 'postprocessing';
 import Boxes from './boxes';
 import Car from './car';
+import { FloatingGrid } from './floating-grid';
 import Ground from './ground';
 import Rings from './rings';
 
@@ -40,6 +41,9 @@ function Scene() {
       {/* Boxes */}
       <Boxes />
 
+      {/* Floating Grid */}
+      <FloatingGrid />
+
       {/* A brighter spotlight with shadows enabled */}
       <spotLight
         color={[1, 0.25, 0.7]}
@@ -72,7 +76,7 @@ function Scene() {
         <DepthOfField
           focusDistance={0.035} // Focus distance
           focalLength={0.01} // Focal length
-          bokehScale={3} // Bokeh scale
+          bokehScale={0.75} // Bokeh scale
           height={480} // Render height
         />
 

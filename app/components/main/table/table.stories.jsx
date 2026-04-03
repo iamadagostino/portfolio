@@ -1,4 +1,4 @@
-import { Table, TableCell, TableRow } from '~/components/main/table';
+import { Table, TableCell, TableRow } from '@/components/main/table';
 import { StoryContainer } from '../../../../.storybook/story-container';
 import { TableBody, TableHead, TableHeadCell } from './table';
 

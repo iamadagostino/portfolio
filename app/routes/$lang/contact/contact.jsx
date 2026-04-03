@@ -1,23 +1,23 @@
 import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses';
 import { Form, useActionData, useNavigation } from 'react-router';
-import { cssProps, msToNum, numToMs } from '~/utils/style';
+import { cssProps, msToNum, numToMs } from '@/utils/style';
 
 import { useEffect, useRef } from 'react';
-import { Button } from '~/components/main/button';
-import { DecoderText } from '~/components/main/decoder-text';
-import { Divider } from '~/components/main/divider';
-import { Footer } from '~/components/main/footer';
-import { Heading } from '~/components/main/heading';
-import { Icon } from '~/components/main/icon';
-import { Input } from '~/components/main/input';
-import { Section } from '~/components/main/section';
-import { Text } from '~/components/main/text';
-import { Transition } from '~/components/main/transition';
-import { tokens } from '~/config/theme.mjs';
-import { useFormInput } from '~/hooks';
-import { useContactTranslation, useCurrentLanguage } from '~/i18n/i18n.hooks';
-import { resources } from '~/i18n/i18n.resources';
-import { baseMeta } from '~/utils/meta';
+import { Button } from '@/components/main/button';
+import { DecoderText } from '@/components/main/decoder-text';
+import { Divider } from '@/components/main/divider';
+import { Footer } from '@/components/main/footer';
+import { Heading } from '@/components/main/heading';
+import { Icon } from '@/components/main/icon';
+import { Input } from '@/components/main/input';
+import { Section } from '@/components/main/section';
+import { Text } from '@/components/main/text';
+import { Transition } from '@/components/main/transition';
+import { tokens } from '@/config/theme.mjs';
+import { useFormInput } from '@/hooks';
+import { useContactTranslation, useCurrentLanguage } from '@/i18n/i18n.hooks';
+import { resources } from '@/i18n/i18n.resources';
+import { baseMeta } from '@/utils/meta';
 import styles from './contact.module.css';
 
 export const handle = {

@@ -1,6 +1,6 @@
 import { useId } from 'react';
-import { Button } from '~/components/main/button';
-import { useTheme } from '~/components/main/theme-provider';
+import { Button } from '@/components/main/button';
+import { useTheme } from '@/components/main/theme-provider';
 import styles from './theme-toggle.module.css';
 
 export const ThemeToggle = ({ isMobile, ...rest }) => {

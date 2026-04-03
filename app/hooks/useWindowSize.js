@@ -41,7 +41,7 @@ export function useWindowSize() {
     };
   }, [getHeight]);
 
-  const [windowSize, setWindowSize] = useState(dimensions.current);
+  const [windowSize, setWindowSize] = useState({ width: 1280, height: 800 });
 
   useEffect(() => {
     const handleResize = () => {

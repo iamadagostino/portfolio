@@ -31,7 +31,7 @@ resources/locales/
 ### 1. Using Typed Translation Hooks
 
 ```tsx
-import { useNavbarTranslation, useHomeTranslation } from '~/i18n/i18n.hooks';
+import { useNavbarTranslation, useHomeTranslation } from '@/i18n/i18n.hooks';
 
 export const MyComponent = () => {
   const { t: tNavbar } = useNavbarTranslation();
@@ -49,7 +49,7 @@ export const MyComponent = () => {
 ### 2. Using Generic Namespace Hook
 
 ```tsx
-import { useNamespaceTranslation } from '~/i18n/i18n.hooks';
+import { useNamespaceTranslation } from '@/i18n/i18n.hooks';
 
 export const ArticlesPage = () => {
   const { t } = useNamespaceTranslation('articles');
@@ -66,7 +66,7 @@ export const ArticlesPage = () => {
 ### 3. Language Switching
 
 ```tsx
-import { useLanguageChanger } from '~/i18n/i18n.hooks';
+import { useLanguageChanger } from '@/i18n/i18n.hooks';
 
 export const LanguageSwitcher = () => {
   const { changeLanguage, currentLanguage } = useLanguageChanger();
@@ -84,7 +84,7 @@ export const LanguageSwitcher = () => {
 ### 4. Using Error Page Translations
 
 ```tsx
-import { useErrorTranslation } from '~/i18n/i18n.hooks';
+import { useErrorTranslation } from '@/i18n/i18n.hooks';
 
 export const ErrorPage = ({ error }) => {
   const { t } = useErrorTranslation();
@@ -102,7 +102,7 @@ export const ErrorPage = ({ error }) => {
 ### 5. Using Translations in Navigation
 
 ```tsx
-import { useNavbarTranslation } from '~/i18n/i18n.hooks';
+import { useNavbarTranslation } from '@/i18n/i18n.hooks';
 import { getNavLinks } from './nav-data';
 
 export const NavigationMenu = () => {
@@ -191,7 +191,7 @@ export const NavigationMenu = () => {
 The error translation hook is already available:
 
 ```tsx
-import { useErrorTranslation } from '~/i18n/i18n.hooks';
+import { useErrorTranslation } from '@/i18n/i18n.hooks';
 
 export const MyErrorComponent = () => {
   const { t } = useErrorTranslation();

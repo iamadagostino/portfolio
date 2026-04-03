@@ -1,6 +1,6 @@
+import { returnLanguageIfSupported } from '@/i18n/i18n.resources';
 import type { LoaderFunctionArgs } from 'react-router';
 import { redirect } from 'react-router';
-import { returnLanguageIfSupported } from '~/i18n/i18n.resources';
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   const language = returnLanguageIfSupported(params.lang);
@@ -15,4 +15,4 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 };
 
 // Re-export everything from home
-export { Home as default, meta, links, handle } from './home/home';
+export { Hero as default, handle, meta } from './home/hero';

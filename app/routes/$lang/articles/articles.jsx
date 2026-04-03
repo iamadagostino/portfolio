@@ -1,25 +1,25 @@
-import { useEffect, useState } from 'react';
+import { getLocalizedPath } from '@/config/routes';
+import { classes, cssProps } from '@/utils/style';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink, useLoaderData } from 'react-router';
-import { classes, cssProps } from '~/utils/style';
-import { getLocalizedPath } from '~/config/routes';
 
+import { Button } from '@/components/main/button';
+import { DecoderText } from '@/components/main/decoder-text';
+import { Divider } from '@/components/main/divider';
+import { Footer } from '@/components/main/footer';
+import { Heading } from '@/components/main/heading';
+import { Image } from '@/components/main/image';
+import { Section } from '@/components/main/section';
+import { Text } from '@/components/main/text';
+import { useWindowSize } from '@/hooks';
+import { formatDate } from '@/utils/date';
 import { useReducedMotion } from 'framer-motion';
-import { Button } from '~/components/main/button';
-import { DecoderText } from '~/components/main/decoder-text';
-import { Divider } from '~/components/main/divider';
-import { Footer } from '~/components/main/footer';
-import { Heading } from '~/components/main/heading';
-import { Image } from '~/components/main/image';
-import { Section } from '~/components/main/section';
-import { Text } from '~/components/main/text';
-import { useWindowSize } from '~/hooks';
-import { formatDate } from '~/utils/date';
 import styles from './articles.module.css';
 
 function ArticlesPost({ slug, translation, featured, banner, readTime, publishedAt, index, lang = 'en' }) {
   const [hovered, setHovered] = useState(false);
-  const [dateTime, setDateTime] = useState(null);
+  const dateTime = formatDate(publishedAt || new Date(), lang);
   const reduceMotion = useReducedMotion();
   const { t } = useTranslation('articles');
 
@@ -30,14 +30,9 @@ function ArticlesPost({ slug, translation, featured, banner, readTime, published
 
   // Use locale-specific slug if available, otherwise fall back to main slug
   const postSlug = translation?.slug || slug;
-  
+
   // Get the localized article path (article -> articolo for Italian)
   const articlePath = getLocalizedPath('main', 'article', lang);
-
-  useEffect(() => {
-    const date = publishedAt || new Date();
-    setDateTime(formatDate(date, lang));
-  }, [publishedAt, lang]);
 
   const handleMouseEnter = () => {
     setHovered(true);

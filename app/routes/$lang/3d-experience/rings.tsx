@@ -5,14 +5,27 @@ import { Color, Mesh, MeshStandardMaterial } from 'three';
 function Rings() {
   const itemsRef = useRef<(Mesh | null)[]>([]);
 
-  useFrame(() => {
+  useFrame((state) => {
+    const elapsed = state.clock.getElapsedTime();
     itemsRef.current.forEach((item, index) => {
       const mesh = itemsRef.current[index];
 
-      // [-7, 6]
-      // 0 is center, negative is behind, positive is in front
-      // multiply by 3.5 to get spacing
-      const z = (index - 7) * 3.5;
+      // Position calculation for animated ring tunnel effect:
+      // We have 14 rings (index 0-13) that need to create an infinite tunnel moving toward the camera
+      //
+      // Part 1: (index - 7) * 3.5
+      //   - Centers the rings around index 7 (middle of 0-13)
+      //   - Spaces them 3.5 units apart along the z-axis (depth)
+      //   - Creates initial positions from -24.5 (far back) to 21 (far front)
+      //
+      // Part 2: ((elapsed * 0.4) % 3.5) * 2
+      //   - elapsed * 0.4: time-based animation (slower = more smooth)
+      //   - % 3.5: loops every 3.5 units to match ring spacing
+      //   - * 2: doubles the offset to 7 units for seamless wrapping
+      //
+      // Result: Rings smoothly move forward, and when one passes the camera,
+      // it wraps back to the far end, creating an endless tunnel effect
+      const z = (index - 7) * 3.5 + ((elapsed * 0.4) % 3.5) * 2;
 
       // Move the rings towards the camera
       if (mesh) mesh.position.set(0, 0, -z);

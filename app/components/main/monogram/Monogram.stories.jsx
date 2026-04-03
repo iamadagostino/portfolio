@@ -1,4 +1,4 @@
-import { Monogram } from '~/components/main/monogram';
+import { Monogram } from '@/components/main/monogram';
 import { StoryContainer } from '../../../../.storybook/story-container';
 
 export default {

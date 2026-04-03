@@ -1,5 +1,5 @@
 import { createLocalizedLoader } from '../../locale-loader';
-import { getBlogPostsWithCache } from '~/services/blog.server';
+import { getBlogPostsWithCache } from '@/services/blog.server';
 import { Articles } from './articles';
 
 // Custom loader with articles data

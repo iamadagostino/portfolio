@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import { createCookieSessionStorage, redirect, Session } from 'react-router';
-import { prisma } from '~/.server/db';
+import { prisma } from '@/.server/db';
 
 // Create session storage
 const sessionStorage = createCookieSessionStorage({

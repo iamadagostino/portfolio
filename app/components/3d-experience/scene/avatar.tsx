@@ -3,7 +3,17 @@ import { useEffect, useRef, useState } from 'react';
 import { useGLTF } from '@react-three/drei';
 import type { ThreeElements } from '@react-three/fiber';
 import { useFrame } from '@react-three/fiber';
-import { AnimationAction, AnimationClip, AnimationMixer, Bone, Group, MeshStandardMaterial, SkinnedMesh } from 'three';
+import {
+  AnimationAction,
+  AnimationClip,
+  AnimationMixer,
+  Bone,
+  Group,
+  LoopOnce,
+  LoopRepeat,
+  MeshStandardMaterial,
+  SkinnedMesh,
+} from 'three';
 // Some environments need an explicit import for the examples loaders. If
 // your TypeScript setup doesn't include the type declarations for
 // 'three/examples/jsm', you can add them to `types` or use an import like
@@ -11,8 +21,8 @@ import { AnimationAction, AnimationClip, AnimationMixer, Bone, Group, MeshStanda
 // '@types/three' or adjust `tsconfig` accordingly.
 // We'll dynamically import FBXLoader inside the effect to avoid static
 // type/import issues across different TS configurations.
+import avatarModel from '@/assets/models/avatar/avatar.glb';
 import type { GLTF } from 'three-stdlib';
-import avatarModel from '~/assets/models/avatar/avatar.glb';
 
 type AvatarGLTFResult = GLTF & {
   nodes: {
@@ -41,7 +51,11 @@ type AvatarGLTFResult = GLTF & {
 
 type AvatarProps = ThreeElements['group'] & {
   animation: string;
+  onAnimationComplete?: () => void;
 };
+
+// Animations that should play once and then trigger completion callback
+const ONE_SHOT_ANIMATIONS = ['WalkingForward', 'WalkingBackwards'];
 
 export function Avatar(props: AvatarProps) {
   const avatarGroup = useRef<Group | null>(null);
@@ -49,7 +63,7 @@ export function Avatar(props: AvatarProps) {
   const currentAction = useRef<AnimationAction | null>(null);
 
   const { nodes, materials } = useGLTF(avatarModel) as unknown as AvatarGLTFResult;
-  const { animation, ...rest } = props;
+  const { animation, onAnimationComplete, ...rest } = props;
 
   // Use Vite's import.meta.glob to bundle FBX animation files from the assets
   // directory so we can reference them dynamically by name at runtime. The
@@ -240,22 +254,57 @@ export function Avatar(props: AvatarProps) {
       mixer.current = new AnimationMixer(avatarGroup.current);
     }
 
-    const newAction = mixer.current.clipAction(animations[0] as AnimationClip);
+    let clip = animations[0] as AnimationClip;
+    const isOneShot = ONE_SHOT_ANIMATIONS.includes(animation);
 
-    if (currentAction.current) {
-      currentAction.current.crossFadeTo(newAction, 0.5, true);
+    // Remove root motion (position tracks on Hips) from walking animations
+    // This prevents the avatar from moving/jumping position during walk animations
+    if (isOneShot) {
+      const filteredTracks = clip.tracks.filter((track) => {
+        // Remove position tracks from root/hips bone to prevent translation
+        const isPositionTrack = track.name.endsWith('.position');
+        const isRootBone = track.name.toLowerCase().includes('hips') || track.name.toLowerCase().includes('root');
+        return !(isPositionTrack && isRootBone);
+      });
+      clip = new AnimationClip(clip.name, clip.duration, filteredTracks);
+    }
+
+    const newAction = mixer.current.clipAction(clip);
+
+    // Configure animation loop behavior
+    if (isOneShot) {
+      newAction.setLoop(LoopOnce, 1);
+      newAction.clampWhenFinished = true;
     } else {
-      newAction.fadeIn(0.5).play();
+      newAction.setLoop(LoopRepeat, Infinity);
+      newAction.clampWhenFinished = false;
+    }
+
+    // Handle animation finished event for one-shot animations
+    const handleFinished = (event: { action: AnimationAction }) => {
+      if (event.action === newAction && isOneShot && onAnimationComplete) {
+        onAnimationComplete();
+      }
+    };
+
+    mixer.current.addEventListener('finished', handleFinished);
+
+    // Smooth crossfade from previous action
+    if (currentAction.current && currentAction.current !== newAction) {
+      newAction.reset();
+      newAction.play();
+      currentAction.current.crossFadeTo(newAction, 0.3, true);
+    } else {
+      newAction.reset();
+      newAction.fadeIn(0.3).play();
     }
 
     currentAction.current = newAction;
-    newAction.reset().play();
 
-    // NOTE: don't stop the mixer or clear currentAction here because this
-    // effect runs on every animation change and we want the previous action
-    // to remain active until the new action is ready so cross-fades are
-    // smooth. The mixer is cleaned up on component unmount below.
-  }, [loadedFbx, verifiedLoaderUrl, animation]);
+    return () => {
+      mixer.current?.removeEventListener('finished', handleFinished);
+    };
+  }, [loadedFbx, verifiedLoaderUrl, animation, onAnimationComplete]);
 
   // Ensure we stop mixer and actions when the Avatar component unmounts.
   useEffect(() => {
@@ -266,7 +315,7 @@ export function Avatar(props: AvatarProps) {
     };
   }, []);
 
-  useFrame((_, delta) => {
+  useFrame((_: unknown, delta: number) => {
     mixer.current?.update(delta);
   });
 
@@ -280,6 +329,7 @@ export function Avatar(props: AvatarProps) {
         skeleton={nodes.EyeLeft.skeleton}
         morphTargetDictionary={nodes.EyeLeft.morphTargetDictionary}
         morphTargetInfluences={nodes.EyeLeft.morphTargetInfluences}
+        frustumCulled={false}
       />
       <skinnedMesh
         name="EyeRight"
@@ -288,6 +338,7 @@ export function Avatar(props: AvatarProps) {
         skeleton={nodes.EyeRight.skeleton}
         morphTargetDictionary={nodes.EyeRight.morphTargetDictionary}
         morphTargetInfluences={nodes.EyeRight.morphTargetInfluences}
+        frustumCulled={false}
       />
       <skinnedMesh
         name="Wolf3D_Head"
@@ -296,6 +347,7 @@ export function Avatar(props: AvatarProps) {
         skeleton={nodes.Wolf3D_Head.skeleton}
         morphTargetDictionary={nodes.Wolf3D_Head.morphTargetDictionary}
         morphTargetInfluences={nodes.Wolf3D_Head.morphTargetInfluences}
+        frustumCulled={false}
       />
       <skinnedMesh
         name="Wolf3D_Teeth"
@@ -304,31 +356,37 @@ export function Avatar(props: AvatarProps) {
         skeleton={nodes.Wolf3D_Teeth.skeleton}
         morphTargetDictionary={nodes.Wolf3D_Teeth.morphTargetDictionary}
         morphTargetInfluences={nodes.Wolf3D_Teeth.morphTargetInfluences}
+        frustumCulled={false}
       />
       <skinnedMesh
         geometry={nodes.Wolf3D_Glasses.geometry}
         material={materials.Wolf3D_Glasses}
         skeleton={nodes.Wolf3D_Glasses.skeleton}
+        frustumCulled={false}
       />
       <skinnedMesh
         geometry={nodes.Wolf3D_Body.geometry}
         material={materials.Wolf3D_Body}
         skeleton={nodes.Wolf3D_Body.skeleton}
+        frustumCulled={false}
       />
       <skinnedMesh
         geometry={nodes.Wolf3D_Outfit_Bottom.geometry}
         material={materials.Wolf3D_Outfit_Bottom}
         skeleton={nodes.Wolf3D_Outfit_Bottom.skeleton}
+        frustumCulled={false}
       />
       <skinnedMesh
         geometry={nodes.Wolf3D_Outfit_Footwear.geometry}
         material={materials.Wolf3D_Outfit_Footwear}
         skeleton={nodes.Wolf3D_Outfit_Footwear.skeleton}
+        frustumCulled={false}
       />
       <skinnedMesh
         geometry={nodes.Wolf3D_Outfit_Top.geometry}
         material={materials.Wolf3D_Outfit_Top}
         skeleton={nodes.Wolf3D_Outfit_Top.skeleton}
+        frustumCulled={false}
       />
     </group>
   );

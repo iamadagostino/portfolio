@@ -1,10 +1,10 @@
 import { forwardRef, type ElementType, type MouseEventHandler, type ReactNode, type Ref, type RefObject } from 'react';
 
 import { Link } from 'react-router';
-import { Icon } from '~/components/main/icon';
-import { Loader } from '~/components/main/loader';
-import { Transition } from '~/components/main/transition';
-import { classes } from '~/utils/style';
+import { Icon } from '@/components/main/icon';
+import { Loader } from '@/components/main/loader';
+import { Transition } from '@/components/main/transition';
+import { classes } from '@/utils/style';
 import styles from './button.module.css';
 
 function isExternalLink(href?: string): boolean {

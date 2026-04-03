@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { SegmentedControl, SegmentedControlOption } from '~/components/main/segmented-control';
+import { SegmentedControl, SegmentedControlOption } from '@/components/main/segmented-control';
 import { StoryContainer } from '../../../../.storybook/story-container';
 
 export default {

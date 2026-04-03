@@ -1,9 +1,9 @@
 import { useId, useRef, useState } from 'react';
-import { classes, cssProps, msToNum } from '~/utils/style';
+import { classes, cssProps, msToNum } from '@/utils/style';
 
-import { Icon } from '~/components/main/icon';
-import { Transition } from '~/components/main/transition';
-import { tokens } from '~/config/theme.mjs';
+import { Icon } from '@/components/main/icon';
+import { Transition } from '@/components/main/transition';
+import { tokens } from '@/config/theme.mjs';
 import styles from './input.module.css';
 import { TextArea } from './text-area';
 

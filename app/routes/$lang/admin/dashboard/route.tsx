@@ -1,13 +1,13 @@
 import { LoaderFunctionArgs, useLoaderData } from 'react-router';
 
-import { Avatar } from '~/components/admin/avatar';
-import { Heading, Subheading } from '~/components/admin/heading';
-import { Select } from '~/components/admin/select';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/components/admin/table';
-import { getRecentOrders } from '~/data/fake';
+import { Avatar } from '@/components/admin/avatar';
+import { Heading, Subheading } from '@/components/admin/heading';
+import { Select } from '@/components/admin/select';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/admin/table';
+import { getRecentOrders } from '@/data/fake';
 
 import { config } from 'dotenv';
-import { baseMeta } from '~/utils/meta';
+import { baseMeta } from '@/utils/meta';
 import { createLocalizedLoader } from '../../../locale-loader';
 import { Stat } from './stat';
 

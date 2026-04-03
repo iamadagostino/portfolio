@@ -1,5 +1,5 @@
-import { Input } from '~/components/main/input';
-import { useFormInput } from '~/hooks';
+import { Input } from '@/components/main/input';
+import { useFormInput } from '@/hooks';
 
 export default {
   title: 'Input',

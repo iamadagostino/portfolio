@@ -1,44 +1,58 @@
-import type { Language } from '~/i18n/i18n.resources';
+import type { Language } from '../i18n/i18n.resources';
 
 /**
  * Route slug mappings for different languages
  * This allows /en/articles and /it/articoli to map to the same route
  */
+export const DEFAULT_CANONICAL_LANGUAGE: Language = 'en-US';
+
 export const ROUTE_SLUG_MAP: Record<string, Record<Language, string>> = {
   // Articles mapping
   articles: {
-    en: 'articles',
-    it: 'articoli',
+    'en-US': 'articles',
+    'it-IT': 'articoli',
   },
 
   // Contact mapping
   contact: {
-    en: 'contact',
-    it: 'contatti',
+    'en-US': 'contact',
+    'it-IT': 'contatti',
+  },
+
+  // Single article mapping
+  article: {
+    'en-US': 'article',
+    'it-IT': 'articolo',
   },
 
   // Details mapping
   details: {
-    en: 'details',
-    it: 'dettagli',
+    'en-US': 'details',
+    'it-IT': 'dettagli',
   },
 
   // Projects mapping
   projects: {
-    en: 'projects',
-    it: 'progetti',
+    'en-US': 'projects',
+    'it-IT': 'progetti',
   },
 
   // Admin routes stay the same across locales
   admin: {
-    en: 'admin',
-    it: 'admin',
+    'en-US': 'admin',
+    'it-IT': 'admin',
   },
 
   // Uses stays the same
   uses: {
-    en: 'uses',
-    it: 'uses',
+    'en-US': 'uses',
+    'it-IT': 'utilizzi',
+  },
+
+  // 3D experience mapping
+  '3d-experience': {
+    'en-US': '3d-experience',
+    'it-IT': 'esperienza-3d',
   },
 } as const;
 
@@ -47,7 +61,7 @@ export const ROUTE_SLUG_MAP: Record<string, Record<Language, string>> = {
  */
 export const CANONICAL_ROUTE_MAP: Record<string, string> = {};
 Object.entries(ROUTE_SLUG_MAP).forEach(([canonical, translations]) => {
-  Object.values(translations).forEach(localizedSlug => {
+  Object.values(translations).forEach((localizedSlug) => {
     CANONICAL_ROUTE_MAP[localizedSlug] = canonical;
   });
 });
@@ -80,10 +94,7 @@ export function isValidLocalizedSlug(slug: string, lang: Language): boolean {
  * This is used by the locale-loader to redirect /it/contatti -> /it/contact
  * It should NOT redirect canonical slugs like /it/contact
  */
-export function getCorrectLocalizedUrl(
-  pathname: string,
-  targetLang: Language
-): string | null {
+export function getCorrectLocalizedUrl(pathname: string, targetLang: Language): string | null {
   const pathParts = pathname.split('/').filter(Boolean);
 
   if (pathParts.length < 2) return null;
@@ -94,7 +105,7 @@ export function getCorrectLocalizedUrl(
 
   // Get the canonical English slug for this route
   const canonical = getCanonicalRoute(currentSlug);
-  const canonicalEnglishSlug = ROUTE_SLUG_MAP[canonical]?.en || canonical;
+  const canonicalEnglishSlug = ROUTE_SLUG_MAP[canonical]?.[DEFAULT_CANONICAL_LANGUAGE] || canonical;
 
   // If we're already on the canonical English slug, no redirect needed
   // Example: /it/contact stays as /it/contact (correct)
@@ -104,9 +115,7 @@ export function getCorrectLocalizedUrl(
 
   // We're on a localized slug (like /it/contatti), redirect to canonical English slug
   // Example: /it/contatti -> /it/contact
-  const newPath = `/${targetLang}/${canonicalEnglishSlug}${
-    rest.length > 0 ? `/${rest.join('/')}` : ''
-  }`;
+  const newPath = `/${targetLang}/${canonicalEnglishSlug}${rest.length > 0 ? `/${rest.join('/')}` : ''}`;
 
   return newPath;
 }

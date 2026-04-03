@@ -1,5 +1,5 @@
+import { postMarkdown } from '@/layouts/post/post-markdown';
 import { useEffect, useState } from 'react';
-import { postMarkdown } from '~/layouts/post/post-markdown';
 
 interface MarkdownContentProps {
   html: string;
@@ -181,6 +181,7 @@ export const MarkdownContent = ({ html }: MarkdownContentProps) => {
   const [components, setComponents] = useState<React.ReactElement[]>([]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsClient(true);
 
     if (typeof window !== 'undefined') {

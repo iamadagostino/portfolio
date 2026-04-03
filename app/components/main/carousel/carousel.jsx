@@ -1,3 +1,4 @@
+import { cleanRenderer, cleanScene, textureLoader } from '@/utils/three';
 import { animate, useReducedMotion } from 'framer-motion';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
@@ -11,11 +12,10 @@ import {
   ShaderMaterial,
   WebGLRenderer,
 } from 'three';
-import { cleanRenderer, cleanScene, textureLoader } from '~/utils/three';
 
-import { useInViewport } from '~/hooks';
-import { resolveSrcFromSrcSet } from '~/utils/image';
-import { cssProps } from '~/utils/style';
+import { useInViewport } from '@/hooks';
+import { resolveSrcFromSrcSet } from '@/utils/image';
+import { cssProps } from '@/utils/style';
 import fragment from './carousel-fragment.glsl?raw';
 import vertex from './carousel-vertex.glsl?raw';
 import styles from './carousel.module.css';
@@ -182,13 +182,18 @@ export const Carousel = ({ width, height, images, placeholder, ...rest }) => {
     [textures]
   );
 
+  const navigateRef = useRef(null);
+
   const navigate = useCallback(
     ({ direction, index = null, ...rest }) => {
       if (!loaded) return;
 
       if (animating.current) {
         cancelAnimationFrame(scheduledAnimationFrame.current);
-        scheduledAnimationFrame.current = requestAnimationFrame(() => navigate({ direction, index, ...rest }));
+        // Use ref to call navigate recursively
+        scheduledAnimationFrame.current = requestAnimationFrame(() =>
+          navigateRef.current?.({ direction, index, ...rest })
+        );
         return;
       }
 
@@ -197,6 +202,11 @@ export const Carousel = ({ width, height, images, placeholder, ...rest }) => {
     },
     [goToIndex, imageIndex, loaded, textures]
   );
+
+  // Store navigate in ref for recursive calls
+  useEffect(() => {
+    navigateRef.current = navigate;
+  }, [navigate]);
 
   const onNavClick = useCallback(
     (index) => {
@@ -315,13 +325,21 @@ export const Carousel = ({ width, height, images, placeholder, ...rest }) => {
     [onSwipeMove]
   );
 
+  // Use refs to store handlers to avoid self-referential issues with event listeners
+  const handlePointerUpRef = useRef(null);
+
   const handlePointerUp = useCallback(() => {
     setDragging(false);
     onSwipeEnd();
 
-    document.removeEventListener('pointerup', handlePointerUp);
+    document.removeEventListener('pointerup', handlePointerUpRef.current);
     document.removeEventListener('pointermove', handlePointerMove);
-  }, [handlePointerMove, onSwipeEnd]);
+  }, [onSwipeEnd, handlePointerMove]);
+
+  // Update ref when handler changes
+  useEffect(() => {
+    handlePointerUpRef.current = handlePointerUp;
+  }, [handlePointerUp]);
 
   const handlePointerDown = useCallback(
     (event) => {
@@ -329,9 +347,9 @@ export const Carousel = ({ width, height, images, placeholder, ...rest }) => {
       setDragging(true);
 
       document.addEventListener('pointermove', handlePointerMove);
-      document.addEventListener('pointerup', handlePointerUp);
+      document.addEventListener('pointerup', handlePointerUpRef.current);
     },
-    [handlePointerMove, handlePointerUp]
+    [handlePointerMove]
   );
 
   const handleKeyDown = (event) => {

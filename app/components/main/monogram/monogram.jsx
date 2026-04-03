@@ -1,7 +1,7 @@
 import { forwardRef, useCallback, useId } from 'react';
 
 import classNames from 'classnames';
-import { classes } from '~/utils/style';
+import { classes } from '@/utils/style';
 import styles from './monogram.module.css';
 import { useHover } from '@uidotdev/usehooks';
 import { useTheme } from '../theme-provider';

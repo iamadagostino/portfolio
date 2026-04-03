@@ -6,21 +6,27 @@ import { useEffect, useRef, useState } from 'react';
  * `react-transition-group` to be used for simple vanilla css transitions
  */
 export const Transition = ({ children, in: show, unmount, initial = true, ...props }) => {
-  const enterTimeout = useRef();
-  const exitTimeout = useRef();
+  const enterTimeoutRef = useRef();
+  const exitTimeoutRef = useRef();
 
   useEffect(() => {
     if (show) {
-      clearTimeout(exitTimeout.current);
+      clearTimeout(exitTimeoutRef.current);
     } else {
-      clearTimeout(enterTimeout.current);
+      clearTimeout(enterTimeoutRef.current);
     }
   }, [show]);
 
   return (
     <AnimatePresence>
       {(show || !unmount) && (
-        <TransitionContent enterTimeout={enterTimeout} exitTimeout={exitTimeout} in={show} initial={initial} {...props}>
+        <TransitionContent
+          enterTimeoutRef={enterTimeoutRef}
+          exitTimeoutRef={exitTimeoutRef}
+          in={show}
+          initial={initial}
+          {...props}
+        >
           {children}
         </TransitionContent>
       )}
@@ -31,8 +37,8 @@ export const Transition = ({ children, in: show, unmount, initial = true, ...pro
 const TransitionContent = ({
   children,
   timeout = 0,
-  enterTimeout,
-  exitTimeout,
+  enterTimeoutRef,
+  exitTimeoutRef,
   onEnter,
   onEntered,
   onExit,
@@ -54,8 +60,8 @@ const TransitionContent = ({
 
     const actualTimeout = splitTimeout ? timeout.enter : timeout;
 
-    clearTimeout(enterTimeout.current);
-    clearTimeout(exitTimeout.current);
+    clearTimeout(enterTimeoutRef.current);
+    clearTimeout(exitTimeoutRef.current);
 
     setHasEntered(true);
     setStatus('entering');
@@ -64,19 +70,19 @@ const TransitionContent = ({
     // Force reflow
     nodeRef.current?.offsetHeight;
 
-    enterTimeout.current = setTimeout(() => {
+    enterTimeoutRef.current = setTimeout(() => {
       setStatus('entered');
       onEntered?.();
     }, actualTimeout);
-  }, [onEnter, onEntered, timeout, status, show, enterTimeout, exitTimeout, hasEntered, nodeRef, splitTimeout]);
+  }, [onEnter, onEntered, timeout, status, show, enterTimeoutRef, exitTimeoutRef, hasEntered, nodeRef, splitTimeout]);
 
   useEffect(() => {
     if (isPresent && show) return;
 
     const actualTimeout = splitTimeout ? timeout.exit : timeout;
 
-    clearTimeout(enterTimeout.current);
-    clearTimeout(exitTimeout.current);
+    clearTimeout(enterTimeoutRef.current);
+    clearTimeout(exitTimeoutRef.current);
 
     setStatus('exiting');
     onExit?.();
@@ -84,11 +90,23 @@ const TransitionContent = ({
     // Force reflow
     nodeRef.current?.offsetHeight;
 
-    exitTimeout.current = setTimeout(() => {
+    exitTimeoutRef.current = setTimeout(() => {
       setStatus('exited');
       safeToRemove?.();
     }, actualTimeout);
-  }, [isPresent, onExit, safeToRemove, timeout, onExited, show, enterTimeout, exitTimeout, nodeRef, splitTimeout]);
+  }, [
+    isPresent,
+    onExit,
+    safeToRemove,
+    timeout,
+    onExited,
+    show,
+    enterTimeoutRef,
+    exitTimeoutRef,
+    nodeRef,
+    splitTimeout,
+  ]);
 
+  // eslint-disable-next-line react-hooks/refs
   return children({ visible, status, nodeRef });
 };

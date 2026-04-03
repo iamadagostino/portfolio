@@ -1,8 +1,8 @@
-import { Link } from '~/components/main/link';
-import { Text } from '~/components/main/text';
-import config from '~/config/app.json';
-import { useCommonTranslation } from '~/i18n/i18n.hooks';
-import { classes } from '~/utils/style';
+import { Link } from '@/components/main/link';
+import { Text } from '@/components/main/text';
+import config from '@/config/app.json';
+import { useCommonTranslation } from '@/i18n/i18n.hooks';
+import { classes } from '@/utils/style';
 import styles from './footer.module.css';
 
 export const Footer = ({ className }) => {

@@ -1,14 +1,15 @@
-import flatlinePoster from '~/assets/images/errors/flatline.png';
-import notFoundPoster from '~/assets/images/errors/notfound.jpg';
-import flatlineVideo from '~/assets/videos/errors//flatline.mp4';
-import notFoundVideo from '~/assets/videos/errors/notfound.mp4';
-import { Button } from '~/components/main/button';
-import { DecoderText } from '~/components/main/decoder-text';
-import { Heading } from '~/components/main/heading';
-import { Image } from '~/components/main/image';
-import { Text } from '~/components/main/text';
-import { Transition } from '~/components/main/transition';
-import { useCurrentLanguage, useErrorTranslation } from '~/i18n/i18n.hooks';
+import flatlinePoster from '@/assets/images/errors/flatline.png';
+import notFoundPoster from '@/assets/images/errors/notfound.jpg';
+import flatlineVideo from '@/assets/videos/errors//flatline.mp4';
+import notFoundVideo from '@/assets/videos/errors/notfound.mp4';
+import { Button } from '@/components/main/button';
+import { DecoderText } from '@/components/main/decoder-text';
+import { Heading } from '@/components/main/heading';
+import { Image } from '@/components/main/image';
+import { Text } from '@/components/main/text';
+import { Transition } from '@/components/main/transition';
+import { useCurrentLanguage, useErrorTranslation } from '@/i18n/i18n.hooks';
+import { Link } from 'react-router';
 import flatlineSkull from './error-flatline.svg';
 import styles from './error.module.css';
 
@@ -99,11 +100,13 @@ export function Error({ error }) {
                   </Button>
                 ) : (
                   <Button
+                    as={Link}
+                    reloadDocument
                     secondary
                     iconHoverShift
                     className={styles.button}
                     data-visible={visible}
-                    href={homeLink}
+                    to={homeLink}
                     icon="chevron-right"
                   >
                     {t('errors.notFound.button')}

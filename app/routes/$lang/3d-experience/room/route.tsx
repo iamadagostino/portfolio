@@ -1,16 +1,15 @@
+import { Interface } from '@/components/3d-experience/interface';
+import { Cursor } from '@/components/3d-experience/partials/cursor';
+import { Menu } from '@/components/3d-experience/partials/menu';
+import { ScrollManager } from '@/components/3d-experience/partials/scrollManager';
+import { Experience } from '@/components/3d-experience/scene/experience';
+import appConfig from '@/config/app.json';
+import { framerMotionConfig } from '@/config/framer-motion';
+import { baseMeta } from '@/utils/meta';
 import { Scroll, ScrollControls } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
-import { config } from 'dotenv';
 import { MotionConfig } from 'framer-motion';
-import { Leva } from 'leva';
-import { useEffect, useState } from 'react';
-import { Interface } from '~/components/3d-experience/interface';
-import { Cursor } from '~/components/3d-experience/partials/cursor';
-import { Menu } from '~/components/3d-experience/partials/menu';
-import { ScrollManager } from '~/components/3d-experience/partials/scrollManager';
-import { Experience } from '~/components/3d-experience/scene/experience';
-import { framerMotionConfig } from '~/config/framer-motion';
-import { baseMeta } from '~/utils/meta';
+import { Suspense, useEffect, useState } from 'react';
 import styles from './room.module.css';
 
 export const handle = {
@@ -20,7 +19,7 @@ export const handle = {
 export const meta = () => {
   return baseMeta({
     title: '3D Experience',
-    description: `${config.name} · 3D experience overview page`,
+    description: `${appConfig.name} · 3D experience overview page`,
   });
 };
 
@@ -32,11 +31,13 @@ function App3dExperience() {
   const [enabledAmbientMusic, setEnabledAmbientMusic] = useState(false);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsClient(true);
   }, []);
 
   // Set menuOpened to false when section changes
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMenuOpened(false);
   }, [section]);
 
@@ -58,8 +59,10 @@ function App3dExperience() {
             <ScrollManager section={section} onSectionChange={setSection} />
             {/* Scroll Areas */}
             <Scroll>
-              {/* Experience */}
-              <Experience darkMode={darkMode} menuOpened={menuOpened} />
+              {/* Experience with Suspense for texture/model loading */}
+              <Suspense fallback={null}>
+                <Experience darkMode={darkMode} menuOpened={menuOpened} />
+              </Suspense>
             </Scroll>
             <Scroll html>
               <div className="no-scrollbar">
@@ -83,9 +86,6 @@ function App3dExperience() {
 
         {/* Cursor */}
         <Cursor />
-
-        {/* Leva */}
-        <Leva hidden />
       </MotionConfig>
     </div>
   );

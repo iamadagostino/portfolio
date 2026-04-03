@@ -1,4 +1,4 @@
-import { Link } from '~/components/main/link';
+import { Link } from '@/components/main/link';
 import { StoryContainer } from '../../../../.storybook/story-container';
 
 export default {

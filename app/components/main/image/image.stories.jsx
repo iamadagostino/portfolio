@@ -1,4 +1,4 @@
-import { Image } from '~/components/main/image';
+import { Image } from '@/components/main/image';
 import { StoryContainer } from '../../../../.storybook/story-container';
 
 export default {

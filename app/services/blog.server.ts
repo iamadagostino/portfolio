@@ -1,7 +1,7 @@
-import { getPrismaClient, prisma } from '~/.server/db';
-import type { Language } from '~/i18n/i18n.resources';
-import { markdownToHtmlSync } from '~/services/markdown.server';
-import { getDatabaseLanguageFilter } from '~/services/blog-slug.server';
+import { getPrismaClient, prisma } from '@/.server/db';
+import type { Language } from '@/i18n/i18n.resources';
+import { markdownToHtmlSync } from '@/services/markdown.server';
+import { getDatabaseLanguageFilter } from '@/services/blog-slug.server';
 
 export interface BlogPost {
   id: number;

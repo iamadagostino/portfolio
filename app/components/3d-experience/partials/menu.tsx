@@ -1,12 +1,49 @@
 import { EnvelopeIcon, HomeIcon, SwatchIcon, UserCircleIcon } from '@heroicons/react/24/solid';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
+import lightSwitchOffSoundEffect from '@/assets/sounds/effects/light-switch-off.wav';
+import lightSwitchOnSoundEffect from '@/assets/sounds/effects/light-switch-on.wav';
+import betterDayMusic from '@/assets/sounds/music/better-day.mp3';
+import flowMusic from '@/assets/sounds/music/flow.mp3';
 import { motion } from 'framer-motion';
-import { useSound } from 'react-sounds';
-import lightSwitchOffSoundEffect from '~/assets/sounds/effects/light-switch-off.wav';
-import lightSwitchOnSoundEffect from '~/assets/sounds/effects/light-switch-on.wav';
-import betterDayMusic from '~/assets/sounds/music/better-day.mp3';
-import flowMusic from '~/assets/sounds/music/flow.mp3';
+
+// Client-only sound hook that safely handles SSR
+function useClientSound(src: string, options: { volume?: number; loop?: boolean } = {}) {
+  const howlRef = useRef<import('howler').Howl | null>(null);
+  const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    // Dynamically import Howler only on client
+    import('howler').then(({ Howl }) => {
+      howlRef.current = new Howl({
+        src: [src],
+        volume: options.volume ?? 1,
+        loop: options.loop ?? false,
+      });
+      setIsReady(true);
+    });
+
+    return () => {
+      howlRef.current?.unload();
+    };
+  }, [src, options.volume, options.loop]);
+
+  const play = useCallback(async () => {
+    if (howlRef.current && isReady) {
+      howlRef.current.play();
+    }
+  }, [isReady]);
+
+  const stop = useCallback(() => {
+    if (howlRef.current) {
+      howlRef.current.stop();
+    }
+  }, []);
+
+  return useMemo(() => ({ play, stop }), [play, stop]);
+}
 
 type MenuProps = {
   darkMode: boolean;
@@ -28,18 +65,18 @@ export const Menu = ({
   setEnabledAmbientMusic,
 }: MenuProps) => {
   const [hasUserInteracted, setHasUserInteracted] = useState(false);
-  const [ambientMusic, setAmbientMusic] = useState<string>(betterDayMusic);
+  const ambientMusic = darkMode ? flowMusic : betterDayMusic;
 
-  const lightSwitchOffSound = useSound(lightSwitchOffSoundEffect, {
+  const lightSwitchOffSound = useClientSound(lightSwitchOffSoundEffect, {
     volume: 0.5,
   });
 
-  const lightSwitchOnSound = useSound(lightSwitchOnSoundEffect, {
+  const lightSwitchOnSound = useClientSound(lightSwitchOnSoundEffect, {
     volume: 0.5,
   });
 
   // Ambient music sound with a delay for user interaction
-  const ambientSound = useSound(ambientMusic, {
+  const ambientSound = useClientSound(ambientMusic, {
     loop: true,
     volume: 0.5,
   });
@@ -65,15 +102,12 @@ export const Menu = ({
     if (darkMode) {
       document.body.classList.add('dark');
       if (hasUserInteracted) void lightSwitchOffSound.play();
-      setAmbientMusic(flowMusic);
     } else {
       document.body.classList.remove('dark');
       if (hasUserInteracted) void lightSwitchOnSound.play();
-      setAmbientMusic(betterDayMusic);
     }
   }, [darkMode, hasUserInteracted, lightSwitchOffSound, lightSwitchOnSound]);
 
-  // Stop current music if ambient music changes
   useEffect(() => {
     if (hasUserInteracted) {
       ambientSound.stop();
@@ -109,7 +143,7 @@ export const Menu = ({
             className="group relative"
           >
             <div
-              className={`relative flex h-[48px] w-[48px] transform flex-col items-center justify-center overflow-hidden rounded-full bg-slate-700 ring-0 ring-gray-300 transition-all hover:ring-8 ${menuOpened ? 'ring-4' : ''} ring-opacity-30 shadow-md duration-200`}
+              className={`relative flex h-12 w-12 transform flex-col items-center justify-center overflow-hidden rounded-full bg-slate-700 ring-0 ring-gray-300 transition-all hover:ring-8 ${menuOpened ? 'ring-4' : ''} ring-opacity-30 shadow-md duration-200`}
             >
               <div
                 className={`-translate-y-5 transform overflow-hidden transition-all duration-150 ${menuOpened ? 'translate-y-3' : ''}`}
@@ -129,16 +163,16 @@ export const Menu = ({
 
               <span
                 aria-hidden
-                className={`flex h-[20px] w-[20px] origin-center -translate-y-3 transform flex-col justify-between overflow-hidden transition-all duration-300`}
+                className={`flex h-5 w-5 origin-center -translate-y-3 transform flex-col justify-between overflow-hidden transition-all duration-300`}
               >
                 <span
-                  className={`mb-1.5 block h-[2px] w-7 origin-left transform bg-white transition-all duration-300 ${menuOpened ? 'translate-y-6' : ''}`}
+                  className={`mb-1.5 block h-0.5 w-7 origin-left transform bg-white transition-all duration-300 ${menuOpened ? 'translate-y-6' : ''}`}
                 ></span>
                 <span
-                  className={`mb-1.5 block h-[2px] w-7 transform rounded bg-white transition-all duration-300 ${menuOpened ? 'translate-y-6' : ''} delay-75`}
+                  className={`mb-1.5 block h-0.5 w-7 transform rounded bg-white transition-all duration-300 ${menuOpened ? 'translate-y-6' : ''} delay-75`}
                 ></span>
                 <span
-                  className={`block h-[2px] w-7 origin-left transform bg-white transition-all duration-300 ${menuOpened ? 'translate-y-6' : ''} delay-100`}
+                  className={`block h-0.5 w-7 origin-left transform bg-white transition-all duration-300 ${menuOpened ? 'translate-y-6' : ''} delay-100`}
                 ></span>
               </span>
             </div>
@@ -154,7 +188,7 @@ export const Menu = ({
             className="group relative"
           >
             <div
-              className={`relative flex h-[48px] w-[48px] transform flex-col items-center justify-center overflow-hidden rounded-full bg-slate-700 ring-0 ring-gray-300 transition-all hover:ring-8 ${menuOpened ? 'ring-4' : ''} ring-opacity-30 shadow-md duration-200`}
+              className={`relative flex h-12 w-12 transform flex-col items-center justify-center overflow-hidden rounded-full bg-slate-700 ring-0 ring-gray-300 transition-all hover:ring-8 ${menuOpened ? 'ring-4' : ''} ring-opacity-30 shadow-md duration-200`}
             >
               <div
                 className={`-translate-y-5 transform overflow-hidden transition-all duration-150 ${menuOpened ? 'translate-y-3' : ''}`}
@@ -174,16 +208,16 @@ export const Menu = ({
 
               <span
                 aria-hidden
-                className={`flex h-[20px] w-[20px] origin-center -translate-y-3 transform flex-col justify-between overflow-hidden transition-all duration-300`}
+                className={`flex h-5 w-5 origin-center -translate-y-3 transform flex-col justify-between overflow-hidden transition-all duration-300`}
               >
                 <span
-                  className={`mb-1.5 block h-[2px] w-7 origin-left transform bg-white transition-all duration-300 ${menuOpened ? 'translate-y-6' : ''}`}
+                  className={`mb-1.5 block h-0.5 w-7 origin-left transform bg-white transition-all duration-300 ${menuOpened ? 'translate-y-6' : ''}`}
                 ></span>
                 <span
-                  className={`mb-1.5 block h-[2px] w-7 transform rounded bg-white transition-all duration-300 ${menuOpened ? 'translate-y-6' : ''} delay-75`}
+                  className={`mb-1.5 block h-0.5 w-7 transform rounded bg-white transition-all duration-300 ${menuOpened ? 'translate-y-6' : ''} delay-75`}
                 ></span>
                 <span
-                  className={`block h-[2px] w-7 origin-left transform bg-white transition-all duration-300 ${menuOpened ? 'translate-y-6' : ''} delay-100`}
+                  className={`block h-0.5 w-7 origin-left transform bg-white transition-all duration-300 ${menuOpened ? 'translate-y-6' : ''} delay-100`}
                 ></span>
               </span>
             </div>
@@ -192,7 +226,7 @@ export const Menu = ({
       </div>
 
       {/* Dark Mode Button */}
-      <div className="fixed top-[50px] right-[120px] z-20">
+      <div className="fixed top-12.5 right-30 z-20">
         {darkMode ? (
           <button
             type="button"
@@ -200,13 +234,13 @@ export const Menu = ({
             aria-pressed="true"
             aria-label="Switch to light mode"
             title="Switch to light mode"
-            className="ring-opacity-30 relative flex h-[42px] w-[42px] transform items-center justify-center overflow-hidden rounded-full bg-slate-700 shadow-md ring-0 ring-gray-300 transition-all duration-200 hover:ring-8"
+            className="ring-opacity-30 relative flex h-10.5 w-10.5 transform items-center justify-center overflow-hidden rounded-full bg-slate-700 shadow-md ring-0 ring-gray-300 transition-all duration-200 hover:ring-8"
           >
             <svg
               width="24"
               height="24"
               viewBox="0 0 18 18"
-              className={`absolute origin-center transform overflow-hidden transition-all duration-500 ${darkMode ? 'rotate-0' : 'rotate-[-45deg]'} fill-yellow-500`}
+              className={`absolute origin-center transform overflow-hidden transition-all duration-500 ${darkMode ? 'rotate-0' : '-rotate-45'} fill-yellow-500`}
               aria-hidden
             >
               <mask id="sun-mask-open">
@@ -271,7 +305,7 @@ export const Menu = ({
               width="24"
               height="24"
               viewBox="0 0 18 18"
-              className={`absolute origin-center transform overflow-hidden transition-all duration-500 ${darkMode ? 'rotate-[30deg]' : 'rotate-0'} fill-gray-200 ${darkMode ? 'animate-wiggle' : ''}`}
+              className={`absolute origin-center transform overflow-hidden transition-all duration-500 ${darkMode ? 'rotate-30' : 'rotate-0'} fill-gray-200 ${darkMode ? 'animate-wiggle' : ''}`}
             >
               <mask id="moon-mask-open">
                 <rect x="0" y="0" width="18" height="18"></rect>
@@ -295,13 +329,13 @@ export const Menu = ({
             aria-pressed="false"
             aria-label="Switch to dark mode"
             title="Switch to dark mode"
-            className="ring-opacity-30 relative flex h-[42px] w-[42px] transform items-center justify-center overflow-hidden rounded-full bg-slate-700 shadow-md ring-0 ring-gray-300 transition-all duration-200 hover:ring-8"
+            className="ring-opacity-30 relative flex h-10.5 w-10.5 transform items-center justify-center overflow-hidden rounded-full bg-slate-700 shadow-md ring-0 ring-gray-300 transition-all duration-200 hover:ring-8"
           >
             <svg
               width="24"
               height="24"
               viewBox="0 0 18 18"
-              className={`absolute origin-center transform overflow-hidden transition-all duration-500 ${darkMode ? 'rotate-0' : 'rotate-[-45deg]'} fill-yellow-500`}
+              className={`absolute origin-center transform overflow-hidden transition-all duration-500 ${darkMode ? 'rotate-0' : '-rotate-45'} fill-yellow-500`}
               aria-hidden
             >
               <mask id="sun-mask-closed">
@@ -366,7 +400,7 @@ export const Menu = ({
               width="24"
               height="24"
               viewBox="0 0 18 18"
-              className={`absolute origin-center transform overflow-hidden transition-all duration-500 ${darkMode ? 'rotate-[30deg]' : 'rotate-0'} fill-gray-200 ${darkMode ? 'animate-wiggle' : ''}`}
+              className={`absolute origin-center transform overflow-hidden transition-all duration-500 ${darkMode ? 'rotate-30' : 'rotate-0'} fill-gray-200 ${darkMode ? 'animate-wiggle' : ''}`}
             >
               <mask id="moon-mask-closed">
                 <rect x="0" y="0" width="18" height="18"></rect>
@@ -387,7 +421,7 @@ export const Menu = ({
       </div>
 
       {/* Sound Button */}
-      <div className="fixed top-[50px] right-[180px] z-20">
+      <div className="fixed top-12.5 right-45 z-20">
         {enabledAmbientMusic ? (
           <button
             type="button"
@@ -395,7 +429,7 @@ export const Menu = ({
             aria-pressed="true"
             aria-label="Disable ambient music"
             title="Disable ambient music"
-            className="ring-opacity-30 relative flex h-[42px] w-[42px] transform items-center justify-center overflow-hidden rounded-full bg-slate-700 shadow-md ring-0 ring-gray-300 transition-all duration-200 hover:ring-8"
+            className="ring-opacity-30 relative flex h-10.5 w-10.5 transform items-center justify-center overflow-hidden rounded-full bg-slate-700 shadow-md ring-0 ring-gray-300 transition-all duration-200 hover:ring-8"
           >
             <svg
               width="28"
@@ -435,7 +469,7 @@ export const Menu = ({
             aria-pressed="false"
             aria-label="Enable ambient music"
             title="Enable ambient music"
-            className="ring-opacity-30 relative flex h-[42px] w-[42px] transform items-center justify-center overflow-hidden rounded-full bg-slate-700 shadow-md ring-0 ring-gray-300 transition-all duration-200 hover:ring-8"
+            className="ring-opacity-30 relative flex h-10.5 w-10.5 transform items-center justify-center overflow-hidden rounded-full bg-slate-700 shadow-md ring-0 ring-gray-300 transition-all duration-200 hover:ring-8"
           >
             <svg
               width="28"
@@ -493,7 +527,7 @@ export const Menu = ({
           </h5>
         </div>
         <nav
-          className="flex min-w-[240px] flex-col gap-1 p-2 font-sans text-base font-normal text-gray-700"
+          className="flex min-w-60 flex-col gap-1 p-2 font-sans text-base font-normal text-gray-700"
           data-menu-nav="true"
           id="experience-menu"
         >

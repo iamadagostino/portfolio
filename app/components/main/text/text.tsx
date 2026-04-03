@@ -1,6 +1,6 @@
 import { type ElementType, type JSXElementConstructor, type ReactNode } from 'react';
 
-import { classes } from '~/utils/style';
+import { classes } from '@/utils/style';
 import styles from './text.module.css';
 
 interface TextProps {

@@ -4,7 +4,7 @@ import {
   deleteImage,
   getGalleryImages,
   type UploadResult,
-} from '~/services/upload.server';
+} from '@/services/upload.server';
 
 /**
  * API Route for handling image uploads and management

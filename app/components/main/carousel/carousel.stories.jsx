@@ -1,4 +1,4 @@
-import { Carousel } from '~/components/main/carousel';
+import { Carousel } from '@/components/main/carousel';
 import { StoryContainer } from '../../../../.storybook/story-container';
 
 export default {

@@ -1,14 +1,14 @@
+import { Avatar } from '@/components/admin/avatar';
+import { Badge } from '@/components/admin/badge';
+import { Button } from '@/components/admin/button';
+import { DescriptionDetails, DescriptionList, DescriptionTerm } from '@/components/admin/description-list';
+import { Divider } from '@/components/admin/divider';
+import { Heading, Subheading } from '@/components/admin/heading';
+import { Link } from '@/components/admin/link';
+import { getOrder } from '@/data/fake';
 import { BanknotesIcon, CalendarIcon, ChevronLeftIcon, CreditCardIcon } from '@heroicons/react/16/solid';
-import { useLoaderData } from 'react-router';
 import type { LoaderFunctionArgs } from 'react-router';
-import { Avatar } from '~/components/admin/avatar';
-import { Badge } from '~/components/admin/badge';
-import { Button } from '~/components/admin/button';
-import { DescriptionDetails, DescriptionList, DescriptionTerm } from '~/components/admin/description-list';
-import { Divider } from '~/components/admin/divider';
-import { Heading, Subheading } from '~/components/admin/heading';
-import { Link } from '~/components/admin/link';
-import { getOrder } from '~/data/fake';
+import { useLoaderData } from 'react-router';
 import { RefundOrder } from './refund';
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {

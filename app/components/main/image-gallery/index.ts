@@ -1,2 +1,2 @@
-export { ImageGallery, ImageSelector } from './ImageGallery';
-export type { ImageData } from './ImageGallery';
+export { ImageGallery, ImageSelector } from './image-gallery';
+export type { ImageData } from './image-gallery';

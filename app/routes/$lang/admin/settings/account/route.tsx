@@ -1,12 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { Avatar } from '~/components/admin/avatar';
-import { Button } from '~/components/admin/button';
-import { Divider } from '~/components/admin/divider';
-import { Heading, Subheading } from '~/components/admin/heading';
-import { Link } from '~/components/admin/link';
-import { Text } from '~/components/admin/text';
+import { Avatar } from '@/components/admin/avatar';
+import { Button } from '@/components/admin/button';
+import { Divider } from '@/components/admin/divider';
+import { Heading, Subheading } from '@/components/admin/heading';
+import { Link } from '@/components/admin/link';
+import { Text } from '@/components/admin/text';
 
 export const meta = () => [{ title: 'Profile · Account · Admin' }];
 

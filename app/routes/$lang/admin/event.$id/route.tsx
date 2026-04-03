@@ -1,12 +1,12 @@
 import { ChevronLeftIcon } from '@heroicons/react/16/solid';
 import type { LoaderFunctionArgs } from 'react-router';
 import { useLoaderData } from 'react-router';
-import { Badge } from '~/components/admin/badge';
-import { Button } from '~/components/admin/button';
-import { Heading, Subheading } from '~/components/admin/heading';
-import { Link } from '~/components/admin/link';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/components/admin/table';
-import { getEvent, getEventOrders } from '~/data/fake';
+import { Badge } from '@/components/admin/badge';
+import { Button } from '@/components/admin/button';
+import { Heading, Subheading } from '@/components/admin/heading';
+import { Link } from '@/components/admin/link';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/admin/table';
+import { getEvent, getEventOrders } from '@/data/fake';
 import { Stat } from '../dashboard/stat';
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {

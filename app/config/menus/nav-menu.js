@@ -1,5 +1,37 @@
-import config from '~/config/app.json';
-import { getLocalizedPath } from '~/config/routes';
+import config from '@/config/app.json';
+import { getLocalizedPath } from '@/config/routes';
+
+const SECTION_ANCHORS = {
+  home: {
+    canonical: 'home',
+    localized: {
+      'it-IT': 'home',
+    },
+    aliases: ['intro'],
+  },
+  projects: {
+    canonical: 'projects',
+    localized: {
+      'it-IT': 'progetti',
+    },
+    aliases: ['project-1', 'project-2', 'project-3', 'progetto-1', 'progetto-2', 'progetto-3'],
+  },
+  details: {
+    canonical: 'details',
+    localized: {
+      'it-IT': 'dettagli',
+    },
+  },
+};
+
+export const getLocalizedSectionAnchor = (slug, language) => {
+  const config = SECTION_ANCHORS[slug];
+  if (!config) {
+    return null;
+  }
+
+  return config.localized[language] ?? config.canonical;
+};
 
 // Navigation link keys for translation
 export const navLinkKeys = [
@@ -36,10 +68,10 @@ export const getNavLinks = (t, currentLanguage = 'en', currentPath = '/') => {
   
   return navLinkKeys.map(link => {
     let pathname;
-    
+
     if (link.type === 'home') {
-      // Home page
-      pathname = localePrefix;
+      // Always navigate to #home anchor to show the hero section
+      pathname = isOnHomePage ? '#home' : `${localePrefix}#home`;
     } else if (link.type === 'anchor') {
       // Hash links (anchors on home page) - DON'T translate the anchor ID
       // HTML section IDs are fixed regardless of language
@@ -51,18 +83,13 @@ export const getNavLinks = (t, currentLanguage = 'en', currentPath = '/') => {
         pathname = `${localePrefix}#${link.anchor}`;
       }
     } else if (link.type === 'page') {
-      // Smart routing for sections that have both page routes and anchors
-      const sectionsWithAnchors = {
-        projects: 'project-1',
-        details: 'details'
-      };
-      
       // Use our domain-based route mapping system
       const translatedSlug = getLocalizedPath('main', link.slug, currentLanguage) || t(`slugs.${link.slug}`, { defaultValue: link.slug });
       
       // If this section has an anchor and we're on the home page, use anchor for smooth scrolling
-      if (sectionsWithAnchors[link.slug] && isOnHomePage) {
-        pathname = `#${sectionsWithAnchors[link.slug]}`;
+      const anchorId = getLocalizedSectionAnchor(link.slug, currentLanguage);
+      if (anchorId) {
+        pathname = isOnHomePage ? `#${anchorId}` : `${localePrefix}#${anchorId}`;
       } else {
         // Otherwise use the full localized route
         pathname = `${localePrefix}/${translatedSlug}`;
@@ -80,6 +107,46 @@ export const getNavLinks = (t, currentLanguage = 'en', currentPath = '/') => {
     };
   });
 };
+
+export const getAnchorAliasMap = (language) => {
+  const aliases = {};
+
+  Object.values(SECTION_ANCHORS).forEach(({ canonical, localized, aliases: extraAliases = [] }) => {
+    aliases[canonical] = canonical;
+    aliases[`#${canonical}`] = canonical;
+
+    const localizedValue = localized[language];
+    if (localizedValue && localizedValue !== canonical) {
+      aliases[localizedValue] = canonical;
+      aliases[`#${localizedValue}`] = canonical;
+    }
+
+    extraAliases.forEach((alias) => {
+      aliases[alias] = canonical;
+      aliases[`#${alias}`] = canonical;
+    });
+  });
+
+  return aliases;
+};
+
+export const getAnchorHashes = (language) => {
+  const hashes = {};
+
+  Object.entries(SECTION_ANCHORS).forEach(([slug, { canonical, localized, aliases: extraAliases = [] }]) => {
+    const variations = new Set([`#${canonical}`]);
+    const localizedValue = localized[language];
+    if (localizedValue && localizedValue !== canonical) {
+      variations.add(`#${localizedValue}`);
+    }
+    extraAliases.forEach((alias) => variations.add(`#${alias}`));
+    hashes[slug] = Array.from(variations);
+  });
+
+  return hashes;
+};
+
+export const getCanonicalSectionAnchor = (slug) => SECTION_ANCHORS[slug]?.canonical ?? null;
 
 export const socialLinks = [
   {
@@ -108,7 +175,7 @@ export const socialLinks = [
 export const navLinks = [
   {
     label: 'Projects',
-    pathname: '/#projects', // Changed from '#project-1' to '#projects'
+    pathname: '/#projects',
   },
   {
     label: 'Details',

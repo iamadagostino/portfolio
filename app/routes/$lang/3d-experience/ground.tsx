@@ -1,21 +1,24 @@
+import plasterBrickNormalMap from '@/assets/textures/ground/plasterbrick_nor_gl_1k.jpg';
+import plasterBrickRoughnessMap from '@/assets/textures/ground/plasterbrick_rough_1k.jpg';
+import { configureTextures } from '@/utils/texture-config';
 import { MeshReflectorMaterial } from '@react-three/drei';
-import { useLoader } from '@react-three/fiber';
+import { useFrame, useLoader } from '@react-three/fiber';
 import { useEffect } from 'react';
 import { LinearSRGBColorSpace, RepeatWrapping, TextureLoader } from 'three';
-import plasterBrickNormalMap from '~/assets/textures/ground/plasterbrick_nor_gl_1k.jpg';
-import plasterBrickRoughnessMap from '~/assets/textures/ground/plasterbrick_rough_1k.jpg';
 
 function Ground() {
   const [roughnessMap, normalMap] = useLoader(TextureLoader, [plasterBrickRoughnessMap, plasterBrickNormalMap]);
 
   useEffect(() => {
-    [roughnessMap, normalMap].forEach((texture) => {
-      texture.wrapS = RepeatWrapping;
-      texture.wrapT = RepeatWrapping;
-      texture.repeat.set(5, 5);
+    configureTextures([roughnessMap, normalMap], {
+      wrapS: RepeatWrapping,
+      wrapT: RepeatWrapping,
+      colorSpace: LinearSRGBColorSpace,
     });
 
-    normalMap.colorSpace = LinearSRGBColorSpace;
+    [roughnessMap, normalMap].forEach((texture) => {
+      texture.repeat.set(5, 5);
+    });
 
     // Cleanup function to dispose textures when component unmounts
     return () => {
@@ -23,6 +26,14 @@ function Ground() {
       normalMap.dispose();
     };
   }, [normalMap, roughnessMap]);
+
+  useFrame((state) => {
+    // Get the elapsed time and use it to create a scrolling effect
+    const t = -state.clock.getElapsedTime() * 0.128;
+    // Scroll the texture to create a moving effect
+    roughnessMap.offset.set(0, t);
+    normalMap.offset.set(0, t);
+  });
 
   return (
     <mesh rotation-x={-Math.PI * 0.5} castShadow receiveShadow>

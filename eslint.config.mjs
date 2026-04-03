@@ -119,7 +119,7 @@ export default [...compat.extends("eslint:recommended", "plugin:storybook/recomm
     },
 
     settings: {
-        "import/internal-regex": "^~/",
+        "import/internal-regex": "^@/",
 
         "import/resolver": {
             node: {

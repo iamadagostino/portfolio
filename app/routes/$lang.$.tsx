@@ -1,7 +1,7 @@
+import { returnLanguageIfSupported } from '@/i18n/i18n.resources';
 import type { LoaderFunctionArgs } from 'react-router';
 import { redirect } from 'react-router';
-import { returnLanguageIfSupported } from '~/i18n/i18n.resources';
-import { ROUTE_SLUG_MAP } from './config';
+import { DEFAULT_CANONICAL_LANGUAGE, ROUTE_SLUG_MAP } from './config';
 
 /**
  * Development-time catch-all for localized URLs
@@ -38,14 +38,24 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 
   // Find which canonical route this localized slug maps to
   for (const [canonical, translations] of Object.entries(ROUTE_SLUG_MAP)) {
-    if (translations[language as keyof typeof translations] === localizedSlug) {
-      // Found the mapping! Redirect to canonical route
-      const canonicalSlug = translations.en || canonical;
-      const remainingPath = pathSegments.slice(1).join('/');
-      const redirectPath = `/${language}/${canonicalSlug}${remainingPath ? `/${remainingPath}` : ''}`;
-
-      throw redirect(redirectPath);
+    const translationValues = Object.values(translations);
+    if (!translationValues.includes(localizedSlug)) {
+      continue;
     }
+
+    // Determine the correct slug for the current language (falls back to canonical language)
+    const expectedSlug =
+      translations[language as keyof typeof translations] || translations[DEFAULT_CANONICAL_LANGUAGE] || canonical;
+
+    // If we're already on the correct slug for this language, no redirect needed
+    if (localizedSlug === expectedSlug) {
+      break;
+    }
+
+    const remainingPath = pathSegments.slice(1).join('/');
+    const redirectPath = `/${language}/${expectedSlug}${remainingPath ? `/${remainingPath}` : ''}`;
+
+    throw redirect(redirectPath);
   }
 
   throw new Response('Not Found', { status: 404 });

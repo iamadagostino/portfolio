@@ -1,13 +1,13 @@
 import type { ElementType, JSXElementConstructor, ReactNode } from 'react';
 import { createContext, useContext } from 'react';
-import GothamBoldItalic from '~/assets/fonts/gotham-bold-italic.woff2';
-import GothamBold from '~/assets/fonts/gotham-bold.woff2';
-import GothamBookItalic from '~/assets/fonts/gotham-book-italic.woff2';
-import GothamBook from '~/assets/fonts/gotham-book.woff2';
-import GothamMediumItalic from '~/assets/fonts/gotham-medium-italic.woff2';
-import GothamMedium from '~/assets/fonts/gotham-medium.woff2';
-import IPAGothic from '~/assets/fonts/ipa-gothic.woff2';
-import { classes, media } from '~/utils/style';
+import GothamBoldItalic from '@/assets/fonts/gotham-bold-italic.woff2';
+import GothamBold from '@/assets/fonts/gotham-bold.woff2';
+import GothamBookItalic from '@/assets/fonts/gotham-book-italic.woff2';
+import GothamBook from '@/assets/fonts/gotham-book.woff2';
+import GothamMediumItalic from '@/assets/fonts/gotham-medium-italic.woff2';
+import GothamMedium from '@/assets/fonts/gotham-medium.woff2';
+import IPAGothic from '@/assets/fonts/ipa-gothic.woff2';
+import { classes, media } from '@/utils/style';
 import { themes, tokens } from './theme';
 
 interface ThemeContextType {

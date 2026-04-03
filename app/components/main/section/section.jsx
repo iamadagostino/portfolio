@@ -1,4 +1,4 @@
-import { classes } from '~/utils/style';
+import { classes } from '@/utils/style';
 import { forwardRef } from 'react';
 import styles from './section.module.css';
 

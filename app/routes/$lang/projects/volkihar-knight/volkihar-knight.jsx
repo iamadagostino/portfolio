@@ -1,29 +1,29 @@
 import { Fragment, Suspense, lazy } from 'react';
-import volkiharBackgroundLarge from '~/assets/images/projects/volkihar-knight/volkihar-background-large.jpg';
-import volkiharBackgroundPlaceholder from '~/assets/images/projects/volkihar-knight/volkihar-background-placeholder.jpg';
-import volkiharBackground from '~/assets/images/projects/volkihar-knight/volkihar-background.jpg';
-import volkiharBannerLarge from '~/assets/images/projects/volkihar-knight/volkihar-banner-large.jpg';
-import volkiharBannerPlaceholder from '~/assets/images/projects/volkihar-knight/volkihar-banner-placeholder.jpg';
-import volkiharBanner from '~/assets/images/projects/volkihar-knight/volkihar-banner.jpg';
-import volkiharBookLarge from '~/assets/images/projects/volkihar-knight/volkihar-book-large.png';
-import volkiharBookPlaceholder from '~/assets/images/projects/volkihar-knight/volkihar-book-placeholder.png';
-import volkiharBook from '~/assets/images/projects/volkihar-knight/volkihar-book.png';
-import volkiharEnderalLarge from '~/assets/images/projects/volkihar-knight/volkihar-enderal-large.jpg';
-import volkiharEnderalLogoLarge from '~/assets/images/projects/volkihar-knight/volkihar-enderal-logo-large.png';
-import volkiharEnderalLogoPlaceholder from '~/assets/images/projects/volkihar-knight/volkihar-enderal-logo-placeholder.png';
-import volkiharEnderalLogo from '~/assets/images/projects/volkihar-knight/volkihar-enderal-logo.png';
-import volkiharEnderalPlaceholder from '~/assets/images/projects/volkihar-knight/volkihar-enderal-placeholder.jpg';
-import volkiharEnderal from '~/assets/images/projects/volkihar-knight/volkihar-enderal.jpg';
-import volkiharSlide1Large from '~/assets/images/projects/volkihar-knight/volkihar-slide-1-large.jpg';
-import volkiharSlide1 from '~/assets/images/projects/volkihar-knight/volkihar-slide-1.jpg';
-import volkiharSlide2Large from '~/assets/images/projects/volkihar-knight/volkihar-slide-2-large.jpg';
-import volkiharSlide2 from '~/assets/images/projects/volkihar-knight/volkihar-slide-2.jpg';
-import volkiharSlide3Large from '~/assets/images/projects/volkihar-knight/volkihar-slide-3-large.jpg';
-import volkiharSlide3 from '~/assets/images/projects/volkihar-knight/volkihar-slide-3.jpg';
-import volkiharSlidePlaceholder from '~/assets/images/projects/volkihar-knight/volkihar-slide-placeholder.jpg';
-import { Button } from '~/components/main/button';
-import { Footer } from '~/components/main/footer';
-import { Image } from '~/components/main/image';
+import volkiharBackgroundLarge from '@/assets/images/projects/volkihar-knight/volkihar-background-large.jpg';
+import volkiharBackgroundPlaceholder from '@/assets/images/projects/volkihar-knight/volkihar-background-placeholder.jpg';
+import volkiharBackground from '@/assets/images/projects/volkihar-knight/volkihar-background.jpg';
+import volkiharBannerLarge from '@/assets/images/projects/volkihar-knight/volkihar-banner-large.jpg';
+import volkiharBannerPlaceholder from '@/assets/images/projects/volkihar-knight/volkihar-banner-placeholder.jpg';
+import volkiharBanner from '@/assets/images/projects/volkihar-knight/volkihar-banner.jpg';
+import volkiharBookLarge from '@/assets/images/projects/volkihar-knight/volkihar-book-large.png';
+import volkiharBookPlaceholder from '@/assets/images/projects/volkihar-knight/volkihar-book-placeholder.png';
+import volkiharBook from '@/assets/images/projects/volkihar-knight/volkihar-book.png';
+import volkiharEnderalLarge from '@/assets/images/projects/volkihar-knight/volkihar-enderal-large.jpg';
+import volkiharEnderalLogoLarge from '@/assets/images/projects/volkihar-knight/volkihar-enderal-logo-large.png';
+import volkiharEnderalLogoPlaceholder from '@/assets/images/projects/volkihar-knight/volkihar-enderal-logo-placeholder.png';
+import volkiharEnderalLogo from '@/assets/images/projects/volkihar-knight/volkihar-enderal-logo.png';
+import volkiharEnderalPlaceholder from '@/assets/images/projects/volkihar-knight/volkihar-enderal-placeholder.jpg';
+import volkiharEnderal from '@/assets/images/projects/volkihar-knight/volkihar-enderal.jpg';
+import volkiharSlide1Large from '@/assets/images/projects/volkihar-knight/volkihar-slide-1-large.jpg';
+import volkiharSlide1 from '@/assets/images/projects/volkihar-knight/volkihar-slide-1.jpg';
+import volkiharSlide2Large from '@/assets/images/projects/volkihar-knight/volkihar-slide-2-large.jpg';
+import volkiharSlide2 from '@/assets/images/projects/volkihar-knight/volkihar-slide-2.jpg';
+import volkiharSlide3Large from '@/assets/images/projects/volkihar-knight/volkihar-slide-3-large.jpg';
+import volkiharSlide3 from '@/assets/images/projects/volkihar-knight/volkihar-slide-3.jpg';
+import volkiharSlidePlaceholder from '@/assets/images/projects/volkihar-knight/volkihar-slide-placeholder.jpg';
+import { Button } from '@/components/main/button';
+import { Footer } from '@/components/main/footer';
+import { Image } from '@/components/main/image';
 import {
   ProjectBackground,
   ProjectContainer,
@@ -35,13 +35,13 @@ import {
   ProjectSectionHeading,
   ProjectSectionText,
   ProjectTextRow,
-} from '~/layouts/project';
-import { baseMeta } from '~/utils/meta';
-import { media } from '~/utils/style';
+} from '@/layouts/project';
+import { baseMeta } from '@/utils/meta';
+import { media } from '@/utils/style';
 import styles from './volkihar-knight.module.css';
 import { VolkiharLogo } from './volkihar-logo';
 
-const Carousel = lazy(() => import('~/components/main/carousel').then((module) => ({ default: module.Carousel })));
+const Carousel = lazy(() => import('@/components/main/carousel').then((module) => ({ default: module.Carousel })));
 
 const Armor = lazy(() => import('./armor').then((module) => ({ default: module.Armor })));
 

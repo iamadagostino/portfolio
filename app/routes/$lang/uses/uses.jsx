@@ -1,9 +1,9 @@
-import usesBackgroundPlaceholder from '~/assets/images/placeholders/uses-background-placeholder.jpg';
-import usesBackground from '~/assets/videos/misc/uses-background.mp4';
-import { Footer } from '~/components/main/footer';
-import { Link } from '~/components/main/link';
-import { List, ListItem } from '~/components/main/list';
-import { Table, TableBody, TableCell, TableHeadCell, TableRow } from '~/components/main/table';
+import usesBackgroundPlaceholder from '@/assets/images/placeholders/uses-background-placeholder.jpg';
+import usesBackground from '@/assets/videos/misc/uses-background.mp4';
+import { Footer } from '@/components/main/footer';
+import { Link } from '@/components/main/link';
+import { List, ListItem } from '@/components/main/list';
+import { Table, TableBody, TableCell, TableHeadCell, TableRow } from '@/components/main/table';
 import {
   ProjectBackground,
   ProjectContainer,
@@ -13,8 +13,8 @@ import {
   ProjectSectionHeading,
   ProjectSectionText,
   ProjectTextRow,
-} from '~/layouts/project';
-import { baseMeta } from '~/utils/meta';
+} from '@/layouts/project';
+import { baseMeta } from '@/utils/meta';
 import styles from './uses.module.css';
 
 export const meta = () => {

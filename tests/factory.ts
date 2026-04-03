@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { User } from '@prisma/client';
-import { createUser as createDbUser } from '~/.server/models/user.model';
+import { createUser as createDbUser } from '@/.server/models/user.model';
 
 /**
  * Create a user specifying the role

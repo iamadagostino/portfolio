@@ -1,6 +1,6 @@
 import { useLoaderData } from 'react-router';
 import { useMemo } from 'react';
-import type { BlogPost } from '~/services/blog.server';
+import type { BlogPost } from '@/services/blog.server';
 
 interface BlogPostPageData {
   post: BlogPost;

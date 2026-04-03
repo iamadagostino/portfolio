@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { Input } from '~/components/admin/input';
-import { Listbox, ListboxLabel, ListboxOption } from '~/components/admin/listbox';
-import { getCountries } from '~/data/fake';
+import { Input } from '@/components/admin/input';
+import { Listbox, ListboxLabel, ListboxOption } from '@/components/admin/listbox';
+import { getCountries } from '@/data/fake';
 
 export function Address() {
   const countries = getCountries();

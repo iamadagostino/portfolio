@@ -1,5 +1,5 @@
 import { useParams } from 'react-router';
-import type { Language } from '~/i18n/i18n.resources';
+import type { Language } from '@/i18n/i18n.resources';
 import { getLocalizedPath } from './route-mapping';
 
 // Hook to get the current language from the URL params

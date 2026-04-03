@@ -1,12 +1,12 @@
-import phoneTexture2Large from '~/assets/gamestack-list-large.jpg';
-import phoneTexture2Placeholder from '~/assets/gamestack-list-placeholder.jpg';
-import phoneTexture2 from '~/assets/gamestack-list.jpg';
-import phoneTextureLarge from '~/assets/gamestack-login-large.jpg';
-import phoneTexturePlaceholder from '~/assets/gamestack-login-placeholder.jpg';
-import phoneTexture from '~/assets/gamestack-login.jpg';
-import { default as laptopTexture, default as laptopTextureLarge } from '~/assets/spr-lesson-builder-dark-large.jpg';
-import laptopTexturePlaceholder from '~/assets/spr-lesson-builder-dark-placeholder.jpg';
-import { Model } from '~/components/main/model';
+import phoneTexture2Large from '@/assets/gamestack-list-large.jpg';
+import phoneTexture2Placeholder from '@/assets/gamestack-list-placeholder.jpg';
+import phoneTexture2 from '@/assets/gamestack-list.jpg';
+import phoneTextureLarge from '@/assets/gamestack-login-large.jpg';
+import phoneTexturePlaceholder from '@/assets/gamestack-login-placeholder.jpg';
+import phoneTexture from '@/assets/gamestack-login.jpg';
+import { default as laptopTexture, default as laptopTextureLarge } from '@/assets/spr-lesson-builder-dark-large.jpg';
+import laptopTexturePlaceholder from '@/assets/spr-lesson-builder-dark-placeholder.jpg';
+import { Model } from '@/components/main/model';
 import { StoryContainer } from '../../../../.storybook/story-container';
 import { deviceModels } from './device-models';
 

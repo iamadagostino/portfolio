@@ -1,15 +1,15 @@
 'use client';
 
-import { Button } from '~/components/admin/button';
-import { Checkbox, CheckboxField } from '~/components/admin/checkbox';
-import { Divider } from '~/components/admin/divider';
-import { Label } from '~/components/admin/fieldset';
-import { Heading, Subheading } from '~/components/admin/heading';
-import { Input } from '~/components/admin/input';
-import { Select } from '~/components/admin/select';
-import { Text } from '~/components/admin/text';
-import { Textarea } from '~/components/admin/textarea';
-import { useTheme } from '~/components/main/theme-provider';
+import { Button } from '@/components/admin/button';
+import { Checkbox, CheckboxField } from '@/components/admin/checkbox';
+import { Divider } from '@/components/admin/divider';
+import { Label } from '@/components/admin/fieldset';
+import { Heading, Subheading } from '@/components/admin/heading';
+import { Input } from '@/components/admin/input';
+import { Select } from '@/components/admin/select';
+import { Text } from '@/components/admin/text';
+import { Textarea } from '@/components/admin/textarea';
+import { useTheme } from '@/components/main/theme-provider';
 import { Address } from './address';
 
 export const meta = () => [{ title: 'Settings · Admin' }];

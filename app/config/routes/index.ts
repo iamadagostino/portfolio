@@ -1,4 +1,4 @@
-import type { Language } from '~/i18n/i18n.resources';
+import type { Language } from '@/i18n/i18n.resources';
 
 // Domain-specific route configurations
 export interface RouteMapping {
@@ -16,6 +16,7 @@ export interface DomainRoutes {
 export const DOMAIN_ROUTE_MAPPINGS: Record<Language, DomainRoutes> = {
   'en-US': {
     main: {
+      intro: 'intro',
       home: 'home',
       articles: 'articles',
       article: 'article',
@@ -44,6 +45,7 @@ export const DOMAIN_ROUTE_MAPPINGS: Record<Language, DomainRoutes> = {
   },
   'it-IT': {
     main: {
+      intro: 'intro',
       home: 'home', // Or 'casa' if you prefer
       articles: 'articoli',
       article: 'articolo',
@@ -54,7 +56,7 @@ export const DOMAIN_ROUTE_MAPPINGS: Record<Language, DomainRoutes> = {
     },
     admin: {
       admin: 'admin', // Keep admin paths in English for consistency
-      dashboard: 'dashboard',
+      dashboard: 'bacheca',
       events: 'eventi',
       orders: 'ordini',
       settings: 'impostazioni',
@@ -74,19 +76,11 @@ export const DOMAIN_ROUTE_MAPPINGS: Record<Language, DomainRoutes> = {
 };
 
 // Helper functions
-export function getLocalizedPath(
-  domain: keyof DomainRoutes,
-  routeKey: string,
-  language: Language
-): string {
+export function getLocalizedPath(domain: keyof DomainRoutes, routeKey: string, language: Language): string {
   return DOMAIN_ROUTE_MAPPINGS[language]?.[domain]?.[routeKey] || routeKey;
 }
 
-export function getRouteKeyFromPath(
-  domain: keyof DomainRoutes,
-  localizedPath: string,
-  language: Language
-): string {
+export function getRouteKeyFromPath(domain: keyof DomainRoutes, localizedPath: string, language: Language): string {
   const domainMappings = DOMAIN_ROUTE_MAPPINGS[language]?.[domain];
   if (!domainMappings) return localizedPath;
 
@@ -112,14 +106,14 @@ export function getRouteKeyFromPathLegacy(localizedPath: string, language: Langu
     if (localizedPath === 'articoli') return 'articles';
     if (localizedPath === 'articolo') return 'article';
   }
-  
+
   // Try main domain first
   const mainResult = getRouteKeyFromPath('main', localizedPath, language);
   if (mainResult !== localizedPath) return mainResult;
-  
+
   // Try admin domain
   const adminResult = getRouteKeyFromPath('admin', localizedPath, language);
   if (adminResult !== localizedPath) return adminResult;
-  
+
   return localizedPath;
 }

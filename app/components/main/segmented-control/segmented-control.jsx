@@ -1,6 +1,6 @@
+import { VisuallyHidden } from '@/components/main/visually-hidden';
+import { cssProps } from '@/utils/style';
 import { createContext, useCallback, useContext, useEffect, useId, useRef, useState } from 'react';
-import { VisuallyHidden } from '~/components/main/visually-hidden';
-import { cssProps } from '~/utils/style';
 import styles from './segmented-control.module.css';
 
 const SegmentedControlContext = createContext({});
@@ -10,6 +10,7 @@ export const SegmentedControl = ({ children, currentIndex, onChange, label, ...p
   const labelId = `${id}segmented-control-label`;
   const optionRefs = useRef([]);
   const [indicator, setIndicator] = useState();
+  const [optionsLength, setOptionsLength] = useState(0);
 
   const handleKeyDown = (event) => {
     const { length } = optionRefs.current;
@@ -27,10 +28,12 @@ export const SegmentedControl = ({ children, currentIndex, onChange, label, ...p
 
   const registerOption = useCallback((optionRef) => {
     optionRefs.current = [...optionRefs.current, optionRef];
+    setOptionsLength(optionRefs.current.length);
   }, []);
 
   const unRegisterOption = useCallback((optionRef) => {
     optionRefs.current = optionRefs.current.filter((ref) => ref !== optionRef);
+    setOptionsLength(optionRefs.current.length);
   }, []);
 
   useEffect(() => {
@@ -66,7 +69,7 @@ export const SegmentedControl = ({ children, currentIndex, onChange, label, ...p
           {!!indicator && (
             <div
               className={styles.indicator}
-              data-last={currentIndex === optionRefs.current.length - 1}
+              data-last={currentIndex === optionsLength - 1}
               style={cssProps(indicator)}
             />
           )}
@@ -80,16 +83,17 @@ export const SegmentedControl = ({ children, currentIndex, onChange, label, ...p
 export const SegmentedControlOption = ({ children, ...props }) => {
   const { optionRefs, currentIndex, onChange, registerOption, unRegisterOption } = useContext(SegmentedControlContext);
   const optionRef = useRef();
-  const index = optionRefs.current.indexOf(optionRef);
+  const [index, setIndex] = useState(-1);
   const isSelected = currentIndex === index;
 
   useEffect(() => {
     registerOption(optionRef);
+    setIndex(optionRefs.current.indexOf(optionRef));
 
     return () => {
       unRegisterOption(optionRef);
     };
-  }, [registerOption, unRegisterOption]);
+  }, [registerOption, unRegisterOption, optionRefs]);
 
   return (
     <button

@@ -1,0 +1,70 @@
+@layer components {
+  .homeSection {
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    scroll-margin-top: 0;
+  }
+
+  .heroSequence {
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .heroSequenceHidden {
+    display: none;
+  }
+
+  .heroProgress {
+    appearance: none;
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 9999px;
+    overflow: hidden;
+    background-color: transparent;
+  }
+
+  .heroProgress::-webkit-progress-bar {
+    background-color: transparent;
+    border-radius: inherit;
+  }
+
+  .heroProgress::-webkit-progress-value {
+    background-image: linear-gradient(
+      to right,
+      hsl(var(--primary) / 0.4),
+      hsl(var(--primary)),
+      hsl(var(--primary) / 0.5)
+    );
+    border-radius: inherit;
+    transition: width 200ms ease;
+  }
+
+  .heroProgress::-moz-progress-bar {
+    background-image: linear-gradient(
+      to right,
+      hsl(var(--primary) / 0.4),
+      hsl(var(--primary)),
+      hsl(var(--primary) / 0.5)
+    );
+    border-radius: inherit;
+    transition: width 200ms ease;
+  }
+
+  .heroDarkTheme {
+    --background: oklch(17.76% 0 0);
+    --backgroundLight: oklch(21.78% 0 0);
+    --primary: oklch(0.6243 0.205577 255.4861);
+    --accent: oklch(0.6243 0.205577 255.4861);
+    --error: oklch(65.91% 0.249 13.76);
+    --text: oklch(100% 0 0);
+    --textTitle: oklch(100% 0 0);
+    --textBody: color-mix(in lab, oklch(100% 0 0) 80%, transparent);
+    --textLight: color-mix(in lab, oklch(100% 0 0) 60%, transparent);
+  }
+}

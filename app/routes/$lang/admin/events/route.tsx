@@ -1,14 +1,14 @@
 import { EllipsisVerticalIcon, MagnifyingGlassIcon } from '@heroicons/react/16/solid';
 import { useLoaderData, useParams } from 'react-router';
-import { Badge } from '~/components/admin/badge';
-import { Button } from '~/components/admin/button';
-import { Divider } from '~/components/admin/divider';
-import { Dropdown, DropdownButton, DropdownItem, DropdownMenu } from '~/components/admin/dropdown';
-import { Heading } from '~/components/admin/heading';
-import { Input, InputGroup } from '~/components/admin/input';
-import { Link } from '~/components/admin/link';
-import { Select } from '~/components/admin/select';
-import { getEvents } from '~/data/fake';
+import { Badge } from '@/components/admin/badge';
+import { Button } from '@/components/admin/button';
+import { Divider } from '@/components/admin/divider';
+import { Dropdown, DropdownButton, DropdownItem, DropdownMenu } from '@/components/admin/dropdown';
+import { Heading } from '@/components/admin/heading';
+import { Input, InputGroup } from '@/components/admin/input';
+import { Link } from '@/components/admin/link';
+import { Select } from '@/components/admin/select';
+import { getEvents } from '@/data/fake';
 
 export const meta = () => [{ title: 'Events · Admin' }];
 

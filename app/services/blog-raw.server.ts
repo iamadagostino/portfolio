@@ -1,6 +1,6 @@
 // Raw markdown blog post service - extends the main blog service
-import { prisma } from '~/.server/db';
-import type { Language } from '~/i18n/i18n.resources';
+import { prisma } from '@/.server/db';
+import type { Language } from '@/i18n/i18n.resources';
 import type { BlogPost } from './blog.server';
 
 // Get a blog post with raw markdown content (for MDXProvider)

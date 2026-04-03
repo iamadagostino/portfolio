@@ -1,29 +1,29 @@
 import { Fragment } from 'react';
-import sliceAnnotationLarge from '~/assets/images/projects/slice/slice-annotation-large.png';
-import sliceAnnotationPlaceholder from '~/assets/images/projects/slice/slice-annotation-placeholder.png';
-import sliceAnnotation from '~/assets/images/projects/slice/slice-annotation.png';
-import sliceAppLarge from '~/assets/images/projects/slice/slice-app-large.jpg';
-import sliceAppPlaceholder from '~/assets/images/projects/slice/slice-app-placeholder.jpg';
-import sliceApp from '~/assets/images/projects/slice/slice-app.jpg';
-import sliceBackgroundBarLarge from '~/assets/images/projects/slice/slice-background-bar-large.jpg';
-import sliceBackgroundBarPlaceholder from '~/assets/images/projects/slice/slice-background-bar-placeholder.jpg';
-import sliceBackgroundBar from '~/assets/images/projects/slice/slice-background-bar.jpg';
-import sliceBackgroundLarge from '~/assets/images/projects/slice/slice-background-large.jpg';
-import sliceBackgroundPlaceholder from '~/assets/images/projects/slice/slice-background-placeholder.jpg';
-import sliceBackground from '~/assets/images/projects/slice/slice-background.jpg';
-import sliceIrlPlaceholder from '~/assets/images/projects/slice/slice-irl-placeholder.jpg';
-import sliceIrl from '~/assets/images/projects/slice/slice-irl.jpg';
-import sliceSidebarAnnotationsLarge from '~/assets/images/projects/slice/slice-sidebar-annotations-large.png';
-import sliceSidebarAnnotationsPlaceholder from '~/assets/images/projects/slice/slice-sidebar-annotations-placeholder.png';
-import sliceSidebarAnnotations from '~/assets/images/projects/slice/slice-sidebar-annotations.png';
-import sliceSidebarLayersLarge from '~/assets/images/projects/slice/slice-sidebar-layers-large.png';
-import sliceSidebarLayersPlaceholder from '~/assets/images/projects/slice/slice-sidebar-layers-placeholder.png';
-import sliceSidebarLayers from '~/assets/images/projects/slice/slice-sidebar-layers.png';
-import sliceSlidesLarge from '~/assets/images/projects/slice/slice-slides-large.jpg';
-import sliceSlidesPlaceholder from '~/assets/images/projects/slice/slice-slides-placeholder.jpg';
-import sliceSlides from '~/assets/images/projects/slice/slice-slides.jpg';
-import { Footer } from '~/components/main/footer';
-import { Image } from '~/components/main/image';
+import sliceAnnotationLarge from '@/assets/images/projects/slice/slice-annotation-large.png';
+import sliceAnnotationPlaceholder from '@/assets/images/projects/slice/slice-annotation-placeholder.png';
+import sliceAnnotation from '@/assets/images/projects/slice/slice-annotation.png';
+import sliceAppLarge from '@/assets/images/projects/slice/slice-app-large.jpg';
+import sliceAppPlaceholder from '@/assets/images/projects/slice/slice-app-placeholder.jpg';
+import sliceApp from '@/assets/images/projects/slice/slice-app.jpg';
+import sliceBackgroundBarLarge from '@/assets/images/projects/slice/slice-background-bar-large.jpg';
+import sliceBackgroundBarPlaceholder from '@/assets/images/projects/slice/slice-background-bar-placeholder.jpg';
+import sliceBackgroundBar from '@/assets/images/projects/slice/slice-background-bar.jpg';
+import sliceBackgroundLarge from '@/assets/images/projects/slice/slice-background-large.jpg';
+import sliceBackgroundPlaceholder from '@/assets/images/projects/slice/slice-background-placeholder.jpg';
+import sliceBackground from '@/assets/images/projects/slice/slice-background.jpg';
+import sliceIrlPlaceholder from '@/assets/images/projects/slice/slice-irl-placeholder.jpg';
+import sliceIrl from '@/assets/images/projects/slice/slice-irl.jpg';
+import sliceSidebarAnnotationsLarge from '@/assets/images/projects/slice/slice-sidebar-annotations-large.png';
+import sliceSidebarAnnotationsPlaceholder from '@/assets/images/projects/slice/slice-sidebar-annotations-placeholder.png';
+import sliceSidebarAnnotations from '@/assets/images/projects/slice/slice-sidebar-annotations.png';
+import sliceSidebarLayersLarge from '@/assets/images/projects/slice/slice-sidebar-layers-large.png';
+import sliceSidebarLayersPlaceholder from '@/assets/images/projects/slice/slice-sidebar-layers-placeholder.png';
+import sliceSidebarLayers from '@/assets/images/projects/slice/slice-sidebar-layers.png';
+import sliceSlidesLarge from '@/assets/images/projects/slice/slice-slides-large.jpg';
+import sliceSlidesPlaceholder from '@/assets/images/projects/slice/slice-slides-placeholder.jpg';
+import sliceSlides from '@/assets/images/projects/slice/slice-slides.jpg';
+import { Footer } from '@/components/main/footer';
+import { Image } from '@/components/main/image';
 import {
   ProjectBackground,
   ProjectContainer,
@@ -35,9 +35,9 @@ import {
   ProjectSectionHeading,
   ProjectSectionText,
   ProjectTextRow,
-} from '~/layouts/project';
-import { baseMeta } from '~/utils/meta';
-import { media } from '~/utils/style';
+} from '@/layouts/project';
+import { baseMeta } from '@/utils/meta';
+import { media } from '@/utils/style';
 import styles from './slice.module.css';
 
 const title = 'Biomedical image collaboration';

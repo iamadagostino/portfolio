@@ -1,8 +1,8 @@
 import { type RouteConfig } from '@react-router/dev/routes';
-import { generateMainRoutes } from './config/routes/main-routes';
+import { generateExperienceRoutes } from './config/routes/3d-experience-routes';
 import { generateAdminRoutes } from './config/routes/admin-routes';
 import { generateApiRoutes } from './config/routes/api-routes';
-import { generateExperienceRoutes } from './config/routes/experience-routes';
+import { generateMainRoutes } from './config/routes/main-routes';
 
 export default [
   // Root catch-all route for non-localized paths
@@ -16,7 +16,7 @@ export default [
   {
     id: 'lang-layout',
     path: '/:lang',
-    file: './layouts/main-layout.tsx',
+    file: './layouts/main/main-layout.tsx',
     children: [
       // Home route
       {
