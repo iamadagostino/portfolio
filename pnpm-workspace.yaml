@@ -1,0 +1,10 @@
+allowBuilds:
+  '@prisma/engines': true
+  '@swc/core': true
+  canvas: true
+  esbuild: true
+  postinstall-postinstall: true
+  prisma: true
+  sharp: true
+  unrs-resolver: true
+  workerd: true
