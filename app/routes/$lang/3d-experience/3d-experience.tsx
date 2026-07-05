@@ -1,5 +1,6 @@
 import { Cursor } from '@/components/3d-experience/partials/cursor';
 import { Menu } from '@/components/3d-experience/partials/menu';
+import { NavHotspots, NavHotspotsOverlay } from '@/components/3d-experience/nav-hotspots';
 import { framerMotionConfig } from '@/config/framer-motion';
 import { baseMeta } from '@/utils/meta';
 import { Canvas } from '@react-three/fiber';
@@ -38,6 +39,8 @@ function App3dExperience() {
         {/* 3D Canvas */}
         <Canvas shadows>
           <Scene />
+          {/* Diegetic navigation hotspots overlaid on the real scene */}
+          <NavHotspots />
           {/* <ScrollControls pages={4} damping={0.1}>
               <ScrollManager section={section} onSectionChange={setSection} />
               <Scroll>
@@ -66,6 +69,9 @@ function App3dExperience() {
 
         {/* Cursor */}
         <Cursor />
+
+        {/* Diegetic hotspot HUD + cinematic contact modal (outside the Canvas) */}
+        <NavHotspotsOverlay />
       </MotionConfig>
     </div>
   );

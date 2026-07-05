@@ -1,0 +1,132 @@
+/* Diegetic navigation hotspots overlaid on the real 3D-experience scene.
+   Themed with the project's real tokens: var(--accent) #0A84FF, var(--error) #ff2463. */
+
+.hot {
+  position: relative;
+  font-family: 'Chakra Petch', system-ui, sans-serif;
+  pointer-events: none;
+  --c: var(--accent);
+}
+.click { pointer-events: auto; cursor: pointer; }
+
+/* ── A · tethered callout tag ─────────────────────────── */
+.callout .stem {
+  position: absolute; left: 50%; bottom: 50%; width: 1.4px; height: 42px;
+  background: linear-gradient(to top, transparent, var(--c)); transform: translateX(-50%);
+}
+.callout .dot {
+  position: absolute; left: 50%; top: 50%; width: 8px; height: 8px;
+  transform: translate(-50%, -50%) rotate(45deg); background: var(--c);
+  box-shadow: 0 0 8px var(--c), 0 0 20px var(--c);
+}
+.callout .tag {
+  position: absolute; left: 50%; bottom: calc(50% + 42px); transform: translateX(-50%);
+  white-space: nowrap; padding: 5px 10px;
+  background: color-mix(in srgb, var(--background, #111) 78%, transparent);
+  border: 1px solid color-mix(in srgb, var(--c) 32%, transparent);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); transition: all 0.15s ease;
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+}
+.callout .tag:hover { border-color: var(--c); box-shadow: 0 0 8px var(--c); transform: translateX(-50%) translateY(-2px); }
+
+/* ── B · proximity hover-glow ─────────────────────────── */
+.prox .zone { position: absolute; left: 50%; top: 50%; width: 120px; height: 120px; transform: translate(-50%, -50%); border-radius: 50%; }
+.prox .ring {
+  position: absolute; left: 50%; top: 50%; width: 56px; height: 56px; margin: -28px 0 0 -28px; border-radius: 50%;
+  border: 1px dashed color-mix(in srgb, var(--c) 45%, transparent); opacity: 0; transform: scale(0.6); transition: all 0.28s ease;
+}
+.prox .pip {
+  position: absolute; left: 50%; top: 50%; width: 6px; height: 6px; transform: translate(-50%, -50%) rotate(45deg);
+  background: color-mix(in srgb, var(--text, #fff) 55%, transparent); transition: all 0.2s ease;
+}
+.prox .card {
+  position: absolute; left: 50%; bottom: calc(50% + 18px); transform: translate(-50%, 8px); white-space: nowrap; padding: 8px 12px; opacity: 0;
+  background: color-mix(in srgb, var(--background, #111) 82%, transparent);
+  border: 1px solid color-mix(in srgb, var(--c) 60%, transparent);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); transition: all 0.24s ease;
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+}
+.prox:hover .ring { opacity: 1; transform: scale(1) rotate(60deg); }
+.prox:hover .pip { background: var(--c); box-shadow: 0 0 8px var(--c); transform: translate(-50%, -50%) rotate(45deg) scale(1.7); }
+.prox:hover .card { opacity: 1; transform: translate(-50%, 0); }
+
+/* ── C · pulsing reticle ──────────────────────────────── */
+.retic .mark {
+  position: absolute; left: 50%; top: 50%; width: 38px; height: 38px; transform: translate(-50%, -50%) rotate(45deg);
+  border: 1.4px solid var(--c); border-radius: 3px; box-shadow: 0 0 8px var(--c), 0 0 20px color-mix(in srgb, var(--c) 40%, transparent);
+  animation: pulse 2.2s ease-in-out infinite;
+}
+.retic .mark::before, .retic .mark::after { content: ''; position: absolute; background: var(--c); }
+.retic .mark::before { left: 50%; top: -8px; width: 1px; height: 8px; transform: translateX(-50%); }
+.retic .mark::after { left: 50%; bottom: -8px; width: 1px; height: 8px; transform: translateX(-50%); }
+.retic .core { position: absolute; left: 50%; top: 50%; width: 5px; height: 5px; transform: translate(-50%, -50%); background: var(--c); border-radius: 50%; box-shadow: 0 0 8px var(--c); }
+.retic .card {
+  position: absolute; left: 50%; top: calc(50% + 28px); transform: translate(-50%, -6px) scaleY(0.8); transform-origin: top center;
+  white-space: nowrap; padding: 7px 11px; opacity: 0;
+  background: color-mix(in srgb, var(--background, #111) 78%, transparent);
+  border: 1px solid color-mix(in srgb, var(--c) 32%, transparent);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); transition: all 0.18s ease;
+  clip-path: polygon(0 0, calc(100% - 9px) 0, 100% 9px, 100% 100%, 9px 100%, 0 calc(100% - 9px));
+}
+.retic:hover .mark { animation: none; transform: translate(-50%, -50%) rotate(45deg) scale(1.2); }
+.retic:hover .card { opacity: 1; transform: translate(-50%, 0) scaleY(1); }
+
+@keyframes pulse {
+  0%, 100% { transform: translate(-50%, -50%) rotate(45deg) scale(1); opacity: 0.85; }
+  50% { transform: translate(-50%, -50%) rotate(45deg) scale(1.16); opacity: 1; }
+}
+
+/* label text (shared) */
+.k { display: block; font-weight: 600; font-size: 13px; letter-spacing: 0.05em; color: var(--text, #f2f5f8); }
+.v { display: block; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--c); margin-top: 1px; }
+
+/* ── Style HUD (outside canvas) ──────────────────────── */
+.hud {
+  position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%); z-index: 40;
+  display: flex; gap: 6px; align-items: center; padding: 6px;
+  font-family: 'Chakra Petch', system-ui, sans-serif;
+  background: color-mix(in srgb, var(--background, #111) 80%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+}
+.hud span { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: color-mix(in srgb, var(--text, #fff) 45%, transparent); padding: 0 8px; }
+.hudBtn {
+  font-family: inherit; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: color-mix(in srgb, var(--text, #fff) 70%, transparent); background: transparent;
+  border: 1px solid color-mix(in srgb, var(--accent) 28%, transparent); padding: 5px 11px; cursor: pointer;
+  border-radius: 2px; transition: all 0.15s ease;
+}
+.hudBtn:hover { color: var(--text, #fff); border-color: var(--accent); }
+.hudBtn[data-active='true'] { color: var(--background, #04070d); background: var(--accent); border-color: var(--accent); box-shadow: 0 0 10px color-mix(in srgb, var(--accent) 60%, transparent); }
+
+/* ── Cinematic contact modal (stub, refined in sketch 003) ── */
+.modalScrim {
+  position: fixed; inset: 0; z-index: 60; display: grid; place-items: center;
+  background: radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--accent) 12%, transparent), rgba(0,0,0,0.86));
+  opacity: 0; pointer-events: none; transition: opacity 0.35s ease;
+}
+.modalScrim[data-open='true'] { opacity: 1; pointer-events: auto; }
+.modal {
+  width: min(440px, 92vw); padding: 28px; transform: translateY(18px) scale(0.96); opacity: 0; transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
+  background: color-mix(in srgb, var(--background, #111) 88%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.7), 0 0 40px color-mix(in srgb, var(--accent) 22%, transparent);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px));
+  font-family: 'Chakra Petch', system-ui, sans-serif;
+}
+.modalScrim[data-open='true'] .modal { transform: translateY(0) scale(1); opacity: 1; }
+.modalEyebrow { font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--accent); }
+.modalTitle { margin: 8px 0 18px; font-size: 26px; font-weight: 700; color: var(--text, #fff); }
+.modalField { margin-bottom: 12px; }
+.modalField label { display: block; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: color-mix(in srgb, var(--text, #fff) 55%, transparent); margin-bottom: 5px; }
+.modalField input, .modalField textarea {
+  width: 100%; padding: 9px 11px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 13px;
+  color: var(--text, #fff); background: rgba(0,0,0,0.4);
+  border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent); border-radius: 2px; outline: none; transition: border-color 0.15s ease;
+}
+.modalField input:focus, .modalField textarea:focus { border-color: var(--accent); }
+.modalActions { display: flex; gap: 10px; margin-top: 18px; }
+.modalSend { flex: 1; padding: 11px; font-family: inherit; font-weight: 600; letter-spacing: 0.06em; color: var(--background, #04070d); background: var(--accent); border: none; border-radius: 2px; cursor: pointer; box-shadow: 0 0 16px color-mix(in srgb, var(--accent) 55%, transparent); }
+.modalClose { padding: 11px 16px; font-family: inherit; letter-spacing: 0.06em; color: color-mix(in srgb, var(--text, #fff) 70%, transparent); background: transparent; border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent); border-radius: 2px; cursor: pointer; }

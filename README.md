@@ -5,13 +5,13 @@
 
 ![Site preview](./public/site-preview.png)
 
-Personal portfolio of Angelo D'Agostino, showcasing projects and expertise in software engineering and design. Built with [Remix](https://remix.run/), [Three.js](https://threejs.org/), [Framer Motion](https://www.framer.com/motion/), featuring comprehensive internationalization support and modern web technologies.
+Personal portfolio of Angelo D'Agostino, showcasing projects and expertise in software engineering and design. Built with [React Router v7](https://reactrouter.com/), [Three.js](https://threejs.org/), [Framer Motion](https://www.framer.com/motion/), featuring comprehensive internationalization support and modern web technologies.
 
 ## About
 
 This portfolio showcases Angelo D'Agostino's work as a Software Engineer and Designer. The site features:
 
-- **Modern Web Technologies**: Built with Remix 2.17, React 19, and TypeScript 5
+- **Modern Web Technologies**: Built with React Router v7, React 19, and TypeScript 5
 - **3D Interactive Elements**: Powered by Three.js and React Three Fiber
 - **Comprehensive Internationalization**: Full bilingual support (Italian/English) with:
   - Localized routing (`/en/articles`, `/it/articoli`)
@@ -21,7 +21,7 @@ This portfolio showcases Angelo D'Agostino's work as a Software Engineer and Des
   - Language-specific article content
 - **Database Integration**: Prisma ORM with PostgreSQL support
 - **Component Library**: Interactive Storybook for design system
-- **Performance Optimized**: Built with Vite 6 and deployed on Cloudflare Pages
+- **Performance Optimized**: Built with Vite 7 and deployed on Cloudflare Pages
 - **Advanced Content Management**: MDX-powered multilingual blog system
 
 ## Install & run
@@ -38,33 +38,32 @@ Once dependencies are installed, start up a local server with:
 pnpm run dev
 ```
 
-To view the components storybook:
-
-```bash
-pnpm run dev:storybook
-```
+This automatically starts the Docker Postgres database and serves the app at **http://localhost:7777**.
 
 ## Database Setup
 
-This portfolio includes database integration. To set up the database:
+The `pnpm run dev` command starts the database automatically via Docker Compose. To manage it manually:
 
 ```bash
-# Start the database (Docker)
-pnpm run db:up
-
 # Run migrations
 pnpm run db:migrate
 
 # Seed the database
 pnpm run db:seed
+
+# Regenerate the Prisma client
+pnpm run db:generate
+
+# Open Prisma Studio
+pnpm run db:studio
 ```
 
 ## Deployment
 
-The site is deployed on Cloudflare Pages. Deploy with:
+The site is deployed on Cloudflare Pages (via Git integration / Wrangler). Produce a production build with:
 
 ```bash
-pnpm run deploy
+pnpm run build
 ```
 
 ## Features
@@ -95,14 +94,14 @@ pnpm run deploy
 
 ## Tech Stack
 
-- **Frontend**: Remix 2.17, React 19, TypeScript 5
+- **Frontend**: React Router v7 (framework mode, SSR), React 19, TypeScript 5
 - **Styling**: CSS Modules, PostCSS, Tailwind CSS 4.1
 - **3D Graphics**: Three.js, React Three Fiber, React Three Drei
 - **Animation**: Framer Motion, GSAP
 - **Database**: Prisma ORM, PostgreSQL
-- **Internationalization**: i18next, react-i18next, remix-i18next
+- **Internationalization**: i18next, react-i18next, i18next backends (fs/http/fetch)
 - **Content Management**: MDX with frontmatter, dynamic imports
-- **Development**: Vite 6, Storybook, ESLint, Prettier
+- **Development**: Vite 7, Storybook, ESLint, Prettier
 - **Testing**: Vitest, Testing Library
 - **Deployment**: Cloudflare Pages, Wrangler
 - **Package Management**: pnpm
@@ -174,7 +173,7 @@ This portfolio is built upon the excellent foundation created by **[Hamish Willi
 
 - Complete internationalization system with Italian/English support
 - Advanced multilingual blog architecture
-- Modernized build system (Remix 2.17, React 19, Vite 6)
+- Modernized build system (React Router v7, React 19, Vite 7)
 - Database integration with Prisma and PostgreSQL
 - Enhanced TypeScript implementation
 - Docker containerization

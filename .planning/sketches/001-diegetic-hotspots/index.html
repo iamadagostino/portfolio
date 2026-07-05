@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sketch 001 — Diegetic Hotspots (exact scene)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../themes/default.css">
+<style>
+  html, body { height: 100%; overflow: hidden; }
+  body { padding-top: 46px; }
+
+  #variant-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 9998;
+    display: flex; gap: 6px; align-items: center;
+    background: rgba(5,5,6,0.92); border-bottom: 1px solid var(--color-border);
+    padding: 8px 14px; font-family: var(--font-mono);
+  }
+  #variant-nav .title {
+    font-size: var(--text-xs); letter-spacing: var(--tracking-wide);
+    color: var(--color-text-dim); margin-right: 10px; text-transform: uppercase;
+  }
+  .variant-tab {
+    font-family: var(--font-mono); font-size: var(--text-xs); letter-spacing: 0.06em;
+    color: var(--color-text-muted); background: transparent;
+    border: 1px solid var(--color-border); padding: 5px 12px; border-radius: var(--radius-sm);
+    cursor: pointer; transition: all 0.15s ease; text-transform: uppercase;
+  }
+  .variant-tab:hover { color: var(--color-text); border-color: var(--color-border-strong); }
+  .variant-tab.active { color: #04070d; background: var(--accent); border-color: var(--accent); box-shadow: var(--glow-accent); }
+
+  #stage { position: fixed; inset: 46px 0 0 0; overflow: hidden; background: #000; }
+  #scene-canvas { display: block; width: 100%; height: 100%; }
+
+  #loading {
+    position: absolute; inset: 0; display: grid; place-items: center; z-index: 5;
+    font-family: var(--font-mono); font-size: var(--text-sm); letter-spacing: var(--tracking-wide);
+    color: var(--accent); text-transform: uppercase; background: #000; transition: opacity 0.6s ease;
+  }
+  #loading .bar { margin-top: 12px; width: 220px; height: 2px; background: rgba(10,132,255,0.2); overflow: hidden; }
+  #loading .bar i { display: block; height: 100%; width: 0; background: var(--accent); box-shadow: var(--glow-accent); transition: width 0.2s ease; }
+
+  #overlay { position: absolute; inset: 0; z-index: 6; pointer-events: none; }
+  .layer { position: absolute; inset: 0; display: none; }
+  .layer.active { display: block; }
+  .hot { position: absolute; left: 0; top: 0; transform: translate(-50%, -50%); will-change: transform; pointer-events: none; }
+  .hot .click { pointer-events: auto; cursor: pointer; }
+
+  /* A — tethered callout tags */
+  .callout .stem { position: absolute; left: 50%; bottom: 50%; width: 1.4px; height: 44px; background: linear-gradient(to top, transparent, var(--c)); transform: translateX(-50%); }
+  .callout .dot { position: absolute; left: 50%; top: 50%; width: 8px; height: 8px; transform: translate(-50%,-50%) rotate(45deg); background: var(--c); box-shadow: var(--g); }
+  .callout .tag { position: absolute; left: 50%; bottom: calc(50% + 44px); transform: translateX(-50%); white-space: nowrap; padding: 5px 10px;
+    background: var(--color-surface); border: 1px solid var(--color-border); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); transition: all 0.15s ease;
+    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px)); }
+  .callout .tag:hover { border-color: var(--c); box-shadow: var(--g); transform: translateX(-50%) translateY(-2px); }
+  .callout .tag .k { display: block; font-family: var(--font-display); font-weight: 600; font-size: 13px; letter-spacing: 0.05em; color: var(--color-text); }
+  .callout .tag .v { display: block; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--c); margin-top: 1px; }
+
+  /* B — proximity hover-glow */
+  .prox .zone { position: absolute; left: 50%; top: 50%; width: 128px; height: 128px; transform: translate(-50%,-50%); border-radius: 50%; }
+  .prox .ring { position: absolute; inset: 34px; border-radius: 50%; border: 1px dashed color-mix(in srgb, var(--c) 40%, transparent); opacity: 0; transform: scale(0.7); transition: all 0.28s ease; }
+  .prox .pip { position: absolute; left: 50%; top: 50%; width: 6px; height: 6px; transform: translate(-50%,-50%) rotate(45deg); background: rgba(242,245,248,0.55); transition: all 0.2s ease; }
+  .prox .card { position: absolute; left: 50%; bottom: calc(50% + 20px); transform: translate(-50%, 8px); white-space: nowrap; padding: 8px 12px; opacity: 0;
+    background: var(--color-surface); border: 1px solid var(--color-border-strong); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: var(--shadow-panel); transition: all 0.24s ease;
+    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px)); }
+  .prox .card .k { font-family: var(--font-display); font-weight: 600; font-size: 14px; color: var(--color-text); letter-spacing: 0.04em; }
+  .prox .card .v { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--c); margin-top: 2px; }
+  .prox:hover .ring { opacity: 1; transform: scale(1) rotate(60deg); }
+  .prox:hover .pip { background: var(--c); box-shadow: var(--g); transform: translate(-50%,-50%) rotate(45deg) scale(1.7); }
+  .prox:hover .card { opacity: 1; transform: translate(-50%, 0); }
+
+  /* C — pulsing reticle */
+  .retic .mark { position: absolute; left: 50%; top: 50%; width: 40px; height: 40px; transform: translate(-50%,-50%) rotate(45deg); border: 1.4px solid var(--c); border-radius: 3px; box-shadow: var(--g); animation: pulse 2.2s ease-in-out infinite; }
+  .retic .mark::before, .retic .mark::after { content: ''; position: absolute; background: var(--c); }
+  .retic .mark::before { left: 50%; top: -8px; width: 1px; height: 8px; transform: translateX(-50%); }
+  .retic .mark::after { left: 50%; bottom: -8px; width: 1px; height: 8px; transform: translateX(-50%); }
+  .retic .core { position: absolute; left: 50%; top: 50%; width: 5px; height: 5px; transform: translate(-50%,-50%); background: var(--c); border-radius: 50%; box-shadow: var(--g); }
+  .retic .card { position: absolute; left: 50%; top: calc(50% + 30px); transform: translate(-50%, -6px) scaleY(0.8); transform-origin: top center; white-space: nowrap; padding: 7px 11px; opacity: 0;
+    background: var(--color-surface); border: 1px solid var(--color-border); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); transition: all 0.18s ease;
+    clip-path: polygon(0 0, calc(100% - 9px) 0, 100% 9px, 100% 100%, 9px 100%, 0 calc(100% - 9px)); }
+  .retic .card .k { font-family: var(--font-display); font-weight: 600; font-size: 13px; color: var(--color-text); }
+  .retic .card .v { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--c); margin-top: 2px; }
+  .retic:hover .mark { animation: none; transform: translate(-50%,-50%) rotate(45deg) scale(1.2); border-color: var(--accent-soft); }
+  .retic:hover .card { opacity: 1; transform: translate(-50%, 0) scaleY(1); }
+  @keyframes pulse { 0%,100% { transform: translate(-50%,-50%) rotate(45deg) scale(1); opacity: 0.85; } 50% { transform: translate(-50%,-50%) rotate(45deg) scale(1.16); opacity: 1; } }
+
+  .caption { position: absolute; left: 18px; bottom: 16px; z-index: 20; max-width: 360px; font-size: var(--text-xs); line-height: 1.6; color: var(--color-text-muted); border-left: 2px solid var(--accent); padding-left: 12px; }
+  .caption b { color: var(--accent); font-weight: 600; }
+  .hint { position: absolute; right: 18px; bottom: 16px; z-index: 20; font-size: var(--text-xs); letter-spacing: 0.1em; color: var(--color-text-dim); text-transform: uppercase; }
+  #toast { position: fixed; left: 50%; bottom: 26px; transform: translate(-50%, 20px); z-index: 9997; opacity: 0; pointer-events: none; transition: all 0.25s ease;
+    background: var(--color-surface-solid); border: 1px solid var(--accent); box-shadow: var(--glow-accent); padding: 10px 18px; font-family: var(--font-mono); font-size: var(--text-sm); letter-spacing: 0.06em; color: var(--color-text);
+    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px)); }
+  #toast.show { opacity: 1; transform: translate(-50%, 0); }
+  #toast .arrow { color: var(--hot); }
+
+  #sketch-tools { position: fixed; bottom: 12px; right: 12px; z-index: 9999; font-family: var(--font-mono); font-size: 11px; background: rgba(0,0,0,0.78); color: #fff; padding: 8px 12px; border-radius: 8px; opacity: 0.35; transition: opacity 0.2s; display: flex; gap: 8px; align-items: center; }
+  #sketch-tools:hover { opacity: 1; }
+  #sketch-tools select { background: #111; color: #fff; border: 1px solid #444; border-radius: 4px; font-size: 11px; padding: 2px 4px; }
+</style>
+</head>
+<body>
+
+<div id="variant-nav">
+  <span class="title">001 · Diegetic Hotspots · exact scene</span>
+  <button class="variant-tab active" data-v="a" type="button">A · Callout Tags</button>
+  <button class="variant-tab" data-v="b" type="button">B · Proximity Glow</button>
+  <button class="variant-tab" data-v="c" type="button">C · Pulsing Reticle</button>
+</div>
+
+<div id="stage">
+  <canvas id="scene-canvas"></canvas>
+  <div id="loading">Booting grid<div class="bar"><i></i></div></div>
+  <div id="overlay">
+    <div class="layer active" id="layer-a"></div>
+    <div class="layer" id="layer-b"></div>
+    <div class="layer" id="layer-c"></div>
+  </div>
+  <div class="caption" id="caption"></div>
+  <div class="hint">drag to orbit · scroll to zoom</div>
+</div>
+
+<div id="toast"></div>
+
+<div id="sketch-tools">
+  <span>theme</span>
+  <select title="theme" onchange="document.querySelector('link[href*=themes]').href='../themes/'+this.value+'.css'">
+    <option value="default">tron</option>
+  </select>
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.182.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.182.0/examples/jsm/",
+    "postprocessing": "https://esm.sh/postprocessing@6.39.2?external=three"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import {
+  EffectComposer, RenderPass, EffectPass,
+  BloomEffect, DepthOfFieldEffect, ChromaticAberrationEffect,
+  BlendFunction, KernelSize
+} from 'postprocessing';
+
+// Real project assets (served over HTTP from repo root)
+const BASE = '../../../app/assets/';
+const CAR_URL   = BASE + 'models/cars/velora.glb';
+const GRID_URL  = BASE + 'textures/ground/grid.png';
+const ROUGH_URL = BASE + 'textures/ground/plasterbrick_rough_1k.jpg';
+const NOR_URL   = BASE + 'textures/ground/plasterbrick_nor_gl_1k.jpg';
+
+const ACCENT = 0x0a84ff, HOT = 0xff2463;
+
+const canvas = document.getElementById('scene-canvas');
+const stage  = document.getElementById('stage');
+
+// ── Renderer (match R3F defaults: ACES tone mapping, sRGB, shadows) ──
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setClearColor(0x000000, 1);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1;
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0, 0, 0);
+
+// ── Camera + Controls (exact) ──
+const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 1000);
+camera.position.set(3, 2, 5);
+const controls = new OrbitControls(camera, canvas);
+controls.target.set(0, 0.35, 0);
+controls.enableDamping = true; controls.dampingFactor = 0.08;
+controls.maxPolarAngle = 1.45;
+controls.minDistance = 2.5; controls.maxDistance = 14;
+
+// ── Lights (exact colors/intensities/positions) ──
+scene.add(new THREE.AmbientLight(0xffffff, 0.3));
+scene.add(new THREE.HemisphereLight(0xffffff, 0x222222, 0.6));
+
+const spotWarm = new THREE.SpotLight(new THREE.Color(1, 0.25, 0.7), 150);
+spotWarm.position.set(5, 5, 0); spotWarm.angle = 0.6; spotWarm.penumbra = 0.5;
+spotWarm.castShadow = true; spotWarm.shadow.mapSize.set(1024, 1024); scene.add(spotWarm);
+
+const spotCool = new THREE.SpotLight(new THREE.Color(0.14, 0.5, 0.7), 200);
+spotCool.position.set(-5, 5, 0); spotCool.angle = 0.6; spotCool.penumbra = 0.5;
+spotCool.castShadow = true; spotCool.shadow.mapSize.set(1024, 1024); spotCool.shadow.bias = -0.0001; scene.add(spotCool);
+
+// ── Real-time cube reflections (CubeCamera + scene.environment) ──
+const cubeRT = new THREE.WebGLCubeRenderTarget(256);
+cubeRT.texture.type = THREE.HalfFloatType;
+const cubeCam = new THREE.CubeCamera(0.1, 1000, cubeRT);
+cubeCam.position.set(0, 0.5, 0);
+scene.add(cubeCam);
+scene.environment = cubeRT.texture;
+
+const texLoader = new THREE.TextureLoader();
+
+// ── Ground (30×30, plasterbrick maps, dark reflective) ──
+const roughMap = texLoader.load(ROUGH_URL);
+const norMap = texLoader.load(NOR_URL);
+[roughMap, norMap].forEach(t => { t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(5, 5); });
+const ground = new THREE.Mesh(
+  new THREE.PlaneGeometry(30, 30),
+  new THREE.MeshStandardMaterial({
+    color: new THREE.Color(0.015, 0.015, 0.015),
+    roughnessMap: roughMap, normalMap: norMap, normalScale: new THREE.Vector2(0.15, 0.15),
+    roughness: 0.7, metalness: 0.5, envMapIntensity: 1.2, dithering: true,
+  })
+);
+ground.rotation.x = -Math.PI * 0.5; ground.receiveShadow = true; scene.add(ground);
+
+// ── Floating neon grid (35×35, white @0.5, scrolls) ──
+const gridTex = texLoader.load(GRID_URL);
+gridTex.wrapS = gridTex.wrapT = THREE.RepeatWrapping; gridTex.repeat.set(1, 1); gridTex.anisotropy = 4;
+const grid = new THREE.Mesh(
+  new THREE.PlaneGeometry(35, 35),
+  new THREE.MeshBasicMaterial({ color: 0xffffff, map: gridTex, alphaMap: gridTex, transparent: true, opacity: 0.5 })
+);
+grid.rotation.x = -Math.PI * 0.5; grid.position.y = 0.001; scene.add(grid);
+
+// ── Rings (14, torus [3.35,0.05,16,100], tunnel + HDR emissive) ──
+const rings = [];
+const ringGeo = new THREE.TorusGeometry(3.35, 0.05, 16, 100);
+for (let i = 0; i < 14; i++) {
+  const m = new THREE.Mesh(ringGeo, new THREE.MeshStandardMaterial({ emissive: new THREE.Color(0.5, 0.5, 0.5), color: new THREE.Color(0, 0, 0) }));
+  m.castShadow = m.receiveShadow = true; scene.add(m); rings.push(m);
+}
+
+// ── Boxes (100, dark red / dark blue, envMapIntensity 0.15) ──
+const boxes = [];
+const boxGeo = new THREE.BoxGeometry(1, 1, 1);
+function resetBoxPos() {
+  const v = new THREE.Vector3((Math.random() * 2 - 1) * 3, Math.random() * 2.5 + 0.1, (Math.random() * 2 - 1) * 15);
+  if (v.x < 0) v.x -= 1.75; if (v.x > 0) v.x += 1.75; return v;
+}
+for (let i = 0; i < 100; i++) {
+  const col = i % 2 === 0 ? new THREE.Color(0.4, 0.1, 0.1) : new THREE.Color(0.05, 0.15, 0.4);
+  const mesh = new THREE.Mesh(boxGeo, new THREE.MeshStandardMaterial({ color: col, envMapIntensity: 0.15 }));
+  mesh.castShadow = mesh.receiveShadow = true;
+  mesh.userData = { pos: resetBoxPos(), rx: Math.random(), ry: Math.random() };
+  mesh.scale.setScalar(Math.pow(Math.random(), 2) * 0.5 + 0.05);
+  scene.add(mesh); boxes.push(mesh);
+}
+
+// ── Diegetic nav props: HOUSE · MAILBOX · PROJECTS sign · SKILLS sign ──
+const POIS = [
+  { id:'house',    k:'THE HOUSE', v:'Enter · scrollable room',   dest:'ENTERING ROOM…',                tone:'accent', pos:[0, 0, -5.0], anchorY:1.9, kind:'house' },
+  { id:'mail',     k:'MAILBOX',   v:'Contact · cinematic modal', dest:'OPENING CONTACT TRANSMISSION…', tone:'hot',    pos:[1.9, 0, 0.4], anchorY:0.85, kind:'mailbox' },
+  { id:'projects', k:'PROJECTS',  v:'Sign · project sections',   dest:'→ PROJECTS',                    tone:'accent', pos:[-3.4, 0, -1.8], anchorY:1.5, kind:'sign', label:'PROJECTS' },
+  { id:'skills',   k:'SKILLS',    v:'Sign · skill matrix',       dest:'→ SKILLS',                      tone:'accent', pos:[3.2, 0, -2.4], anchorY:1.5, kind:'sign', label:'SKILLS' },
+];
+
+function makeCanvasSignTexture(text, colorCss) {
+  const c = document.createElement('canvas'); c.width = 512; c.height = 256;
+  const g = c.getContext('2d');
+  g.fillStyle = 'rgba(4,6,10,0.85)'; g.fillRect(0, 0, 512, 256);
+  g.strokeStyle = colorCss; g.lineWidth = 8; g.strokeRect(10, 10, 492, 236);
+  g.fillStyle = colorCss; g.font = '700 92px "Chakra Petch", sans-serif';
+  g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(text, 256, 132);
+  const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace; return tex;
+}
+
+function makeProp(p) {
+  const g = new THREE.Group();
+  const hex = p.tone === 'hot' ? HOT : ACCENT;
+  const emat = (i = 1.4) => new THREE.MeshStandardMaterial({ emissive: new THREE.Color(hex), emissiveIntensity: i, color: 0x02040a, roughness: 0.5, metalness: 0.3 });
+  const edges = (geo, y = 0) => { const e = new THREE.LineSegments(new THREE.EdgesGeometry(geo), new THREE.LineBasicMaterial({ color: hex })); e.position.y = y; return e; };
+  if (p.kind === 'house') {
+    const bodyGeo = new THREE.BoxGeometry(1.5, 1.2, 1.5);
+    const body = new THREE.Mesh(bodyGeo, emat(0.45)); body.position.y = 0.6; body.castShadow = true;
+    const roof = new THREE.Mesh(new THREE.ConeGeometry(1.25, 0.85, 4), emat(0.5)); roof.position.y = 1.62; roof.rotation.y = Math.PI / 4;
+    g.add(body, edges(bodyGeo, 0.6), roof);
+  } else if (p.kind === 'mailbox') {
+    const post = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.045, 0.65), emat(1)); post.position.y = 0.32;
+    const bxGeo = new THREE.BoxGeometry(0.5, 0.32, 0.28);
+    const bx = new THREE.Mesh(bxGeo, emat(1.5)); bx.position.y = 0.75;
+    g.add(post, bx, edges(bxGeo, 0.75));
+  } else if (p.kind === 'sign') {
+    const tex = makeCanvasSignTexture(p.label, p.tone === 'hot' ? '#ff2463' : '#0a84ff');
+    const board = new THREE.Mesh(new THREE.PlaneGeometry(1.8, 0.9),
+      new THREE.MeshBasicMaterial({ map: tex, transparent: true, side: THREE.DoubleSide }));
+    board.position.y = 1.35;
+    const frameGeo = new THREE.BoxGeometry(1.9, 1.0, 0.05);
+    const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 0.9), emat(0.9)); leg.position.y = 0.45;
+    g.add(new THREE.Mesh(frameGeo, emat(0.3)).translateY(1.35), edges(frameGeo, 1.35), board, leg);
+  }
+  return g;
+}
+
+POIS.forEach(p => {
+  const prop = makeProp(p); prop.position.set(p.pos[0], 0, p.pos[2]); scene.add(prop); p.prop = prop;
+  p.anchor = new THREE.Object3D(); p.anchor.position.set(p.pos[0], p.anchorY, p.pos[2]); scene.add(p.anchor);
+});
+
+// ── Car (real Velora GLB, envMapIntensity 20, spinning wheels) ──
+let wheels = [];
+const loadEl = document.getElementById('loading'), loadBar = loadEl.querySelector('i');
+new GLTFLoader().load(CAR_URL, (gltf) => {
+  const car = gltf.scene; car.scale.set(1, 1, 1); car.position.set(0, 0, 0);
+  car.traverse(m => {
+    if (m.isMesh) {
+      m.castShadow = m.receiveShadow = true;
+      if (m.material) m.material.envMapIntensity = 20;
+      if (/rim|tire|wheel/i.test(m.name)) wheels.push(m);
+    }
+  });
+  scene.add(car); window.__car = car;
+  loadEl.style.opacity = '0'; setTimeout(() => loadEl.remove(), 600);
+}, e => { if (e.total) loadBar.style.width = Math.round((e.loaded / e.total) * 100) + '%'; },
+   err => { loadEl.innerHTML = 'GLB blocked — serve over HTTP (see README). ' + (err?.message || ''); });
+
+// ── Postprocessing: DepthOfField + Bloom + ChromaticAberration (exact params) ──
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+const dof = new DepthOfFieldEffect(camera, { focusDistance: 0.035, focalLength: 0.01, bokehScale: 0.75, height: 480 });
+const bloom = new BloomEffect({ blendFunction: BlendFunction.ADD, intensity: 1.2, luminanceThreshold: 0.95, luminanceSmoothing: 0.025, kernelSize: KernelSize.VERY_LARGE });
+const chroma = new ChromaticAberrationEffect({ blendFunction: BlendFunction.NORMAL, offset: new THREE.Vector2(0.0005, 0.0012) });
+composer.addPass(new EffectPass(camera, dof, bloom, chroma));
+
+function resize() {
+  const w = stage.clientWidth, h = stage.clientHeight;
+  renderer.setSize(w, h); composer.setSize(w, h);
+  camera.aspect = w / h; camera.updateProjectionMatrix();
+}
+window.addEventListener('resize', resize); resize();
+
+// ── HTML hotspots (3 variants) mapped to the same 3D anchors ──
+const layers = { a: document.getElementById('layer-a'), b: document.getElementById('layer-b'), c: document.getElementById('layer-c') };
+let toastT;
+function fire(dest) {
+  const t = document.getElementById('toast');
+  t.innerHTML = `<span class="arrow">▸</span> ${dest}`; t.classList.add('show');
+  clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 1800);
+}
+POIS.forEach(p => {
+  const tv = p.tone === 'hot' ? '--c:var(--hot);--g:var(--glow-hot);' : '--c:var(--accent);--g:var(--glow-accent);';
+  const a = document.createElement('div'); a.className = 'hot callout'; a.style.cssText = tv;
+  a.innerHTML = `<span class="stem"></span><span class="dot"></span><div class="tag click"><span class="k">${p.k}</span><span class="v">${p.v}</span></div>`;
+  a.querySelector('.tag').onclick = () => fire(p.dest); layers.a.appendChild(a); p.elA = a;
+  const b = document.createElement('div'); b.className = 'hot prox click'; b.style.cssText = tv;
+  b.innerHTML = `<span class="zone"></span><span class="ring"></span><span class="pip"></span><div class="card"><div class="k">${p.k}</div><div class="v">${p.v}</div></div>`;
+  b.onclick = () => fire(p.dest); layers.b.appendChild(b); p.elB = b;
+  const c = document.createElement('div'); c.className = 'hot retic click'; c.style.cssText = tv;
+  c.innerHTML = `<span class="mark"></span><span class="core"></span><div class="card"><div class="k">${p.k}</div><div class="v">${p.v}</div></div>`;
+  c.onclick = () => fire(p.dest); layers.c.appendChild(c); p.elC = c;
+});
+
+const proj = new THREE.Vector3();
+function updateHotspots() {
+  const w = stage.clientWidth, h = stage.clientHeight;
+  POIS.forEach(p => {
+    p.anchor.getWorldPosition(proj); proj.project(camera);
+    const x = (proj.x * 0.5 + 0.5) * w, y = (-proj.y * 0.5 + 0.5) * h;
+    const vis = proj.z < 1 && proj.x > -1.2 && proj.x < 1.2 && proj.y > -1.2 && proj.y < 1.2;
+    [p.elA, p.elB, p.elC].forEach(el => { el.style.transform = `translate(${x}px, ${y}px)`; el.style.opacity = vis ? '1' : '0'; el.style.pointerEvents = vis ? '' : 'none'; });
+  });
+}
+
+// ── Animation ──
+const clock = new THREE.Clock();
+function tick() {
+  const elapsed = clock.getElapsedTime(), delta = clock.getDelta();
+
+  // grid + ground scroll
+  gridTex.offset.set(0, -elapsed * 0.128);
+  roughMap.offset.set(0, -elapsed * 0.128); norMap.offset.set(0, -elapsed * 0.128);
+
+  // wheels
+  wheels.forEach(m => { m.rotation.x = elapsed * 2; });
+
+  // rings — exact tunnel + HDR emissive dimming
+  rings.forEach((mesh, index) => {
+    const z = (index - 7) * 3.5 + ((elapsed * 0.4) % 3.5) * 2;
+    mesh.position.set(0, 0, -z);
+    const dist = Math.abs(z);
+    const s = 1 / (1 + 0.1 * dist); mesh.scale.set(s, s, s);
+    let colorScale = 1; if (dist > 2) colorScale = 1 - (Math.min(dist, 12) - 2) / 10; colorScale *= 0.5;
+    const col = index % 2 === 1 ? new THREE.Color(6, 0.15, 0.7) : new THREE.Color(0.1, 0.7, 3);
+    mesh.material.emissive.copy(col.multiplyScalar(colorScale));
+  });
+
+  // boxes — faithful: fixed scatter + gentle rotation
+  boxes.forEach(b => { b.position.copy(b.userData.pos); b.position.z += delta * 3; b.rotation.x += delta * b.userData.rx; b.rotation.y += delta * b.userData.ry; });
+
+  controls.update();
+
+  // real-time reflections (exclude the car from its own env)
+  const car = window.__car; if (car) car.visible = false;
+  cubeCam.update(renderer, scene);
+  if (car) car.visible = true;
+
+  updateHotspots();
+  composer.render(delta);
+  requestAnimationFrame(tick);
+}
+tick();
+
+// ── Variant switching ──
+const CAPTIONS = {
+  a: `<b>A · Callout Tags.</b> Every destination labelled up-front, tethered to its 3D anchor. Zero discovery cost — but tags crowd the scene and follow you as you orbit.`,
+  b: `<b>B · Proximity Glow.</b> The world stays clean; hover an object and it lights up with a fading label. Immersive — but nothing discoverable at rest (no hover on touch).`,
+  c: `<b>C · Pulsing Reticle.</b> A quiet animated marker rides each object; hover expands it. Middle path — presence always visible, meaning on demand.`,
+};
+function showVariant(id, btn) {
+  Object.values(layers).forEach(l => l.classList.remove('active'));
+  document.querySelectorAll('.variant-tab').forEach(t => t.classList.remove('active'));
+  layers[id].classList.add('active'); if (btn) btn.classList.add('active');
+  document.getElementById('caption').innerHTML = CAPTIONS[id];
+}
+document.querySelectorAll('.variant-tab').forEach(btn => btn.addEventListener('click', () => showVariant(btn.dataset.v, btn)));
+showVariant('a', document.querySelector('.variant-tab'));
+</script>
+</body>
+</html>

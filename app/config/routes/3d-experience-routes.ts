@@ -22,5 +22,16 @@ export function generateExperienceRoutes() {
       path: 'esperienza-3d/stanza',
       file: './routes/$lang/3d-experience/room/route.tsx',
     },
+    // City routes (flying DeLorean experience)
+    {
+      id: 'city-en',
+      path: '3d-experience/city',
+      file: './routes/$lang/3d-experience/city/route.tsx',
+    },
+    {
+      id: 'city-it',
+      path: 'esperienza-3d/citta',
+      file: './routes/$lang/3d-experience/city/route.tsx',
+    },
   ];
 }

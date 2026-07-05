@@ -23,11 +23,11 @@
     "key:generate-session-secret": "node scripts/generate-session-secret.mjs",
     "draco:copy": "node scripts/draco.cjs",
     "update": "pnpm update --latest && pnpm postinstall",
-    "postinstall": "pnpm run draco:copy && patch-package",
+    "postinstall": "pnpm run draco:copy && prisma generate && patch-package",
     "prepare": "patch-package"
   },
   "dependencies": {
-    "@aws-sdk/client-ses": "^3.1078.0",
+    "@aws-sdk/client-ses": "^3.1079.0",
     "@fullcalendar/core": "^6.1.21",
     "@fullcalendar/daygrid": "^6.1.21",
     "@fullcalendar/interaction": "^6.1.21",
@@ -175,7 +175,7 @@
     "tailwindcss": "^4.3.2",
     "ts-node": "^10.9.2",
     "tslib": "^2.8.1",
-    "tsx": "^4.22.5",
+    "tsx": "^4.23.0",
     "typescript": "^5.9.3",
     "vite": "^7.3.6",
     "vite-env-only": "^3.0.3",
@@ -184,42 +184,6 @@
     "vitest": "^4.1.9",
     "wrangler": "^4.107.0",
     "zx": "^8.8.5"
-  },
-  "pnpm": {
-    "overrides": {
-      "abab": ">=2.0.6",
-      "are-we-there-yet": ">=2.0.0",
-      "domexception": ">=4.0.0",
-      "gauge": ">=3.0.2",
-      "glob": ">=7.2.3",
-      "inflight": ">=1.0.6",
-      "npmlog": ">=5.0.1",
-      "q": ">=1.5.1",
-      "rimraf": ">=2.6.3"
-    },
-    "allowedDeprecatedVersions": {
-      "abab": "*",
-      "are-we-there-yet": "*",
-      "domexception": "*",
-      "gauge": "*",
-      "glob": "*",
-      "inflight": "*",
-      "npmlog": "*",
-      "q": "*",
-      "rimraf": "*"
-    },
-    "onlyBuiltDependencies": [
-      "@prisma/client",
-      "@prisma/engines",
-      "@swc/core",
-      "canvas",
-      "esbuild",
-      "postinstall-postinstall",
-      "prisma",
-      "sharp",
-      "unrs-resolver",
-      "workerd"
-    ]
   },
   "engines": {
     "node": ">=22.11.0"
