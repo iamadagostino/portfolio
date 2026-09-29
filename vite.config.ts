@@ -11,8 +11,6 @@ import remarkFrontmatter from 'remark-frontmatter';
 import remarkMdxFrontmatter from 'remark-mdx-frontmatter';
 import { defineConfig, ViteDevServer } from 'vite';
 import { envOnlyMacros } from 'vite-env-only';
-import topLevelAwait from 'vite-plugin-top-level-await';
-import tsconfigPaths from 'vite-tsconfig-paths';
 
 const isStorybook = process.argv.some((arg) => arg.includes('storybook'));
 
@@ -37,21 +35,11 @@ const cloudflareHeaders = () => ({
 export default defineConfig({
   assetsInclude: ['**/*.glb', '**/*.hdr', '**/*.glsl'],
   build: {
-    target: 'es2022', // Use ES2022 for modern environments
     assetsInlineLimit: 1024, // Inline assets below this size
-  },
-  esbuild: {
-    target: 'es2022', // Ensure esbuild also uses ES2022 for top-level await support
   },
   server: {
     open: true, // Open the development server in the browser
     port: 7777, // Define the development server port
-  },
-  ssr: {},
-  optimizeDeps: {
-    esbuildOptions: {
-      target: 'es2022', // Ensure esbuild optimizations also use ES2022
-    },
   },
   plugins: [
     cloudflareHeaders(), // Apply Cloudflare _headers file during development
@@ -72,18 +60,11 @@ export default defineConfig({
         jsxRuntime: 'automatic',
       }), // React Support for Storybook excluding Remix
     !isStorybook && reactRouter(), // React Router support exclusively for non-Storybook builds
-    topLevelAwait({
-      // The export name of top-level await promise for each chunk module
-      promiseExportName: '__tla',
-      // The function to generate import names of top-level await promise in each chunk module
-      promiseImportName: (i) => `__tla_${i}`,
-    }),
     envOnlyMacros(), // Enable environment-only macros
-    tsconfigPaths(), // Resolve paths from jsconfig.json
   ],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './app'),
+      '@': path.resolve(import.meta.dirname, './app'),
     },
   },
 });

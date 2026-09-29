@@ -1,7 +1,7 @@
 
 import { createInstance } from 'i18next';
 import { I18nextProvider } from 'react-i18next';
-import type { AppLoadContext, EntryContext } from 'react-router';
+import type { EntryContext, RouterContextProvider } from 'react-router';
 
 import { createReadableStreamFromReadable } from '@react-router/node';
 import { isbot } from 'isbot';
@@ -21,7 +21,7 @@ export default async function handleRequest(
   // This is ignored so we can keep it in the template for visibility.  Feel
   // free to delete this parameter in your app if you're not using it!
 
-  loadContext: AppLoadContext
+  loadContext: RouterContextProvider
 ) {
   const url = new URL(request.url);
   const { pathname } = url;
@@ -35,7 +35,7 @@ export default async function handleRequest(
     fallbackLng: lng, // Ensure we don't fall back to English
     defaultNS: 'common',
     ns: availableNamespaces,
-    initImmediate: false,
+    initAsync: false,
     interpolation: {
       escapeValue: false, // React already escapes values
     },
@@ -57,7 +57,7 @@ async function handleBotRequest(
   responseStatusCode: number,
   responseHeaders: Headers,
   reactRouterContext: EntryContext,
-  _loadContext: AppLoadContext,
+  _loadContext: RouterContextProvider,
   i18nextInstance: ReturnType<typeof createInstance>
 ) {
   return new Promise((resolve, reject) => {
@@ -107,7 +107,7 @@ async function handleBrowserRequest(
   responseStatusCode: number,
   responseHeaders: Headers,
   reactRouterContext: EntryContext,
-  _loadContext: AppLoadContext,
+  _loadContext: RouterContextProvider,
   i18nextInstance: ReturnType<typeof createInstance>
 ) {
   return new Promise((resolve, reject) => {

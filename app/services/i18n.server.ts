@@ -18,7 +18,7 @@ export function createI18nInstance(): I18n {
       defaultNS: defaultNamespace,
       ns: availableNamespaces,
       resources,
-      initImmediate: false, // Don't wait for resources to load
+      initAsync: false, // Init synchronously (resources are bundled)
       backend: {
         loadPath: 'app/assets/locales/{{lng}}/{{ns}}.json',
       },

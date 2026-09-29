@@ -10,7 +10,7 @@ import textureYouTube from '@/assets/images/textures/3d-experience/youtube.jpg';
 import roomModel from '@/assets/models/environments/room.glb';
 import videoVScode from '@/assets/videos/misc/vs-code.mp4';
 import { configureTexture } from '@/utils/texture-config';
-import { useGLTF, useTexture, useVideoTexture } from '@react-three/drei';
+import { useGLTF, useTexture } from '@react-three/drei';
 import type { ThreeElements } from '@react-three/fiber';
 import { useFrame } from '@react-three/fiber';
 import { animate, useMotionValue } from 'framer-motion';
@@ -62,7 +62,20 @@ export const Room = memo(function RoomComponent(props: RoomProps) {
 
   // Dual monitor (L) texture
   const textureDualMonitorLRef = useRef<THREE.VideoTexture | null>(null);
-  const textureDualMonitorL = useVideoTexture(videoVScode);
+  // ponytail: native VideoTexture — drei's useVideoTexture statically bundles hls.js (~500 kB) we don't need for a plain .mp4
+  const textureDualMonitorL = useMemo(() => {
+    const video = Object.assign(document.createElement('video'), {
+      src: videoVScode,
+      crossOrigin: 'anonymous',
+      loop: true,
+      muted: true,
+      playsInline: true,
+    });
+    void video.play();
+    const texture = new THREE.VideoTexture(video);
+    texture.colorSpace = THREE.SRGBColorSpace;
+    return texture;
+  }, []);
 
   // Dual monitor (R) texture
   const textureDualMonitorR = useTexture(textureYouTube);

@@ -1,4 +1,4 @@
-import { createPagesFunctionHandler } from '@react-router/cloudflare-pages';
+import { createPagesFunctionHandler } from '@react-router/cloudflare';
 
 import * as build from '../build/server';
 

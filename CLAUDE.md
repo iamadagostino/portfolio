@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Personal portfolio site. **React Router v7 (framework mode, SSR) + React 19 + TypeScript 5 + Vite 7**, deployed on Cloudflare Pages.
+Personal portfolio site. **React Router v8 (framework mode, SSR) + React 19 + TypeScript 6 + Vite 8 (Rolldown)**, deployed on Cloudflare Pages.
 
 > ⚠️ The README is stale — it says "Remix 2.17 / Vite 6" and lists scripts that don't exist
 > (`dev:storybook`, `db:up`, `deploy`). Trust `package.json`, not the README.
@@ -39,3 +39,8 @@ Local dev needs `.env` (see `.env`) and, for Cloudflare/email features, `.dev.va
 - **pnpm 11+ ignores the `pnpm` field in `package.json`.** `overrides`, `allowedDeprecatedVersions`, and
   build approvals (`allowBuilds`, formerly `onlyBuiltDependencies`) live in `pnpm-workspace.yaml`.
 - Deploy target is Cloudflare Pages (wrangler); Express/Node adapters are also present in deps.
+- **Version pins on purpose:** TypeScript 6 (typescript-eslint caps `<6.1`), ESLint 9 (react/import/jsx-a11y
+  plugins lack ESLint 10 support), Prisma 7 (npm `latest` tag points at 8.0 RC), `@cloudflare/workers-types` 4
+  (peer of `@react-router/cloudflare`). Don't blanket `pnpm update --latest` past these.
+- `pnpm-lock.yaml` is gitignored — installs are not reproducible across machines.
+- `pnpm start` (react-router-serve) does not load `.env`; source it first.
