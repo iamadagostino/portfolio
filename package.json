@@ -1,5 +1,6 @@
 {
   "name": "portfolio",
+  "version": "1.0.0",
   "homepage": "https://www.angelo-dagostino.com",
   "description": "Portfolio site for Angelo D'Agostino",
   "repository": "https://github.com/iamadagostino/portfolio.git",
@@ -22,9 +23,11 @@
     "db:usage": "tsx prisma/verify-db-usage.ts",
     "key:generate-session-secret": "node scripts/generate-session-secret.mjs",
     "draco:copy": "node scripts/draco.cjs",
-    "update": "pnpm update --latest && pnpm postinstall",
+    "update": "pnpm update --latest \"!typescript\" \"!eslint\" \"!@eslint/js\" \"!prisma\" \"!@cloudflare/workers-types\" && pnpm postinstall",
     "postinstall": "pnpm run draco:copy && prisma generate && patch-package",
-    "prepare": "patch-package"
+    "prepare": "patch-package",
+    "release": "node scripts/release.mjs",
+    "changelog": "node scripts/release.mjs --changelog-only"
   },
   "dependencies": {
     "@aws-sdk/client-ses": "^3.1141.0",
