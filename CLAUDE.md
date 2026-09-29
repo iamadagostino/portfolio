@@ -42,7 +42,6 @@ Local dev needs `.env` (see `.env`) and, for Cloudflare/email features, `.dev.va
 - **Version pins on purpose:** TypeScript 6 (typescript-eslint caps `<6.1`), ESLint 9 (react/import/jsx-a11y
   plugins lack ESLint 10 support), Prisma 7 (npm `latest` tag points at 8.0 RC), `@cloudflare/workers-types` 4
   (peer of `@react-router/cloudflare`). `pnpm run update` excludes them (bare `pnpm update` is pnpm's builtin and does not) — keep that list in sync when a pin is lifted.
-- `pnpm-lock.yaml` is gitignored — installs are not reproducible across machines.
 - `pnpm start` (react-router-serve) does not load `.env`; source it first.
 
 ## Releases (ported from auth.parcelabs.com)

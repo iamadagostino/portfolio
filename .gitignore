@@ -27,8 +27,6 @@ template
 # System files
 .DS_Store
 
-# PNPM lock file
-pnpm-lock.yaml
 
 # IDE files
 .claude
